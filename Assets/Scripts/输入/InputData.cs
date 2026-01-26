@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputData : Singleton<InputData>
 {   
@@ -21,5 +22,18 @@ public class InputData : Singleton<InputData>
     {
         get { return isAttack; }
         set { isAttack = value; }
+    }
+
+    /// <summary>
+    /// 鼠标世界位置
+    /// </summary>
+    public Vector2 MouseWorldPosition
+    {
+        get
+        {
+            Vector2 mouseScreenPosition = Mouse.current.position.ReadValue();
+            Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
+            return mouseWorldPosition;
+        }
     }
 }
