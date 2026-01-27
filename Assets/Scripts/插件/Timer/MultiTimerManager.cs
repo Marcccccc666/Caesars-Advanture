@@ -145,12 +145,15 @@ public class MultiTimerManager : Singleton<MultiTimerManager>
     /// </summary>
     /// <param name="timerName">计时器名称</param>
     /// <param name="duration">倒计时开始时间(秒)</param>
-    public void Start_DownTimer(string timerName, float duration)
+    public void Start_DownTimer(string timerName, float duration = 0f)
     {
         if (M_DownTimers.ContainsKey(timerName))
         {
+            if (duration > 0f)
+            {
+                M_DownTimers[timerName].SetDuration(duration);
+            }
             M_DownTimers[timerName].StartTimer();
-            M_DownTimers[timerName].SetDuration(duration);
         }
         else
         {

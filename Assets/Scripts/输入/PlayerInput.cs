@@ -3,14 +3,16 @@ using UnityEngine.InputSystem;
 
 public class PlayerInput : MonoBehaviour
 {
-    [SerializeField, ChineseLabel("角色数据")]private CHData M_chData;
+    [SerializeField, ChineseLabel("角色数据")]private ObjectData M_chData;
     private InputData InputData => InputData.Instance;
     private MultiTimerManager MultiTimerManager => MultiTimerManager.Instance;
+    private WeaponManager weaponManager => WeaponManager.Instance;
 
     void Awake()
     {
+        Debug.Log(weaponManager.GetCurrentWeapon.AttackInterval);
         // 注册计时器
-        MultiTimerManager.Create_DownTime("AttackCooldown", M_chData.CurrentAttackInterval);
+        MultiTimerManager.Create_DownTime("AttackCooldown", weaponManager.GetCurrentWeapon.AttackInterval);
     }
 
     void OnMove(InputValue direction)
@@ -24,8 +26,8 @@ public class PlayerInput : MonoBehaviour
         if(MultiTimerManager.IsDownTimerComplete("AttackCooldown"))
         {
             InputData.IsAttack = true;
-            MultiTimerManager.Reset_DownTimer("AttackCooldown", M_chData.CurrentAttackInterval);
-            MultiTimerManager.Start_DownTimer("AttackCooldown", M_chData.CurrentAttackInterval);
+            MultiTimerManager.Pause_DownTimer("AttackCooldown");
+            MultiTimerManager.Start_DownTimer("AttackCooldown", weaponManager.GetCurrentWeapon.AttackInterval);
         }
     }
 }

@@ -16,17 +16,17 @@ TagManager:
   - player
   - Enemy
   - Wall
+  - 
+  - 
+  - 
+  - 
+  - "\u6B66\u5668"
+  - 
+  - 
+  - 
+  - 
+  - 
   - "\u5B50\u5F39"
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
   - 
   - 
   - 
@@ -54,6 +54,9 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 234420865
+    locked: 0
+  - name: "\u6B66\u5668"
+    uniqueID: 1717683145
     locked: 0
   - name: Wall
     uniqueID: 4294028151

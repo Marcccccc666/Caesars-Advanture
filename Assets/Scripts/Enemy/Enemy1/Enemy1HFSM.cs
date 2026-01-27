@@ -3,7 +3,7 @@ using UnityHFSM;
 
 public enum Enemy1{}
 
-[RequireComponent(typeof(Rigidbody2D), typeof(Collider2D), typeof(CHData))]
+[RequireComponent(typeof(Rigidbody2D), typeof(Collider2D), typeof(EnemyData))]
 public class Enemy1HFSM : MonoBehaviour
 {
     /// <summary>
@@ -24,7 +24,7 @@ public class Enemy1HFSM : MonoBehaviour
     /// <summary>
     /// 角色数据
     /// </summary>
-    private CHData M_chData;
+    private EnemyData M_chData;
 
     /// <summary>
     /// 刚体
@@ -39,8 +39,9 @@ public class Enemy1HFSM : MonoBehaviour
     /// <summary>
     /// 玩家位置
     /// </summary>
-    private Transform playerTransform => CharacterManager.GetCurrentPlayerCharacterData().CharacterPosition;
-
+    private Transform playerTransform => characterManager.GetCurrentPlayerCharacterData.transform;
+    private CharacterManager characterManager => CharacterManager.Instance;
+    
     /// <summary>
     /// 可以开始攻击
     /// </summary>
@@ -50,8 +51,8 @@ public class Enemy1HFSM : MonoBehaviour
     
     void Awake()
     {
-        M_chData = GetComponent<CHData>();
-        M_chData.InitCharacterData();
+        M_chData = GetComponent<EnemyData>();
+        M_chData.InitObjectData();
         
 
         M_rigidbody2D = GetComponent<Rigidbody2D>();
@@ -68,15 +69,15 @@ public class Enemy1HFSM : MonoBehaviour
     void FixedUpdate()
     {
         M_rigidbody2D.angularVelocity = 0f;
-        // 移动角色
+        // 移动游戏对象
         if(NeedMove()&& M_stateMachine.ActiveStateName == Enemy1StateID.Move)
         {
             Vector2 directionToPlayer = ((Vector2)playerTransform.position - (Vector2)this.transform.position).normalized;
-            CharacterMove.MoveCharacter(M_rigidbody2D, directionToPlayer, M_chData.CurrentMoveSpeed);
+            ObjectMove.MoveObject(M_rigidbody2D, directionToPlayer, M_chData.CurrentMoveSpeed);
         }
         else if(M_stateMachine.ActiveStateName == Enemy1StateID.Attack && CanStartAttack)
         {
-            CharacterMove.MoveCharacter(M_rigidbody2D, this.transform.right, collisionSpeed);
+            ObjectMove.MoveObject(M_rigidbody2D, this.transform.right, collisionSpeed);
         }
     }
 
@@ -87,7 +88,7 @@ public class Enemy1HFSM : MonoBehaviour
         // 旋转头部朝向玩家
         if(M_stateMachine.ActiveStateName == Enemy1StateID.Move && NeedRotate())
         {
-            CharacterRotation.RotateTowardsTarget(this.transform, playerTransform.position, M_chData.CharacterBaseData.rotationSpeed);
+            ObjectRotation.RotateTowardsTarget(this.transform, playerTransform.position, M_chData.EnemyBaseData.rotationSpeed);
         }
     }
 

@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b76b9a159fdc094ea872294ebcaba20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHit
-  enemyData: {fileID: 2150376821498134743}
+  enemyData: {fileID: 6740500160704608436}
 --- !u!1 &4519380451200294602
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +209,75 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HPUpdata
   prefix: 
   HPText: {fileID: 8691679963352588689}
-  characterData: {fileID: 2150376821498134743}
+  characterData: {fileID: 6740500160704608436}
+--- !u!1 &4871940432281584699
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3770934829987559454}
+  - component: {fileID: 240269686410485836}
+  m_Layer: 7
+  m_Name: "\u9632\u6B62\u5806\u79EF"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3770934829987559454
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4871940432281584699}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2610950808481684394}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &240269686410485836
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4871940432281584699}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.5
 --- !u!1 &5590672625034155132
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,7 +539,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1657374595
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 0.9854934, b: 0, a: 1}
   m_FlipX: 0
@@ -495,9 +563,8 @@ GameObject:
   - component: {fileID: 2697991624718251876}
   - component: {fileID: 8439868699668358744}
   - component: {fileID: 2233443032932247670}
-  - component: {fileID: 2150376821498134743}
   - component: {fileID: 1942155355687459825}
-  - component: {fileID: 3083289942228812203}
+  - component: {fileID: 6740500160704608436}
   m_Layer: 7
   m_Name: "\u654C\u4EBA1"
   m_TagString: Enemy
@@ -522,6 +589,7 @@ Transform:
   - {fileID: 5151638350908833485}
   - {fileID: 1472426992667619439}
   - {fileID: 9128070279232305791}
+  - {fileID: 3770934829987559454}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2697991624718251876
@@ -655,20 +723,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &2150376821498134743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8625351930764168971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 611eca3162eeef1428f22fb7d3f44540, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CHData
-  characterBaseData: {fileID: 11400000, guid: c486d8859c47c0d4080108f1eaddab0f, type: 2}
-  bulletSpeed: 500
 --- !u!114 &1942155355687459825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -684,7 +738,7 @@ MonoBehaviour:
   rotationOffsetAngle: 0.5
   collisionSpeed: 7
   collisionDistance: 5.5
---- !u!114 &3083289942228812203
+--- !u!114 &6740500160704608436
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -693,7 +747,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8625351930764168971}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b76b9a159fdc094ea872294ebcaba20, type: 3}
+  m_Script: {fileID: 11500000, guid: 37c2eb7be406d2c499c709c03bbb0d06, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyHit
-  enemyData: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  enemyBaseData: {fileID: 11400000, guid: 04eb880e7a8536245987495ea04593b7, type: 2}
