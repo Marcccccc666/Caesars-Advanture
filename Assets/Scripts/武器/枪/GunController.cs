@@ -29,7 +29,7 @@ public class GunController : WeaponBase
 
         if(inputData.CurrentMouseState == MouseState.Press || inputData.CurrentMouseState == MouseState.Hold)
         {
-            if(MultiTimerManager.IsDownTimerComplete("GunAttackCooldown") )
+            if(MultiTimerManager.IsDownTimerComplete("GunAttackCooldown"))
             {
                 Attack();
                 MultiTimerManager.Start_DownTimer("GunAttackCooldown", GunData.AttackInterval);

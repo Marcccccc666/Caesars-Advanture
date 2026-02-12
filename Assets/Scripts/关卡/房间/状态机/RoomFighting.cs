@@ -1,21 +1,22 @@
-using Unity.Cinemachine;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class RoomFighting : BaseState<RoomState>
+public class RoomFighting : BaseState<RoomController.RoomState>
 {
-    private CinemachineCamera roomCamera;
+    private GameObject Doors;
+
     private EnemyManager enemyManager = EnemyManager.Instance;
-    private CameraManager cameraManager = CameraManager.Instance;
-    public RoomFighting(CinemachineCamera roomCamera) : base()
+    public RoomFighting(GameObject Doors) : base()
     {
-        this.roomCamera = roomCamera;
+        this.Doors = Doors;
     }
 
     public override void OnEnter()
     {
         base.OnEnter();
 
-        // 切换到房间相机
-        cameraManager.SetCurrentCamera(roomCamera);
+        // 锁门
+        Doors.SetActive(true);
 
         // 放狗
         foreach(var enemy in enemyManager.GetEnemyDataDict.Values)

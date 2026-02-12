@@ -46,6 +46,6 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
 
     protected virtual void OnAwake() { return; }
 
-    
+
 
 }

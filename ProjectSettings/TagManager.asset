@@ -6,7 +6,6 @@ TagManager:
   tags:
   - Enemy
   - Wall
-  - Obstacle
   layers:
   - Default
   - TransparentFX
@@ -17,8 +16,8 @@ TagManager:
   - player
   - Enemy
   - Wall
-  - Door
-  - Obstacle
+  - 
+  - 
   - 
   - 
   - "\u6B66\u5668"
@@ -44,9 +43,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: BackGround
-    uniqueID: 1694838269
-    locked: 0
   - name: "\u5730\u9762"
     uniqueID: 4032116159
     locked: 0
@@ -59,14 +55,11 @@ TagManager:
   - name: Player
     uniqueID: 234420865
     locked: 0
-  - name: Wall
-    uniqueID: 4294028151
-    locked: 0
   - name: "\u6B66\u5668"
     uniqueID: 1717683145
     locked: 0
-  - name: Door
-    uniqueID: 1861161799
+  - name: Wall
+    uniqueID: 4294028151
     locked: 0
   m_RenderingLayers:
   - Default

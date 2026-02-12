@@ -62,6 +62,7 @@ public class CharacterHPUI : MonoBehaviour
     {
         int currentHP = character.CurrentHealth;
         int maxHP = character.MaxHealth;
+        Debug.Log($"当前HP: {currentHP}, 最大HP: {maxHP}");
         HPText.text = $"{prefix}{currentHP} / {maxHP}";
     }
 }
