@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Wall
+  - Obstacle
   layers:
   - Default
   - TransparentFX
@@ -57,6 +58,9 @@ TagManager:
     locked: 0
   - name: "\u6B66\u5668"
     uniqueID: 1717683145
+    locked: 0
+  - name: Door
+    uniqueID: 2511564795
     locked: 0
   - name: Wall
     uniqueID: 4294028151

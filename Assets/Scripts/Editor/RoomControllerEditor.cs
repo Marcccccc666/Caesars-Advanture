@@ -2,14 +2,14 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(RoomController))]
+[CustomEditor(typeof(BattleRoomController), true)]
 public class RoomControllerEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
-        RoomController rc = (RoomController)target;
+        BattleRoomController rc = (BattleRoomController)target;
 
         GUILayout.Space(10);
 

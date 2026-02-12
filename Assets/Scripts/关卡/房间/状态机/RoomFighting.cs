@@ -1,22 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomFighting : BaseState<RoomController.RoomState>
+public class RoomFighting : BaseState<RoomState>
 {
-    private GameObject Doors;
 
     private EnemyManager enemyManager = EnemyManager.Instance;
-    public RoomFighting(GameObject Doors) : base()
+    public RoomFighting() : base()
     {
-        this.Doors = Doors;
     }
 
     public override void OnEnter()
     {
         base.OnEnter();
-
-        // 锁门
-        Doors.SetActive(true);
 
         // 放狗
         foreach(var enemy in enemyManager.GetEnemyDataDict.Values)

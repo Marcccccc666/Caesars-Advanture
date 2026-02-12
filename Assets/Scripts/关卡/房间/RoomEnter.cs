@@ -5,13 +5,13 @@ using UnityEngine;
 /// </summary>
 public class RoomEnter : MonoBehaviour
 {
-    [SerializeField, ChineseLabel("房间控制器")] private RoomController roomController;
+    [SerializeField, ChineseLabel("房间控制器")] private RoomBase roomController;
     
     private void Awake()
     {
         if(roomController == null)
         {
-            roomController = GetComponentInParent<RoomController>();
+            roomController = GetComponentInParent<RoomBase>();
         }
     }
 
@@ -32,11 +32,11 @@ public class RoomEnter : MonoBehaviour
     {
         if(roomController == null)
         {
-            roomController = GetComponentInParent<RoomController>();
+            roomController = GetComponentInParent<RoomBase>();
 
             if(roomController == null)
             {
-                Debug.LogError("RoomEnter脚本未找到RoomController组件，请检查！");
+                Debug.LogError("RoomEnter脚本未找到RoomBase组件，请检查！");
             }
         }
     }
