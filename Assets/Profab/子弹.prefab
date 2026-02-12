@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5745430533665465511}
   - component: {fileID: 7211240625171716979}
   - component: {fileID: 6694119961778632836}
-  - component: {fileID: 4315502294115431112}
+  - component: {fileID: -3245512310463744862}
   m_Layer: 19
   m_Name: "\u5B50\u5F39"
   m_TagString: Untagged
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.722, y: -0.005, z: 0}
-  m_LocalScale: {x: 0.2141, y: 0.2141, z: 0.2141}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.2141}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -83,7 +83,7 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.07585368, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -156,7 +156,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.49999997
---- !u!114 &4315502294115431112
+--- !u!114 &-3245512310463744862
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

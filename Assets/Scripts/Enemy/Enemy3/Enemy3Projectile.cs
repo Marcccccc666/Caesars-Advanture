@@ -8,13 +8,16 @@ public class Enemy3Projectile : MonoBehaviour
     [SerializeField, ChineseLabel("默认存活时长")] private float defaultLifetime = 3f;
 
     private Rigidbody2D rb2D;
+    private Collider2D projectileCollider;
     private int damage;
     private bool initialized;
     private bool consumed;
+    private Transform ownerTransform;
 
     private void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
+        projectileCollider = GetComponent<Collider2D>();
     }
 
     private void Start()
@@ -29,10 +32,32 @@ public class Enemy3Projectile : MonoBehaviour
         Destroy(gameObject, Mathf.Max(0.1f, defaultLifetime));
     }
 
-    public void Initialize(Vector2 direction, float speed, int bulletDamage, float lifetime)
+    public void Initialize(
+        Vector2 direction,
+        float speed,
+        int bulletDamage,
+        float lifetime,
+        Transform owner = null
+    )
     {
         initialized = true;
         damage = Mathf.Max(0, bulletDamage);
+        ownerTransform = owner;
+
+        if (ownerTransform != null && projectileCollider != null)
+        {
+            Collider2D[] ownerColliders = ownerTransform.GetComponentsInChildren<Collider2D>(true);
+            for (int i = 0; i < ownerColliders.Length; i++)
+            {
+                Collider2D ownerCollider = ownerColliders[i];
+                if (ownerCollider == null || ownerCollider == projectileCollider)
+                {
+                    continue;
+                }
+
+                Physics2D.IgnoreCollision(projectileCollider, ownerCollider, true);
+            }
+        }
 
         Vector2 normalizedDirection = direction.sqrMagnitude < 0.0001f ? Vector2.right : direction.normalized;
         rb2D.linearVelocity = normalizedDirection * Mathf.Max(0f, speed);
@@ -70,12 +95,17 @@ public class Enemy3Projectile : MonoBehaviour
             return;
         }
 
-        if (collision.CompareTag("Player"))
+        if (IsOwnerCollider(collision))
         {
-            CharacterManager manager = CharacterManager.Instance;
-            if (manager != null && manager.GetCurrentPlayerCharacterData != null)
+            return;
+        }
+
+        if (IsPlayerCollider(collision))
+        {
+            CharacterDate playerData = GetPlayerData(collision);
+            if (playerData != null)
             {
-                manager.GetCurrentPlayerCharacterData.Damage(damage);
+                playerData.Damage(damage);
             }
 
             Consume();
@@ -92,5 +122,62 @@ public class Enemy3Projectile : MonoBehaviour
     {
         consumed = true;
         Destroy(gameObject);
+    }
+
+    private bool IsOwnerCollider(Collider2D collision)
+    {
+        if (collision == null || ownerTransform == null)
+        {
+            return false;
+        }
+
+        Transform hitTransform = collision.transform;
+        return hitTransform == ownerTransform || hitTransform.IsChildOf(ownerTransform);
+    }
+
+    private bool IsPlayerCollider(Collider2D collision)
+    {
+        if (collision == null)
+        {
+            return false;
+        }
+
+        if (collision.CompareTag("Player"))
+        {
+            return true;
+        }
+
+        CharacterDate data = collision.GetComponentInParent<CharacterDate>();
+        if (data != null)
+        {
+            return true;
+        }
+
+        CharacterManager manager = CharacterManager.Instance;
+        if (manager == null || manager.GetCurrentPlayerCharacterData == null)
+        {
+            return false;
+        }
+
+        Transform playerRoot = manager.GetCurrentPlayerCharacterData.transform;
+        Transform hitTransform = collision.transform;
+        return hitTransform == playerRoot || hitTransform.IsChildOf(playerRoot);
+    }
+
+    private CharacterDate GetPlayerData(Collider2D collision)
+    {
+        if (collision == null)
+        {
+            return null;
+        }
+
+        CharacterDate directData = collision.GetComponentInParent<CharacterDate>();
+        if (directData != null)
+        {
+            return directData;
+        }
+
+        CharacterManager manager = CharacterManager.Instance;
+        return manager != null ? manager.GetCurrentPlayerCharacterData : null;
     }
 }

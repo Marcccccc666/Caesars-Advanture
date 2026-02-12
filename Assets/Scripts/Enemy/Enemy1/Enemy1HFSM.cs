@@ -15,6 +15,11 @@ public class Enemy1HFSM : MonoBehaviour
     /// 冲撞距离
     /// </summary>
     [SerializeField, ChineseLabel("冲撞距离")] private float collisionDistance = 0f;
+    
+    /// <summary>
+    /// 冲撞前摇时长
+    /// </summary>
+    [SerializeField, ChineseLabel("冲撞前摇时长")] private float collisionPrepareDuration = 0.2f;
 
     /// <summary>
     /// 角色数据
@@ -47,6 +52,7 @@ public class Enemy1HFSM : MonoBehaviour
     /// 可以开始攻击
     /// </summary>
     private bool CanStartAttack = false;
+    private Vector2 attackDirection = Vector2.right;
     private Enemy1StateID? lastAnimationState = null;
 
     private StateMachine<Enemy1StateID, Enemy1> M_stateMachine = new();
@@ -83,7 +89,7 @@ public class Enemy1HFSM : MonoBehaviour
         }
         else if(M_stateMachine.ActiveStateName == Enemy1StateID.Attack && CanStartAttack)
         {
-            ObjectMove.MoveObject(M_rigidbody2D, this.transform.right, collisionSpeed);
+            ObjectMove.MoveObject(M_rigidbody2D, attackDirection, collisionSpeed);
         }
     }
 
@@ -114,7 +120,10 @@ public class Enemy1HFSM : MonoBehaviour
                 M_stateMachine.AddState(Enemy1StateID.Move, new Enemy1_Move());
             
             //攻击状态
-                M_stateMachine.AddState(Enemy1StateID.Attack, new Enemy1_Attack(this, collisionDistance));
+                M_stateMachine.AddState(
+                    Enemy1StateID.Attack,
+                    new Enemy1_Attack(this, collisionDistance, collisionPrepareDuration)
+                );
             // 死亡状态
                 M_stateMachine.AddState(Enemy1StateID.Die, new Enemy1_Die());
 
@@ -152,6 +161,38 @@ public class Enemy1HFSM : MonoBehaviour
     public void SetCanStartAttack(bool canStart)
     {
         CanStartAttack = canStart;
+    }
+
+    /// <summary>
+    /// 设置冲撞方向
+    /// </summary>
+    public void SetAttackDirection(Vector2 direction)
+    {
+        if (direction.sqrMagnitude <= 0.0001f)
+        {
+            return;
+        }
+
+        attackDirection = direction.normalized;
+    }
+
+    /// <summary>
+    /// 获取朝向玩家的方向
+    /// </summary>
+    public Vector2 GetDirectionToPlayer()
+    {
+        if (playerTransform == null)
+        {
+            return attackDirection;
+        }
+
+        Vector2 direction = (Vector2)playerTransform.position - (Vector2)transform.position;
+        if (direction.sqrMagnitude <= 0.0001f)
+        {
+            return attackDirection;
+        }
+
+        return direction.normalized;
     }
 
     private void UpdateAnimationByState(bool force = false)

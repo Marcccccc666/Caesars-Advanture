@@ -15,6 +15,13 @@ public class Enemy4HFSM : MonoBehaviour
 
     [Header("视觉")]
     [SerializeField, ChineseLabel("模型根节点")] private Transform visualRoot;
+    
+    [Header("动画")]
+    [SerializeField, ChineseLabel("动画控制器")] private Animator enemyAnimator;
+    [SerializeField, ChineseLabel("待机动画状态名")] private string idleAnimationState = "idle";
+    [SerializeField, ChineseLabel("追击动画状态名")] private string chaseAnimationState = "move";
+    [SerializeField, ChineseLabel("攻击动画状态名")] private string attackAnimationState = "attack";
+    [SerializeField, ChineseLabel("死亡动画状态名")] private string dieAnimationState = "die";
 
     [Header("攻击配置")]
     [SerializeField, ChineseLabel("瞄准时长")] private float aimDuration = 2f;
@@ -29,7 +36,6 @@ public class Enemy4HFSM : MonoBehaviour
 
     private EnemyData enemyData;
     private Rigidbody2D rb2D;
-    private Animator animator;
     private Enemy4_LineCombat lineCombat;
 
     private float baseVisualScaleX = 1f;
@@ -44,6 +50,7 @@ public class Enemy4HFSM : MonoBehaviour
     private float idlePhaseTimer;
     private Vector2 idleDirection;
     private Vector2 lastKnownAimTarget;
+    private Enemy4StateID? lastAnimationState = null;
 
     private readonly StateMachine<Enemy4StateID, Enemy4> stateMachine = new();
 
@@ -74,8 +81,11 @@ public class Enemy4HFSM : MonoBehaviour
         enemyData.InitObjectData();
 
         rb2D = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-        lineCombat = GetComponentInChildren<Enemy4_LineCombat>();
+        if (enemyAnimator == null)
+        {
+            enemyAnimator = GetComponent<Animator>();
+        }
+        lineCombat = GetComponentInChildren<Enemy4_LineCombat>(true);
 
         if (visualRoot == null)
         {
@@ -114,6 +124,7 @@ public class Enemy4HFSM : MonoBehaviour
     private void Start()
     {
         stateMachine.Init();
+        UpdateAnimationByState(force: true);
     }
 
     private void Update()
@@ -121,6 +132,7 @@ public class Enemy4HFSM : MonoBehaviour
         UpdateRuntimeTimers();
         stateMachine.OnLogic();
         UpdateFacing();
+        UpdateAnimationByState();
     }
 
     private void FixedUpdate()
@@ -369,7 +381,6 @@ public class Enemy4HFSM : MonoBehaviour
 
     public void EnterIdle()
     {
-        SetAnimatorState(Enemy4StateID.Idle);
         StartIdlePhase(false);
         if (lineCombat != null)
         {
@@ -379,7 +390,6 @@ public class Enemy4HFSM : MonoBehaviour
 
     public void EnterChase()
     {
-        SetAnimatorState(Enemy4StateID.Chase);
         if (lineCombat != null)
         {
             lineCombat.EndAimLine();
@@ -388,7 +398,6 @@ public class Enemy4HFSM : MonoBehaviour
 
     public void EnterAttack()
     {
-        SetAnimatorState(Enemy4StateID.Attack);
         rb2D.linearVelocity = Vector2.zero;
 
         attackFinished = false;
@@ -411,7 +420,6 @@ public class Enemy4HFSM : MonoBehaviour
 
     public void EnterCooldown()
     {
-        SetAnimatorState(Enemy4StateID.Cooldown);
         rb2D.linearVelocity = Vector2.zero;
 
         if (attackFinished)
@@ -428,7 +436,6 @@ public class Enemy4HFSM : MonoBehaviour
 
     public void EnterDie()
     {
-        SetAnimatorState(Enemy4StateID.Die);
         rb2D.linearVelocity = Vector2.zero;
         if (lineCombat != null)
         {
@@ -436,16 +443,77 @@ public class Enemy4HFSM : MonoBehaviour
         }
     }
 
-    private void SetAnimatorState(Enemy4StateID state)
+    private void UpdateAnimationByState(bool force = false)
     {
-        if (animator == null)
+        Enemy4StateID currentState = stateMachine.ActiveStateName;
+        if (!force && lastAnimationState.HasValue && lastAnimationState.Value == currentState)
         {
             return;
         }
 
-        animator.SetBool("isIdle", state == Enemy4StateID.Idle || state == Enemy4StateID.Cooldown);
-        animator.SetBool("isChasing", state == Enemy4StateID.Chase);
-        animator.SetBool("isAttacking", state == Enemy4StateID.Attack);
-        animator.SetBool("isDead", state == Enemy4StateID.Die);
+        PlayAnimationForState(currentState);
+        lastAnimationState = currentState;
+    }
+
+    private void PlayAnimationForState(Enemy4StateID state)
+    {
+        switch (state)
+        {
+            case Enemy4StateID.Idle:
+                PlayFirstAvailableState(idleAnimationState, "Idle", "idle", "Move", "move");
+                break;
+            case Enemy4StateID.Chase:
+                PlayFirstAvailableState(chaseAnimationState, "Move", "move", "Chase", "chase");
+                break;
+            case Enemy4StateID.Attack:
+                PlayFirstAvailableState(attackAnimationState, "Attack", "attack");
+                break;
+            case Enemy4StateID.Cooldown:
+                PlayFirstAvailableState(idleAnimationState, "Idle", "idle", "Move", "move");
+                break;
+            case Enemy4StateID.Die:
+                PlayFirstAvailableState(dieAnimationState, "Die", "die");
+                break;
+        }
+    }
+
+    private void PlayFirstAvailableState(params string[] candidates)
+    {
+        if (enemyAnimator == null || candidates == null || candidates.Length == 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < candidates.Length; i++)
+        {
+            if (TryPlayAnimatorState(candidates[i]))
+            {
+                return;
+            }
+        }
+    }
+
+    private bool TryPlayAnimatorState(string stateName)
+    {
+        if (enemyAnimator == null || string.IsNullOrWhiteSpace(stateName))
+        {
+            return false;
+        }
+
+        int shortHash = Animator.StringToHash(stateName);
+        if (enemyAnimator.HasState(0, shortHash))
+        {
+            enemyAnimator.Play(shortHash);
+            return true;
+        }
+
+        int fullPathHash = Animator.StringToHash($"Base Layer.{stateName}");
+        if (enemyAnimator.HasState(0, fullPathHash))
+        {
+            enemyAnimator.Play(fullPathHash);
+            return true;
+        }
+
+        return false;
     }
 }

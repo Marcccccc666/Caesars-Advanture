@@ -9,16 +9,20 @@ public class Enemy4_LineCombat : MonoBehaviour
     [SerializeField, ChineseLabel("伤害检测层")] private LayerMask damageMask;
     [SerializeField, ChineseLabel("射线宽度")] private float lineWidth = 0.08f;
     [SerializeField, ChineseLabel("射线颜色")] private Color lineColor = Color.red;
+    [SerializeField, ChineseLabel("射线渲染顺序")] private int lineSortingOrder = 50;
     [SerializeField, ChineseLabel("攻击音效")] private AudioClip hitAudio;
 
     private LineRenderer lineRenderer;
     private Vector2 currentStart;
     private Vector2 currentEnd;
+    private Transform ownerTransform;
 
     public Transform FirePoint => firePoint;
 
     private void Awake()
     {
+        EnemyData ownerData = GetComponentInParent<EnemyData>();
+        ownerTransform = ownerData != null ? ownerData.transform : transform;
         lineRenderer = GetComponent<LineRenderer>();
         SetupLineRenderer();
         EndAimLine();
@@ -38,6 +42,7 @@ public class Enemy4_LineCombat : MonoBehaviour
         lineRenderer.startColor = lineColor;
         lineRenderer.endColor = lineColor;
         lineRenderer.numCapVertices = 4;
+        lineRenderer.sortingOrder = lineSortingOrder;
 
         if (lineRenderer.sharedMaterial == null)
         {
@@ -76,8 +81,7 @@ public class Enemy4_LineCombat : MonoBehaviour
 
         Vector2 normalizedDirection = direction.normalized;
         float distance = Mathf.Max(0.1f, maxDistance);
-        RaycastHit2D obstacleHit = Physics2D.Raycast(origin, normalizedDirection, distance, obstacleMask);
-        Vector2 end = obstacleHit.collider != null ? obstacleHit.point : origin + normalizedDirection * distance;
+        Vector2 end = ResolveBlockedEnd(origin, normalizedDirection, distance);
 
         currentStart = origin;
         currentEnd = end;
@@ -95,8 +99,7 @@ public class Enemy4_LineCombat : MonoBehaviour
             return;
         }
 
-        int finalMask = damageMask.value == 0 ? Physics2D.DefaultRaycastLayers : damageMask.value;
-        RaycastHit2D[] hits = Physics2D.RaycastAll(currentStart, segment.normalized, distance, finalMask);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(currentStart, segment.normalized, distance);
         for (int i = 0; i < hits.Length; i++)
         {
             Collider2D collider = hits[i].collider;
@@ -105,25 +108,32 @@ public class Enemy4_LineCombat : MonoBehaviour
                 continue;
             }
 
-            if (collider.CompareTag("Enemy"))
+            if (IsSelfCollider(collider))
             {
                 continue;
             }
 
-            if (collider.CompareTag("Player"))
+            if (IsBlockingCollider(collider))
             {
-                CharacterManager manager = CharacterManager.Instance;
-                if (manager != null && manager.GetCurrentPlayerCharacterData != null)
-                {
-                    manager.GetCurrentPlayerCharacterData.Damage(Mathf.Max(0, damage));
-                }
                 break;
             }
 
-            if (collider.CompareTag("Wall"))
+            if (!IsPlayerCollider(collider))
             {
-                break;
+                continue;
             }
+
+            if (damageMask.value != 0 && !IsLayerInMask(collider.gameObject.layer, damageMask))
+            {
+                continue;
+            }
+
+            CharacterDate playerData = GetPlayerData(collider);
+            if (playerData != null)
+            {
+                playerData.Damage(Mathf.Max(0, damage));
+            }
+            break;
         }
 
         if (hitAudio != null && Camera.main != null)
@@ -140,5 +150,105 @@ public class Enemy4_LineCombat : MonoBehaviour
         }
 
         lineRenderer.enabled = false;
+    }
+
+    private Vector2 ResolveBlockedEnd(Vector2 origin, Vector2 direction, float maxDistance)
+    {
+        Vector2 fallbackEnd = origin + direction * maxDistance;
+        RaycastHit2D[] hits = Physics2D.RaycastAll(origin, direction, maxDistance);
+        for (int i = 0; i < hits.Length; i++)
+        {
+            Collider2D collider = hits[i].collider;
+            if (collider == null || IsSelfCollider(collider))
+            {
+                continue;
+            }
+
+            if (!IsBlockingCollider(collider))
+            {
+                continue;
+            }
+
+            return hits[i].point;
+        }
+
+        return fallbackEnd;
+    }
+
+    private bool IsSelfCollider(Collider2D collider)
+    {
+        if (collider == null || ownerTransform == null)
+        {
+            return false;
+        }
+
+        Transform hitTransform = collider.transform;
+        return hitTransform == ownerTransform || hitTransform.IsChildOf(ownerTransform);
+    }
+
+    private bool IsBlockingCollider(Collider2D collider)
+    {
+        if (collider == null)
+        {
+            return false;
+        }
+
+        if (collider.CompareTag("Wall"))
+        {
+            return true;
+        }
+
+        return IsLayerInMask(collider.gameObject.layer, obstacleMask);
+    }
+
+    private bool IsPlayerCollider(Collider2D collider)
+    {
+        if (collider == null)
+        {
+            return false;
+        }
+
+        if (collider.CompareTag("Player"))
+        {
+            return true;
+        }
+
+        CharacterDate data = collider.GetComponentInParent<CharacterDate>();
+        if (data != null)
+        {
+            return true;
+        }
+
+        CharacterManager manager = CharacterManager.Instance;
+        if (manager == null || manager.GetCurrentPlayerCharacterData == null)
+        {
+            return false;
+        }
+
+        Transform playerRoot = manager.GetCurrentPlayerCharacterData.transform;
+        Transform hitTransform = collider.transform;
+        return hitTransform == playerRoot || hitTransform.IsChildOf(playerRoot);
+    }
+
+    private CharacterDate GetPlayerData(Collider2D collider)
+    {
+        if (collider == null)
+        {
+            return null;
+        }
+
+        CharacterDate directData = collider.GetComponentInParent<CharacterDate>();
+        if (directData != null)
+        {
+            return directData;
+        }
+
+        CharacterManager manager = CharacterManager.Instance;
+        return manager != null ? manager.GetCurrentPlayerCharacterData : null;
+    }
+
+    private static bool IsLayerInMask(int layer, LayerMask mask)
+    {
+        return (mask.value & (1 << layer)) != 0;
     }
 }
