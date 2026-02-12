@@ -25,4 +25,5 @@ public static class ObjectMove
         Vector3 movement = direction.normalized * speed * Time.deltaTime;
         Object.position += movement;
     }
+    
 }

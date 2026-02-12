@@ -10,5 +10,5 @@ public abstract class BuffDefinition : ScriptableObject
     public string DisplayName => displayName;
     public string Description => description;
 
-    public abstract void Apply(CharacterDate target);
+    public abstract void Apply();
 }

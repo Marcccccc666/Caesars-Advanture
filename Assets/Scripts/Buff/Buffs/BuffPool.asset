@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: BuffPool
   m_EditorClassIdentifier: Assembly-CSharp::BuffPool
   buffs:
+  - {fileID: 11400000, guid: 9514bceccea283f428b15ac6e7ad4767, type: 2}
+  - {fileID: 11400000, guid: 066195b1f5c39e7448ff7bbf695ca99a, type: 2}
   - {fileID: 11400000, guid: 11e3f3f2cb9fc134fa21ede7657de3c6, type: 2}
   - {fileID: 11400000, guid: 9b66d9009d7132546b708786df0fe939, type: 2}
+  - {fileID: 11400000, guid: 47e76350ab7fea24290bba59761c5179, type: 2}
   - {fileID: 11400000, guid: c36ff06d3ee6fa24bb16ff7f39fe88f1, type: 2}

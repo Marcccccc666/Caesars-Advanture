@@ -11,5 +11,10 @@ public enum RoomState
         /// <summary>
         /// 已清除
         /// </summary>
-        Cleared
+        Cleared,
+
+        /// <summary>
+        /// 玩家死亡
+        /// </summary>
+        PlayerDied
     }

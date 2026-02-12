@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13ed4f3dcc14ee545be1c06559789ceb, type: 3}
-  m_Name: DamageBuff
-  m_EditorClassIdentifier: Assembly-CSharp::DamageBuff
+  m_Script: {fileID: 11500000, guid: fcdc2d4a7dac226479cc58c8df1b209d, type: 3}
+  m_Name: AddPenetration
+  m_EditorClassIdentifier: Assembly-CSharp::AddPenetration
   buffId: 
-  displayName: Damage +1
-  description: Damage +1
-  damageBonus: 1
+  displayName: Add Penetration
+  description: Penetration +1
+  penetrationBonus: 1

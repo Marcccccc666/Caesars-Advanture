@@ -108,7 +108,7 @@ public class AllBuffController : MonoBehaviour
             if (selectedBuff != null)
             {
                 // 应用 Buff 效果
-                selectedBuff.Apply(characterManager.GetCurrentPlayerCharacterData);
+                selectedBuff.Apply();
             }
         }
     }

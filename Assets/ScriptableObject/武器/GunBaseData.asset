@@ -16,5 +16,9 @@ MonoBehaviour:
   weaponDamage: 2
   attackInterval: 0.5
   weaponRotationSpeed: 1000
-  bulletPrefab: {fileID: 7211240625171716979, guid: e6a8d1d9c0cd27747a94af0db40f53f6, type: 3}
-  bulletSpeed: 20
+  initialBallisticsCount: 1
+  ballisticsType: 0
+  bulletIntervalDistance: 0.2
+  bulletPrefab: {fileID: -3245512310463744862, guid: e6a8d1d9c0cd27747a94af0db40f53f6, type: 3}
+  bulletSpeed: 10
+  bulletPenetration: 1

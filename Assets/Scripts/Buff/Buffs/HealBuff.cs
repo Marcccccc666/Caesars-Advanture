@@ -5,14 +5,15 @@ public class HealBuff : BuffDefinition
 {
     [SerializeField, ChineseLabel("生命上限增加")] private int maxHealthIncrease = 2;
 
-    public override void Apply(CharacterDate target)
+    public override void Apply()
     {
-        if (target == null)
+        var characterDate = CharacterManager.Instance.GetCurrentPlayerCharacterData;
+        if (characterDate == null)
         {
             return;
         }
 
-        target.MaxHealth = target.MaxHealth + maxHealthIncrease;
-        target.CurrentHealth = target.MaxHealth;
+        characterDate.MaxHealth = characterDate.MaxHealth + maxHealthIncrease;
+        characterDate.CurrentHealth = characterDate.MaxHealth;
     }
 }

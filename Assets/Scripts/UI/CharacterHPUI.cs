@@ -30,7 +30,10 @@ public class CharacterHPUI : MonoBehaviour
 
     void OnDisable()
     {
-        characterManager.OnCurrentPlayerCharacterDataChanged -= BindCharacter;
+        if(characterManager != null)
+        {
+            characterManager.OnCurrentPlayerCharacterDataChanged -= BindCharacter;
+        }
         UnbindCharacter(characterManager.GetCurrentPlayerCharacterData);
     }
 

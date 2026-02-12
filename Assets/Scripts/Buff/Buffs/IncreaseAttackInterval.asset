@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13ed4f3dcc14ee545be1c06559789ceb, type: 3}
-  m_Name: DamageBuff
-  m_EditorClassIdentifier: Assembly-CSharp::DamageBuff
+  m_Script: {fileID: 11500000, guid: 36ff36ec22bd6db46980b5799284324d, type: 3}
+  m_Name: IncreaseAttackInterval
+  m_EditorClassIdentifier: Assembly-CSharp::IncreaseAttackInterval
   buffId: 
-  displayName: Damage +1
-  description: Damage +1
-  damageBonus: 1
+  displayName: Attack Interval - 0.5
+  description: Attack Interval - 0.5
+  attackIntervalBonus: 0.5

@@ -67,7 +67,7 @@ public class Caesar_Controller : MonoBehaviour
     
     private void FixedUpdate()
     {
-        if(buffManager && buffManager.IsBuffSelectionOpen)
+        if(!gameManager.IsPlayerControllable)
         {
             return;
         }
@@ -82,7 +82,7 @@ public class Caesar_Controller : MonoBehaviour
 
     private void Update()
     {
-        if(buffManager && buffManager.IsBuffSelectionOpen)
+        if(!gameManager.IsPlayerControllable)
         {
             return;
         }

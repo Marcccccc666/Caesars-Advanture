@@ -8,23 +8,22 @@ public class WeaponManager: Singleton<WeaponManager>
     /// <summary>
     /// 当前武器
     /// </summary>
-    [SerializeField]private WeaponBaseData currentWeapon;
+    [SerializeField]private WeaponData currentWeapon;
 
     [SerializeField, ChineseLabel("武器伤害倍率")] private float damageMultiplier = 1f;
     [SerializeField, ChineseLabel("武器伤害加成")] private int damageBonus = 0;
 
+    [SerializeField, ChineseLabel("攻击间隔减少(秒)")] private float attackIntervalBonus = 0f;
+
     /// <summary>
     /// 获取当前武器
     /// </summary>
-    public WeaponBaseData GetCurrentWeapon
-    {
-        get => currentWeapon;
-    }
+    public WeaponData GetCurrentWeapon => currentWeapon;
 
     /// <summary>
     /// 切换武器
     /// </summary>
-    public void SwitchWeapon(WeaponBaseData newWeapon)
+    public void SwitchWeapon(WeaponData newWeapon)
     {
         currentWeapon = newWeapon;
     }
@@ -37,6 +36,15 @@ public class WeaponManager: Singleton<WeaponManager>
         float scaled = baseDamage * damageMultiplier;
         int total = Mathf.RoundToInt(scaled) + damageBonus;
         return Mathf.Max(0, total);
+    }
+
+    /// <summary>
+    /// 获取最终攻击间隔
+    /// </summary>
+    public float GetFinalAttackInterval(float baseInterval)
+    {
+        float finalInterval = baseInterval - attackIntervalBonus;
+        return Mathf.Max(0.1f, finalInterval); // 最小攻击间隔为0.1秒
     }
 
     /// <summary>
@@ -55,5 +63,11 @@ public class WeaponManager: Singleton<WeaponManager>
         damageBonus += bonus;
     }
 
-
+    /// <summary>
+    /// 增加攻击间隔减少
+    /// </summary>
+    public void AddAttackIntervalBonus(float bonus)
+    {
+        attackIntervalBonus += bonus;
+    }
 }

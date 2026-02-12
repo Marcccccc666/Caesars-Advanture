@@ -5,8 +5,9 @@ public class MoveSpeedBuff : BuffDefinition
 {
     [SerializeField, ChineseLabel("移速数值加成")] private float speedBonus = 2f;
 
-    public override void Apply(CharacterDate target)
+    public override void Apply()
     {
+        var target = CharacterManager.Instance.GetCurrentPlayerCharacterData;
         if (target == null)
         {
             return;
