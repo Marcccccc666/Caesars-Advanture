@@ -2847,7 +2847,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 41.2159, y: 14.074107, z: -10}
+  m_LocalPosition: {x: 24.21207, y: 9.436319, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3281,7 +3281,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 00000000bf3555f081faf80d019c492e8387c96277abf1ffc9c361664713ef6efd2d0565fb6fb395
+  m_ApplyToSortingLayers: 00000000bf3555f081faf80d019c492e8387c96277abf1ffc9c361664713ef6efd2d0565fb6fb3950187be68
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -10301,6 +10301,18 @@ PrefabInstance:
     - target: {fileID: 5031841087171647175, guid: 7738c7b4fc827bf4786ff8a83d41fc66, type: 3}
       propertyPath: m_Name
       value: Map
+      objectReference: {fileID: 0}
+    - target: {fileID: 5228602982273953522, guid: 7738c7b4fc827bf4786ff8a83d41fc66, type: 3}
+      propertyPath: m_SortingLayer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5228602982273953522, guid: 7738c7b4fc827bf4786ff8a83d41fc66, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1757316865
+      objectReference: {fileID: 0}
+    - target: {fileID: 6449813554818880209, guid: 7738c7b4fc827bf4786ff8a83d41fc66, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
