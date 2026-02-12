@@ -171,3 +171,6 @@ MonoBehaviour:
   defaultDamage: 1
   defaultSpeed: 8
   defaultLifetime: 3
+  blockingLayerMask:
+    serializedVersion: 2
+    m_Bits: 768

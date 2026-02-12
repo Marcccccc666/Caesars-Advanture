@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityHFSM;
 
@@ -41,11 +42,36 @@ public class Enemy1HFSM : MonoBehaviour
     /// 攻击范围
     /// </summary>
     private float AttackRange = 0f;
+    [SerializeField, ChineseLabel("默认仇恨范围")] private float defaultHateRange = 8f;
+    private float hateRange = 0f;
+
+    [Header("2D寻路")]
+    [SerializeField, ChineseLabel("障碍层")] private LayerMask obstacleMask;
+    [SerializeField, ChineseLabel("网格大小")] private float pathCellSize = 0.5f;
+    [SerializeField, ChineseLabel("节点检测半径")] private float pathNodeCheckRadius = 0.18f;
+    [SerializeField, ChineseLabel("自动按碰撞体计算节点半径")] private bool autoPathNodeCheckRadius = true;
+    [SerializeField, ChineseLabel("节点半径缩放")] private float pathNodeRadiusScale = 1f;
+    [SerializeField, ChineseLabel("节点半径补偿")] private float pathNodeRadiusPadding = 0.02f;
+    [SerializeField, ChineseLabel("节点半径最小值")] private float pathNodeRadiusMin = 0.12f;
+    [SerializeField, ChineseLabel("重算路径间隔")] private float pathRepathInterval = 0.2f;
+    [SerializeField, ChineseLabel("最大搜索节点")] private int pathMaxSearchNodes = 1200;
+    [SerializeField, ChineseLabel("到点阈值")] private float pathWaypointReachDistance = 0.12f;
 
     /// <summary>
     /// 玩家位置
     /// </summary>
-    private Transform playerTransform => characterManager.GetCurrentPlayerCharacterData.transform;
+    private Transform playerTransform
+    {
+        get
+        {
+            if (characterManager == null || characterManager.GetCurrentPlayerCharacterData == null)
+            {
+                return null;
+            }
+
+            return characterManager.GetCurrentPlayerCharacterData.transform;
+        }
+    }
     private CharacterManager characterManager => CharacterManager.Instance;
     
     /// <summary>
@@ -54,6 +80,9 @@ public class Enemy1HFSM : MonoBehaviour
     private bool CanStartAttack = false;
     private Vector2 attackDirection = Vector2.right;
     private Enemy1StateID? lastAnimationState = null;
+    private float pathRepathTimer = 0f;
+    private readonly List<Vector2> currentPath = new();
+    private int currentPathIndex = 0;
 
     private StateMachine<Enemy1StateID, Enemy1> M_stateMachine = new();
     
@@ -67,7 +96,16 @@ public class Enemy1HFSM : MonoBehaviour
         {
             enemyAnimator = GetComponent<Animator>();
         }
-        AttackRange = GetComponentInChildren<AttackRangeGizmo>().GetAttackRange;
+        AttackRangeGizmo attackRangeGizmo = GetComponentInChildren<AttackRangeGizmo>();
+        if (attackRangeGizmo != null)
+        {
+            AttackRange = attackRangeGizmo.GetAttackRange;
+        }
+
+        HateRangeGizmo hateRangeGizmo = GetComponentInChildren<HateRangeGizmo>();
+        hateRange = hateRangeGizmo != null ? hateRangeGizmo.GetHateRange : defaultHateRange;
+        
+        ResolvePathNodeRadiusByCollider();
 
         Enemy1StateMachine();
     }
@@ -81,13 +119,18 @@ public class Enemy1HFSM : MonoBehaviour
     void FixedUpdate()
     {
         M_rigidbody2D.angularVelocity = 0f;
-        // 移动游戏对象
-        if(NeedMove()&& M_stateMachine.ActiveStateName == Enemy1StateID.Move)
+        if (M_stateMachine.ActiveStateName != Enemy1StateID.Move)
         {
-            Vector2 directionToPlayer = ((Vector2)playerTransform.position - (Vector2)this.transform.position).normalized;
-            ObjectMove.MoveObject(M_rigidbody2D, directionToPlayer, M_chData.CurrentMoveSpeed);
+            pathRepathTimer = 0f;
+            ClearPath();
         }
-        else if(M_stateMachine.ActiveStateName == Enemy1StateID.Attack && CanStartAttack)
+
+        // 移动游戏对象
+        if (M_stateMachine.ActiveStateName == Enemy1StateID.Move && ShouldChase())
+        {
+            MoveWithPathfinding();
+        }
+        else if (M_stateMachine.ActiveStateName == Enemy1StateID.Attack && CanStartAttack)
         {
             ObjectMove.MoveObject(M_rigidbody2D, attackDirection, collisionSpeed);
         }
@@ -129,15 +172,19 @@ public class Enemy1HFSM : MonoBehaviour
 
         // 添加转换
             //待机 -> 移动
-                M_stateMachine.AddTransition(Enemy1StateID.Idle, Enemy1StateID.Move, t => NeedMove());
+                M_stateMachine.AddTransition(Enemy1StateID.Idle, Enemy1StateID.Move, t => ShouldChase());
             //待机 -> 攻击
-                M_stateMachine.AddTransition(Enemy1StateID.Idle, Enemy1StateID.Attack, t => !NeedMove());
+                M_stateMachine.AddTransition(Enemy1StateID.Idle, Enemy1StateID.Attack, t => ShouldAttack());
             
             //移动 -> 攻击
-                M_stateMachine.AddTransition(Enemy1StateID.Move, Enemy1StateID.Attack, t => !NeedMove());
+                M_stateMachine.AddTransition(Enemy1StateID.Move, Enemy1StateID.Attack, t => ShouldAttack());
+            //移动 -> 待机
+                M_stateMachine.AddTransition(Enemy1StateID.Move, Enemy1StateID.Idle, t => ShouldIdle());
 
             //攻击 -> 移动
-                M_stateMachine.AddTransition(Enemy1StateID.Attack, Enemy1StateID.Move, t => NeedMove());
+                M_stateMachine.AddTransition(Enemy1StateID.Attack, Enemy1StateID.Move, t => ShouldChase());
+            //攻击 -> 待机
+                M_stateMachine.AddTransition(Enemy1StateID.Attack, Enemy1StateID.Idle, t => ShouldIdle());
             
         M_stateMachine.SetStartState(Enemy1StateID.Idle);
             
@@ -145,14 +192,213 @@ public class Enemy1HFSM : MonoBehaviour
 
     private bool NeedMove()
     {
+        if (playerTransform == null)
+        {
+            return false;
+        }
+
         // 获取玩家位置
         Vector2 playerPosition = playerTransform.position;
 
         // 计算敌人与玩家的距离
-        float distanceToPlayer = Vector2.Distance(this.transform.position, playerPosition);
+        float distanceToPlayer = Vector2.Distance(transform.position, playerPosition);
 
         // 判断是否需要移动
         return distanceToPlayer > AttackRange;
+    }
+
+    private bool IsPlayerInAttackRange()
+    {
+        if (playerTransform == null)
+        {
+            return false;
+        }
+
+        float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
+        return distanceToPlayer <= AttackRange;
+    }
+
+    private bool HasLineOfSightToPlayer()
+    {
+        if (playerTransform == null)
+        {
+            return false;
+        }
+
+        if (obstacleMask.value == 0)
+        {
+            return true;
+        }
+
+        Vector2 origin = transform.position;
+        Vector2 target = playerTransform.position;
+        RaycastHit2D obstacleHit = Physics2D.Linecast(origin, target, obstacleMask);
+        return obstacleHit.collider == null;
+    }
+
+    private bool IsPlayerInHateRange()
+    {
+        if (playerTransform == null)
+        {
+            return false;
+        }
+
+        if (hateRange <= 0f)
+        {
+            return true;
+        }
+
+        float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
+        return distanceToPlayer <= hateRange;
+    }
+
+    private bool ShouldChase()
+    {
+        if (!IsPlayerInHateRange())
+        {
+            return false;
+        }
+
+        // 在攻击范围内但被障碍挡住时，继续追击找角度，不允许隔墙开打。
+        return !IsPlayerInAttackRange() || !HasLineOfSightToPlayer();
+    }
+
+    private bool ShouldAttack()
+    {
+        return IsPlayerInHateRange() && IsPlayerInAttackRange() && HasLineOfSightToPlayer();
+    }
+
+    private bool ShouldIdle()
+    {
+        return !IsPlayerInHateRange();
+    }
+
+    private void MoveWithPathfinding()
+    {
+        if (playerTransform == null)
+        {
+            return;
+        }
+
+        pathRepathTimer -= Time.fixedDeltaTime;
+        if (pathRepathTimer <= 0f)
+        {
+            RebuildPathToPlayer();
+            pathRepathTimer = Mathf.Max(0.05f, pathRepathInterval);
+        }
+
+        Vector2 moveTarget = GetCurrentMoveTarget();
+        Vector2 moveDirection = moveTarget - (Vector2)transform.position;
+        if (moveDirection.sqrMagnitude <= 0.0001f)
+        {
+            return;
+        }
+
+        ObjectMove.MoveObject(M_rigidbody2D, moveDirection.normalized, M_chData.CurrentMoveSpeed);
+    }
+
+    private void RebuildPathToPlayer()
+    {
+        if (playerTransform == null)
+        {
+            ClearPath();
+            return;
+        }
+
+        Vector2 start = transform.position;
+        Vector2 goal = playerTransform.position;
+
+        if (obstacleMask.value == 0 || !Physics2D.Linecast(start, goal, obstacleMask))
+        {
+            ClearPath();
+            return;
+        }
+
+        bool foundPath = Enemy1Pathfinding2D.TryBuildPath(
+            start,
+            goal,
+            pathCellSize,
+            pathNodeCheckRadius,
+            obstacleMask,
+            pathMaxSearchNodes,
+            currentPath
+        );
+
+        if (foundPath)
+        {
+            currentPathIndex = 0;
+            return;
+        }
+
+        ClearPath();
+    }
+
+    private Vector2 GetCurrentMoveTarget()
+    {
+        if (currentPath.Count == 0)
+        {
+            return playerTransform != null ? (Vector2)playerTransform.position : (Vector2)transform.position;
+        }
+
+        Vector2 currentPosition = transform.position;
+        while (currentPathIndex < currentPath.Count)
+        {
+            float distance = Vector2.Distance(currentPosition, currentPath[currentPathIndex]);
+            if (distance > pathWaypointReachDistance)
+            {
+                break;
+            }
+
+            currentPathIndex++;
+        }
+
+        if (currentPathIndex >= currentPath.Count)
+        {
+            return playerTransform != null ? (Vector2)playerTransform.position : currentPosition;
+        }
+
+        return currentPath[currentPathIndex];
+    }
+
+    private void ClearPath()
+    {
+        currentPath.Clear();
+        currentPathIndex = 0;
+    }
+
+    private void ResolvePathNodeRadiusByCollider()
+    {
+        if (!autoPathNodeCheckRadius)
+        {
+            return;
+        }
+
+        Collider2D[] colliders = GetComponentsInChildren<Collider2D>(true);
+        float maxRadius = 0f;
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            Collider2D collider = colliders[i];
+            if (collider == null || !collider.enabled || collider.isTrigger)
+            {
+                continue;
+            }
+
+            Bounds bounds = collider.bounds;
+            float radius = Mathf.Max(bounds.extents.x, bounds.extents.y);
+            if (radius > maxRadius)
+            {
+                maxRadius = radius;
+            }
+        }
+
+        if (maxRadius <= 0f)
+        {
+            return;
+        }
+
+        float computedRadius = maxRadius * Mathf.Max(0.01f, pathNodeRadiusScale)
+            + Mathf.Max(0f, pathNodeRadiusPadding);
+        pathNodeCheckRadius = Mathf.Max(pathNodeRadiusMin, computedRadius);
     }
     
     /// <summary>

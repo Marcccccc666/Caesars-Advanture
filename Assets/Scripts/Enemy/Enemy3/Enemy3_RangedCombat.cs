@@ -32,10 +32,11 @@ public class Enemy3_RangedCombat : MonoBehaviour
         }
 
         Vector2 normalizedDirection = direction.normalized;
+        float angle = Mathf.Atan2(normalizedDirection.y, normalizedDirection.x) * Mathf.Rad2Deg;
         Rigidbody2D projectileInstance = Instantiate(
             projectilePrefab,
             firePoint.position,
-            Quaternion.identity
+            Quaternion.Euler(0f, 0f, angle)
         );
 
         EnemyBulletAttack enemyBullet = projectileInstance.GetComponent<EnemyBulletAttack>();

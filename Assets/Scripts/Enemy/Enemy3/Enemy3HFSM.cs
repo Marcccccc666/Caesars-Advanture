@@ -8,11 +8,6 @@ public enum Enemy3
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D), typeof(EnemyData))]
 public class Enemy3HFSM : MonoBehaviour
 {
-    [Header("检测范围")]
-    [SerializeField, ChineseLabel("仇恨判定点")] private Transform detectionPoint;
-    [SerializeField, ChineseLabel("默认仇恨范围")] private float defaultHateRange = 8f;
-    [SerializeField, ChineseLabel("默认攻击范围")] private float defaultAttackRange = 4f;
-
     [Header("视觉")]
     [SerializeField, ChineseLabel("模型根节点")] private Transform visualRoot;
     
@@ -38,10 +33,10 @@ public class Enemy3HFSM : MonoBehaviour
     private EnemyData enemyData;
     private Rigidbody2D rb2D;
     private Enemy3_RangedCombat rangedCombat;
+    private EnemyVision2D vision;
+    private EnemyAStarChase2D chasePathfinder;
 
     private float baseVisualScaleX = 1f;
-    private float hateRange;
-    private float attackRange;
 
     private float cooldownTimer;
     private float attackTimer;
@@ -66,15 +61,8 @@ public class Enemy3HFSM : MonoBehaviour
 
     private Transform playerTransform
     {
-        get
-        {
-            var playerData = CharacterManager.Instance.GetCurrentPlayerCharacterData;
-            return playerData != null ? playerData.transform : null;
-        }
+        get => vision != null ? vision.PlayerTransform : null;
     }
-
-    private Vector2 DetectionPosition =>
-        detectionPoint != null ? (Vector2)detectionPoint.position : (Vector2)transform.position;
 
     private void Awake()
     {
@@ -87,6 +75,16 @@ public class Enemy3HFSM : MonoBehaviour
             enemyAnimator = GetComponent<Animator>();
         }
         rangedCombat = GetComponentInChildren<Enemy3_RangedCombat>(true);
+        vision = GetComponent<EnemyVision2D>();
+        if (vision == null)
+        {
+            vision = gameObject.AddComponent<EnemyVision2D>();
+        }
+        chasePathfinder = GetComponent<EnemyAStarChase2D>();
+        if (chasePathfinder == null)
+        {
+            chasePathfinder = gameObject.AddComponent<EnemyAStarChase2D>();
+        }
 
         if (visualRoot == null)
         {
@@ -99,11 +97,18 @@ public class Enemy3HFSM : MonoBehaviour
             baseVisualScaleX = 1f;
         }
 
-        var attackGizmo = GetComponentInChildren<AttackRangeGizmo>();
-        attackRange = attackGizmo != null ? attackGizmo.GetAttackRange : defaultAttackRange;
-
-        var hateGizmo = GetComponentInChildren<HateRangeGizmo>();
-        hateRange = hateGizmo != null ? hateGizmo.GetHateRange : defaultHateRange;
+        if (vision != null)
+        {
+            if (rangedCombat != null && rangedCombat.FirePoint != null)
+            {
+                vision.SetAttackPoint(rangedCombat.FirePoint);
+            }
+            vision.RefreshRangesFromGizmos();
+        }
+        if (chasePathfinder != null)
+        {
+            chasePathfinder.BindVision(vision);
+        }
 
         BuildStateMachine();
     }
@@ -125,10 +130,14 @@ public class Enemy3HFSM : MonoBehaviour
     private void FixedUpdate()
     {
         rb2D.angularVelocity = 0f;
+        if (stateMachine.ActiveStateName != Enemy3StateID.Chase && chasePathfinder != null)
+        {
+            chasePathfinder.ResetPath();
+        }
 
         if (stateMachine.ActiveStateName == Enemy3StateID.Chase && ShouldChase())
         {
-            MoveTowardsPlayer();
+            MoveWithPathfinding();
             return;
         }
 
@@ -154,7 +163,7 @@ public class Enemy3HFSM : MonoBehaviour
         stateMachine.AddTransition(
             Enemy3StateID.Idle,
             Enemy3StateID.Cooldown,
-            _ => IsPlayerInAttackRange() && cooldownTimer > 0f
+            _ => IsPlayerInAttackRange() && HasLineOfSightToPlayer() && cooldownTimer > 0f
         );
 
         stateMachine.AddTransition(Enemy3StateID.Chase, Enemy3StateID.Idle, _ => ShouldIdle());
@@ -162,7 +171,7 @@ public class Enemy3HFSM : MonoBehaviour
         stateMachine.AddTransition(
             Enemy3StateID.Chase,
             Enemy3StateID.Cooldown,
-            _ => IsPlayerInAttackRange() && cooldownTimer > 0f
+            _ => IsPlayerInAttackRange() && HasLineOfSightToPlayer() && cooldownTimer > 0f
         );
 
         // 攻击状态只在攻击时长结束后切出，不受玩家位置影响。
@@ -241,58 +250,37 @@ public class Enemy3HFSM : MonoBehaviour
 
     private bool HasPlayer()
     {
-        return playerTransform != null;
+        return vision != null && vision.HasPlayer();
     }
 
     private bool IsPlayerInHateRange()
     {
-        if (!HasPlayer())
-        {
-            return false;
-        }
-
-        if (hateRange <= 0f)
-        {
-            return true;
-        }
-
-        return Vector2.Distance(DetectionPosition, playerTransform.position) <= hateRange;
+        return vision != null && vision.IsPlayerInHateRange();
     }
 
     private bool IsPlayerInAttackRange()
     {
-        if (!HasPlayer())
-        {
-            return false;
-        }
+        return vision != null && vision.IsPlayerInAttackRange();
+    }
 
-        if (attackRange <= 0f)
-        {
-            return false;
-        }
-
-        Vector2 origin = transform.position;
-        if (rangedCombat != null && rangedCombat.FirePoint != null)
-        {
-            origin = rangedCombat.FirePoint.position;
-        }
-
-        return Vector2.Distance(origin, playerTransform.position) <= attackRange;
+    private bool HasLineOfSightToPlayer()
+    {
+        return vision != null && vision.HasLineOfSightToPlayer();
     }
 
     private bool CanEnterAttack()
     {
-        return IsPlayerInAttackRange() && cooldownTimer <= 0f;
+        return vision != null && vision.CanAttack() && cooldownTimer <= 0f;
     }
 
     private bool ShouldChase()
     {
-        return IsPlayerInHateRange() && !IsPlayerInAttackRange();
+        return vision != null && vision.ShouldChase();
     }
 
     private bool ShouldIdle()
     {
-        return !IsPlayerInHateRange();
+        return vision == null || vision.ShouldIdle();
     }
 
     private void MoveTowardsPlayer()
@@ -304,6 +292,26 @@ public class Enemy3HFSM : MonoBehaviour
 
         Vector2 direction =
             ((Vector2)playerTransform.position - (Vector2)transform.position).normalized;
+        MoveByDirection(direction, enemyData.CurrentMoveSpeed);
+    }
+
+    private void MoveWithPathfinding()
+    {
+        Vector2 direction = Vector2.zero;
+        if (chasePathfinder != null)
+        {
+            direction = chasePathfinder.GetMoveDirectionToPlayer();
+        }
+        else
+        {
+            direction = vision != null ? vision.GetDirectionToPlayer() : Vector2.zero;
+        }
+
+        if (direction.sqrMagnitude <= 0.0001f)
+        {
+            return;
+        }
+
         MoveByDirection(direction, enemyData.CurrentMoveSpeed);
     }
 

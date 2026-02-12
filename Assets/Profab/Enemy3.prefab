@@ -220,6 +220,7 @@ GameObject:
   - component: {fileID: 4529342643130588469}
   - component: {fileID: 1740422455164711344}
   - component: {fileID: 7073015299503198411}
+  - component: {fileID: 5849145859787399124}
   m_Layer: 7
   m_Name: Enemy3
   m_TagString: Enemy
@@ -416,9 +417,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13827bbd5d8fdec498e504469365ef9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy3HFSM
-  detectionPoint: {fileID: 2512152800752955395}
-  defaultHateRange: 8
-  defaultAttackRange: 5
   visualRoot: {fileID: 2610950808481684394}
   enemyAnimator: {fileID: 5580066900337829736}
   idleAnimationState: idle
@@ -431,3 +429,24 @@ MonoBehaviour:
   idleMoveSpeedMultiplier: 0.5
   idleMoveDurationRange: {x: 0.35, y: 0.8}
   idleStopDurationRange: {x: 0.3, y: 0.75}
+--- !u!114 &5849145859787399124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8625351930764168971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67fd7cc297fafb7458b54dc629f598eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyVision2D
+  detectionPoint: {fileID: 2512152800752955395}
+  attackPoint: {fileID: 819042794018667150}
+  defaultHateRange: 8
+  defaultAttackRange: 5
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 768
+  requireLineOfSightToAttack: 1
+  requireHateRangeForAttack: 1

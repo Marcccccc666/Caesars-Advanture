@@ -9,6 +9,8 @@ public class Enemy4_LineCombat : MonoBehaviour
     [SerializeField, ChineseLabel("伤害检测层")] private LayerMask damageMask;
     [SerializeField, ChineseLabel("射线宽度")] private float lineWidth = 0.08f;
     [SerializeField, ChineseLabel("射线颜色")] private Color lineColor = Color.red;
+    [SerializeField, ChineseLabel("发射瞬间粗细倍率")] private float fireWidthMultiplier = 2.4f;
+    [SerializeField, ChineseLabel("发射瞬间持续时间")] private float fireFlashDuration = 0.08f;
     [SerializeField, ChineseLabel("射线渲染顺序")] private int lineSortingOrder = 50;
     [SerializeField, ChineseLabel("攻击音效")] private AudioClip hitAudio;
 
@@ -16,8 +18,11 @@ public class Enemy4_LineCombat : MonoBehaviour
     private Vector2 currentStart;
     private Vector2 currentEnd;
     private Transform ownerTransform;
+    private bool aimingActive;
+    private float fireFlashTimer;
 
     public Transform FirePoint => firePoint;
+    public LayerMask ObstacleMask => obstacleMask;
 
     private void Awake()
     {
@@ -26,6 +31,26 @@ public class Enemy4_LineCombat : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         SetupLineRenderer();
         EndAimLine();
+    }
+
+    private void Update()
+    {
+        if (lineRenderer == null || fireFlashTimer <= 0f)
+        {
+            return;
+        }
+
+        fireFlashTimer -= Time.deltaTime;
+        if (fireFlashTimer > 0f)
+        {
+            return;
+        }
+
+        SetLineWidth(lineWidth);
+        if (!aimingActive)
+        {
+            lineRenderer.enabled = false;
+        }
     }
 
     private void SetupLineRenderer()
@@ -43,10 +68,16 @@ public class Enemy4_LineCombat : MonoBehaviour
         lineRenderer.endColor = lineColor;
         lineRenderer.numCapVertices = 4;
         lineRenderer.sortingOrder = lineSortingOrder;
+        lineRenderer.widthCurve = AnimationCurve.Constant(0f, 1f, 1f);
+        SetLineWidth(lineWidth);
 
         if (lineRenderer.sharedMaterial == null)
         {
-            Shader shader = Shader.Find("Sprites/Default");
+            Shader shader = Shader.Find("Universal Render Pipeline/2D/Sprite-Unlit-Default");
+            if (shader == null)
+            {
+                shader = Shader.Find("Sprites/Default");
+            }
             if (shader != null)
             {
                 lineRenderer.sharedMaterial = new Material(shader);
@@ -61,6 +92,9 @@ public class Enemy4_LineCombat : MonoBehaviour
             return;
         }
 
+        aimingActive = true;
+        fireFlashTimer = 0f;
+        SetLineWidth(lineWidth);
         lineRenderer.enabled = true;
         UpdateAimLine(targetPosition, maxDistance);
     }
@@ -92,6 +126,8 @@ public class Enemy4_LineCombat : MonoBehaviour
 
     public void FireLockedLine(int damage)
     {
+        TriggerFireFlash();
+
         Vector2 segment = currentEnd - currentStart;
         float distance = segment.magnitude;
         if (distance <= 0.001f)
@@ -149,7 +185,36 @@ public class Enemy4_LineCombat : MonoBehaviour
             return;
         }
 
-        lineRenderer.enabled = false;
+        aimingActive = false;
+        if (fireFlashTimer <= 0f)
+        {
+            lineRenderer.enabled = false;
+        }
+    }
+
+    private void TriggerFireFlash()
+    {
+        if (lineRenderer == null)
+        {
+            return;
+        }
+
+        lineRenderer.enabled = true;
+        float flashWidth = lineWidth * Mathf.Max(1f, fireWidthMultiplier);
+        SetLineWidth(flashWidth);
+        fireFlashTimer = Mathf.Max(0.01f, fireFlashDuration);
+    }
+
+    private void SetLineWidth(float width)
+    {
+        if (lineRenderer == null)
+        {
+            return;
+        }
+
+        float value = Mathf.Max(0.005f, width);
+        lineRenderer.startWidth = value;
+        lineRenderer.endWidth = value;
     }
 
     private Vector2 ResolveBlockedEnd(Vector2 origin, Vector2 direction, float maxDistance)

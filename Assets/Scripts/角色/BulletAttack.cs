@@ -3,25 +3,41 @@ using UnityEngine;
 public class BulletAttack : MonoBehaviour
 {
     private int bulletDamage = 10;
-    private GameManager GameManager => GameManager.Instance;
-    private WeaponManager weaponManager => WeaponManager.Instance;
     private EnemyManager enemyManager => EnemyManager.Instance;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Enemy"))
         {
-            int enemyID = collision.gameObject.GetInstanceID();
-            EnemyData enemyData = enemyManager.GetEnemyDataDict[enemyID];
-            enemyData.CurrentHealth -= bulletDamage;
-
-            if(enemyData.CurrentHealth <= 0)
+            EnemyData enemyData = collision.GetComponentInParent<EnemyData>();
+            if (enemyData == null)
             {
-                enemyManager.RemoveEnemyData(enemyID);
-
+                Destroy(gameObject);
+                return;
             }
+
+            int enemyID = enemyData.gameObject.GetInstanceID();
+            if (enemyManager != null && enemyManager.GetEnemyDataDict.TryGetValue(enemyID, out EnemyData managedData))
+            {
+                enemyData = managedData;
+            }
+
+            enemyData.CurrentHealth -= bulletDamage;
+            if (enemyData.CurrentHealth <= 0)
+            {
+                if (enemyManager != null && enemyManager.GetEnemyDataDict.ContainsKey(enemyID))
+                {
+                    enemyManager.RemoveEnemyData(enemyID);
+                }
+                else
+                {
+                    Destroy(enemyData.gameObject);
+                }
+            }
+
             Destroy(gameObject);
         }
-        else if(collision.CompareTag("Wall"))
+        else if(collision.CompareTag("Wall") || !collision.isTrigger)
         {
             Destroy(gameObject);
         }

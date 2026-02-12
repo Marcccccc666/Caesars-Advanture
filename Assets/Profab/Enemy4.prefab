@@ -89,7 +89,8 @@ LineRenderer:
   m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials: []
+  m_Materials:
+  - {fileID: -876546973899608171, guid: ca2ed216f98028c4dae6c5224a952b3c, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -121,14 +122,23 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.028045662
-        value: 0.93876076
+        time: 0
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.9559623
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -194,6 +204,8 @@ MonoBehaviour:
     m_Bits: 64
   lineWidth: 0.2
   lineColor: {r: 1, g: 0, b: 0, a: 1}
+  fireWidthMultiplier: 2.4
+  fireFlashDuration: 0.08
   lineSortingOrder: 50
   hitAudio: {fileID: 0}
 --- !u!1 &5542867085567767002
@@ -289,6 +301,7 @@ GameObject:
   - component: {fileID: 1417673386466925431}
   - component: {fileID: 2862760164898156680}
   - component: {fileID: 2741666557413033440}
+  - component: {fileID: 412445040394862774}
   m_Layer: 7
   m_Name: Enemy4
   m_TagString: Enemy
@@ -399,8 +412,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.5, y: 1}
+  m_Offset: {x: 0, y: -0.004689604}
+  m_Size: {x: 0.5, y: 0.5216649}
   m_Direction: 0
 --- !u!212 &1417673386466925431
 SpriteRenderer:
@@ -472,7 +485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37c2eb7be406d2c499c709c03bbb0d06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  enemyBaseData: {fileID: 11400000, guid: f543f2342138d444e8553b5c1fe8cc0c, type: 2}
+  enemyBaseData: {fileID: 11400000, guid: e5b587a09bafdd545a06ed4af6b32350, type: 2}
 --- !u!114 &2741666557413033440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -485,9 +498,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0c3871254d5b2b4ea53f5f8ba5e6889, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy4HFSM
-  detectionPoint: {fileID: 9000883742154529131}
-  defaultHateRange: 12
-  defaultAttackRange: 10
   visualRoot: {fileID: 5010295172714828738}
   enemyAnimator: {fileID: 8406435155875776161}
   idleAnimationState: idle
@@ -499,6 +509,27 @@ MonoBehaviour:
   idleMoveSpeedMultiplier: 0.5
   idleMoveDurationRange: {x: 0.35, y: 0.8}
   idleStopDurationRange: {x: 0.3, y: 0.75}
+--- !u!114 &412445040394862774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6659619635824075980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67fd7cc297fafb7458b54dc629f598eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyVision2D
+  detectionPoint: {fileID: 9000883742154529131}
+  attackPoint: {fileID: 4857019926811389477}
+  defaultHateRange: 12
+  defaultAttackRange: 10
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 768
+  requireLineOfSightToAttack: 1
+  requireHateRangeForAttack: 1
 --- !u!1 &7566580866584902788
 GameObject:
   m_ObjectHideFlags: 0
