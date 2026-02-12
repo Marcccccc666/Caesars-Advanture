@@ -7,11 +7,6 @@ public enum Enemy1{}
 public class Enemy1HFSM : MonoBehaviour
 {
     /// <summary>
-    /// 旋转偏差角度
-    /// </summary>
-    [SerializeField,ChineseLabel("旋转偏差角度")] private float rotationOffsetAngle = 0f;
-
-    /// <summary>
     /// 冲撞速度
     /// </summary>
     [SerializeField, ChineseLabel("冲撞速度")] private float collisionSpeed = 0f;
@@ -31,6 +26,12 @@ public class Enemy1HFSM : MonoBehaviour
     /// </summary>
     private Rigidbody2D M_rigidbody2D;
 
+    [Header("动画")]
+    [SerializeField, ChineseLabel("动画控制器")] private Animator enemyAnimator;
+    [SerializeField, ChineseLabel("待机动画状态名")] private string idleAnimationState = "idle";
+    [SerializeField, ChineseLabel("移动动画状态名")] private string moveAnimationState = "move";
+    [SerializeField, ChineseLabel("攻击动画状态名")] private string attackAnimationState = "attack";
+
     /// <summary>
     /// 攻击范围
     /// </summary>
@@ -46,6 +47,7 @@ public class Enemy1HFSM : MonoBehaviour
     /// 可以开始攻击
     /// </summary>
     private bool CanStartAttack = false;
+    private Enemy1StateID? lastAnimationState = null;
 
     private StateMachine<Enemy1StateID, Enemy1> M_stateMachine = new();
     
@@ -54,8 +56,11 @@ public class Enemy1HFSM : MonoBehaviour
         M_chData = GetComponent<EnemyData>();
         M_chData.InitObjectData();
         
-
         M_rigidbody2D = GetComponent<Rigidbody2D>();
+        if (enemyAnimator == null)
+        {
+            enemyAnimator = GetComponent<Animator>();
+        }
         AttackRange = GetComponentInChildren<AttackRangeGizmo>().GetAttackRange;
 
         Enemy1StateMachine();
@@ -64,6 +69,7 @@ public class Enemy1HFSM : MonoBehaviour
     void Start()
     {
         M_stateMachine.Init();
+        UpdateAnimationByState(force: true);
     }
 
     void FixedUpdate()
@@ -84,12 +90,7 @@ public class Enemy1HFSM : MonoBehaviour
     void Update()
     {
         M_stateMachine.OnLogic();
-
-        // 旋转头部朝向玩家
-        if(M_stateMachine.ActiveStateName == Enemy1StateID.Move && NeedRotate())
-        {
-            ObjectRotation.RotateTowardsTarget(this.transform, playerTransform.position, M_chData.EnemyBaseData.rotationSpeed);
-        }
+        UpdateAnimationByState();
     }
 
     public enum Enemy1StateID
@@ -121,29 +122,16 @@ public class Enemy1HFSM : MonoBehaviour
             //待机 -> 移动
                 M_stateMachine.AddTransition(Enemy1StateID.Idle, Enemy1StateID.Move, t => NeedMove());
             //待机 -> 攻击
-                M_stateMachine.AddTransition(Enemy1StateID.Idle, Enemy1StateID.Attack, t => !NeedMove() && !NeedRotate());
+                M_stateMachine.AddTransition(Enemy1StateID.Idle, Enemy1StateID.Attack, t => !NeedMove());
             
             //移动 -> 攻击
-                M_stateMachine.AddTransition(Enemy1StateID.Move, Enemy1StateID.Attack, t => !NeedMove() && !NeedRotate());
+                M_stateMachine.AddTransition(Enemy1StateID.Move, Enemy1StateID.Attack, t => !NeedMove());
 
             //攻击 -> 移动
                 M_stateMachine.AddTransition(Enemy1StateID.Attack, Enemy1StateID.Move, t => NeedMove());
             
         M_stateMachine.SetStartState(Enemy1StateID.Idle);
             
-    }
-
-    /// <summary>
-    /// 是否需要旋转
-    /// </summary>
-    private bool NeedRotate()
-    {
-        // 计算头与玩家的角度差
-        Vector2 directionToPlayer = ((Vector2)playerTransform.position - (Vector2)this.transform.position).normalized;
-        float angleToPlayer = Vector2.SignedAngle(this.transform.right, directionToPlayer);
-
-        // 判断是否需要旋转
-        return Mathf.Abs(angleToPlayer) > rotationOffsetAngle;
     }
 
     private bool NeedMove()
@@ -166,4 +154,74 @@ public class Enemy1HFSM : MonoBehaviour
         CanStartAttack = canStart;
     }
 
+    private void UpdateAnimationByState(bool force = false)
+    {
+        Enemy1StateID currentState = M_stateMachine.ActiveStateName;
+        if (!force && lastAnimationState.HasValue && lastAnimationState.Value == currentState)
+        {
+            return;
+        }
+
+        PlayAnimationForState(currentState);
+        lastAnimationState = currentState;
+    }
+
+    private void PlayAnimationForState(Enemy1StateID state)
+    {
+        switch (state)
+        {
+            case Enemy1StateID.Idle:
+                PlayFirstAvailableState(idleAnimationState, "Idle", "idle", "敌人1_Idle");
+                break;
+            case Enemy1StateID.Move:
+                PlayFirstAvailableState(moveAnimationState, "Move", "move", "敌人1_Move");
+                break;
+            case Enemy1StateID.Attack:
+                PlayFirstAvailableState(attackAnimationState, "Attack", "attack", "敌人1_attack");
+                break;
+            case Enemy1StateID.Die:
+                // 当前未配置死亡动画，保持现状。
+                break;
+        }
+    }
+
+    private void PlayFirstAvailableState(params string[] candidates)
+    {
+        if (enemyAnimator == null || candidates == null || candidates.Length == 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < candidates.Length; i++)
+        {
+            if (TryPlayAnimatorState(candidates[i]))
+            {
+                return;
+            }
+        }
+    }
+
+    private bool TryPlayAnimatorState(string stateName)
+    {
+        if (enemyAnimator == null || string.IsNullOrWhiteSpace(stateName))
+        {
+            return false;
+        }
+
+        int shortHash = Animator.StringToHash(stateName);
+        if (enemyAnimator.HasState(0, shortHash))
+        {
+            enemyAnimator.Play(shortHash);
+            return true;
+        }
+
+        int fullPathHash = Animator.StringToHash($"Base Layer.{stateName}");
+        if (enemyAnimator.HasState(0, fullPathHash))
+        {
+            enemyAnimator.Play(fullPathHash);
+            return true;
+        }
+
+        return false;
+    }
 }
