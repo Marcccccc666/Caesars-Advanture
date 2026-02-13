@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class TransferScenes : MonoBehaviour
 {
-    [SerializeField, ChineseLabel("要传送到的场景名称"), ReadOnly(true)] private string sceneName;
+    [SerializeField, ChineseLabel("要传送到的场景名称"), Readonly] private string sceneName;
 
     public void TransferScene()
     {
