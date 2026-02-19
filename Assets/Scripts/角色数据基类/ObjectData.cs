@@ -12,6 +12,18 @@ public class ObjectData : MonoBehaviour
     }
 
     /// <summary>
+    /// 加血事件
+    /// </summary>
+    /// <param name="health">加血值</param>
+    public Action<int> OnHeal;
+
+    /// <summary>
+    /// 受伤事件
+    /// </summary>
+    /// <param name="damage">受伤值</param>
+    public Action<int> OnDamage;
+
+    /// <summary>
     /// 死亡事件
     /// </summary>
     public Action OnDie;
@@ -75,6 +87,7 @@ public class ObjectData : MonoBehaviour
     public virtual void Heal(int health)
     {
         CurrentHealth += health;
+        OnHeal?.Invoke(health);
     }
 
     /// <summary>
@@ -84,6 +97,7 @@ public class ObjectData : MonoBehaviour
     public virtual void Damage(int damage)
     {
         CurrentHealth -= damage;
+        OnDamage?.Invoke(damage);
     }
 
 #endregion

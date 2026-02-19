@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -6,14 +7,14 @@ using UnityEngine;
 public class DamageHitFeedback : MonoBehaviour
 {
     [Header("数据源")]
-    [SerializeField, ChineseLabel("数据组件(自动查找)")] private EnemyData objectData;
+    [SerializeField, ChineseLabel("数据组件(自动查找)")] private ObjectData objectData;
 
     [Header("闪白配置")]
     [SerializeField, ChineseLabel("受击渲染器(留空自动查找)")] private SpriteRenderer[] flashRenderers;
     [SerializeField, ChineseLabel("闪白颜色")] private Color flashColor = Color.white;
     [SerializeField, ChineseLabel("闪白持续时间")] private float flashDuration = 0.08f;
     [SerializeField, ChineseLabel("优先使用材质高亮")] private bool useMaterialIntensity = true;
-    [SerializeField, ChineseLabel("材质白闪强度倍率")] [Min(1f)] private float flashIntensity = 2.2f;
+    [SerializeField, ChineseLabel("材质白闪强度倍率"), Min(1f)] private float flashIntensity = 2.2f;
 
     [Header("伤害飘字配置")]
     [SerializeField, ChineseLabel("飘字颜色")] private Color damageTextColor = new Color(1f, 0.3f, 0.3f, 1f);
@@ -24,37 +25,35 @@ public class DamageHitFeedback : MonoBehaviour
     [SerializeField, ChineseLabel("飘字水平随机偏移")] private float damageTextRandomX = 0.2f;
     [SerializeField, ChineseLabel("飘字渲染层级")] private int damageTextSortingOrder = 200;
 
+    private readonly List<FlashSnapshot> activeFlashSnapshots = new();
     private Coroutine flashCoroutine;
-    private Color[] preFlashColors;
-    private Material[] flashMaterials;
-    private Color[] preMaterialColors;
-    private string[] materialColorProperties;
     private bool isSubscribed;
     private bool warnedMissingRenderer;
 
+    private struct FlashSnapshot
+    {
+        public SpriteRenderer renderer;
+        public Color spriteColor;
+        public Material material;
+        public string materialColorProperty;
+        public Color materialColor;
+    }
+
     private void Awake()
     {
-        AutoAssignReferences();
-        EnsureColorBuffer();
-        EnsureMaterialBuffer();
+        ResolveReferences();
     }
 
     private void OnEnable()
     {
+        ResolveReferences();
         SubscribeDamageEvent();
     }
 
     private void OnDisable()
     {
         UnsubscribeDamageEvent();
-
-        // 仅在闪白过程中被禁用时恢复颜色，避免未初始化颜色覆盖精灵颜色。
-        if (flashCoroutine != null)
-        {
-            StopCoroutine(flashCoroutine);
-            flashCoroutine = null;
-            RestoreColors();
-        }
+        StopFlashAndRestore();
     }
 
     private void SubscribeDamageEvent()
@@ -92,7 +91,14 @@ public class DamageHitFeedback : MonoBehaviour
 
     private void PlayFlash()
     {
-        if (flashDuration <= 0f || flashRenderers == null || flashRenderers.Length == 0)
+        if (flashDuration <= 0f)
+        {
+            return;
+        }
+
+        ResolveReferences();
+        CaptureFlashSnapshots(activeFlashSnapshots);
+        if (activeFlashSnapshots.Count == 0)
         {
             if (!warnedMissingRenderer)
             {
@@ -102,54 +108,42 @@ public class DamageHitFeedback : MonoBehaviour
             return;
         }
 
-        CaptureCurrentColors();
-
         if (flashCoroutine != null)
         {
-            StopCoroutine(flashCoroutine);
+            StopFlashAndRestore();
         }
 
-        flashCoroutine = StartCoroutine(FlashRoutine());
+        ApplyFlash(activeFlashSnapshots);
+        flashCoroutine = StartCoroutine(FlashRoutine(Mathf.Max(0.01f, flashDuration)));
     }
 
-    private IEnumerator FlashRoutine()
+    private IEnumerator FlashRoutine(float duration)
     {
-        ApplyFlashColor();
-        yield return new WaitForSeconds(flashDuration);
-        RestoreColors();
+        yield return new WaitForSeconds(duration);
+        RestoreFlash(activeFlashSnapshots);
+        activeFlashSnapshots.Clear();
         flashCoroutine = null;
     }
 
-    private void CaptureCurrentColors()
+    private void StopFlashAndRestore()
     {
-        EnsureColorBuffer();
-        EnsureMaterialBuffer();
-
-        for (int i = 0; i < flashRenderers.Length; i++)
+        if (flashCoroutine != null)
         {
-            if (flashRenderers[i] == null)
-            {
-                continue;
-            }
+            StopCoroutine(flashCoroutine);
+            flashCoroutine = null;
+        }
 
-            preFlashColors[i] = flashRenderers[i].color;
-
-            if (flashMaterials == null || preMaterialColors == null || materialColorProperties == null)
-            {
-                continue;
-            }
-
-            Material material = flashMaterials[i];
-            string colorProperty = materialColorProperties[i];
-            if (material != null && !string.IsNullOrEmpty(colorProperty))
-            {
-                preMaterialColors[i] = material.GetColor(colorProperty);
-            }
+        if (activeFlashSnapshots.Count > 0)
+        {
+            RestoreFlash(activeFlashSnapshots);
+            activeFlashSnapshots.Clear();
         }
     }
 
-    private void ApplyFlashColor()
+    private void CaptureFlashSnapshots(List<FlashSnapshot> snapshots)
     {
+        snapshots.Clear();
+
         if (flashRenderers == null)
         {
             return;
@@ -163,45 +157,63 @@ public class DamageHitFeedback : MonoBehaviour
                 continue;
             }
 
-            bool useMaterialFlash = TryApplyMaterialFlash(i);
-            if (!useMaterialFlash)
+            FlashSnapshot snapshot = new FlashSnapshot
             {
-                Color targetColor = flashColor;
-                targetColor.a = preFlashColors != null && i < preFlashColors.Length
-                    ? preFlashColors[i].a
-                    : renderer.color.a;
-                renderer.color = targetColor;
+                renderer = renderer,
+                spriteColor = renderer.color,
+                material = renderer.material
+            };
+
+            snapshot.materialColorProperty = ResolveColorPropertyName(snapshot.material);
+            if (!string.IsNullOrEmpty(snapshot.materialColorProperty))
+            {
+                snapshot.materialColor = snapshot.material.GetColor(snapshot.materialColorProperty);
             }
+
+            snapshots.Add(snapshot);
         }
     }
 
-    private void RestoreColors()
+    private void ApplyFlash(List<FlashSnapshot> snapshots)
     {
-        if (flashRenderers == null || preFlashColors == null)
+        for (int i = 0; i < snapshots.Count; i++)
         {
-            return;
+            FlashSnapshot snapshot = snapshots[i];
+            if (snapshot.renderer == null)
+            {
+                continue;
+            }
+
+            Color targetSpriteColor = flashColor;
+            targetSpriteColor.a = snapshot.spriteColor.a;
+            snapshot.renderer.color = targetSpriteColor;
+
+            if (!useMaterialIntensity
+                || snapshot.material == null
+                || string.IsNullOrEmpty(snapshot.materialColorProperty))
+            {
+                continue;
+            }
+
+            Color boostedColor = flashColor * Mathf.Max(1f, flashIntensity);
+            boostedColor.a = snapshot.materialColor.a;
+            snapshot.material.SetColor(snapshot.materialColorProperty, boostedColor);
         }
+    }
 
-        int count = Mathf.Min(flashRenderers.Length, preFlashColors.Length);
-        for (int i = 0; i < count; i++)
+    private void RestoreFlash(List<FlashSnapshot> snapshots)
+    {
+        for (int i = 0; i < snapshots.Count; i++)
         {
-            if (flashRenderers[i] == null)
+            FlashSnapshot snapshot = snapshots[i];
+            if (snapshot.renderer != null)
             {
-                continue;
+                snapshot.renderer.color = snapshot.spriteColor;
             }
 
-            flashRenderers[i].color = preFlashColors[i];
-
-            if (flashMaterials == null || preMaterialColors == null || materialColorProperties == null)
+            if (snapshot.material != null && !string.IsNullOrEmpty(snapshot.materialColorProperty))
             {
-                continue;
-            }
-
-            Material material = flashMaterials[i];
-            string colorProperty = materialColorProperties[i];
-            if (material != null && !string.IsNullOrEmpty(colorProperty))
-            {
-                material.SetColor(colorProperty, preMaterialColors[i]);
+                snapshot.material.SetColor(snapshot.materialColorProperty, snapshot.materialColor);
             }
         }
     }
@@ -219,16 +231,16 @@ public class DamageHitFeedback : MonoBehaviour
         text.fontSize = Mathf.Max(0.1f, damageTextFontSize);
         text.alignment = TextAlignmentOptions.Center;
         text.color = damageTextColor;
-        text.textWrappingMode = TextWrappingModes.NoWrap;
+        text.enableWordWrapping = false;
 
         if (TMP_Settings.defaultFontAsset != null)
         {
             text.font = TMP_Settings.defaultFontAsset;
         }
 
+        SpriteRenderer referenceRenderer = GetFirstValidRenderer();
         MeshRenderer textRenderer = text.GetComponent<MeshRenderer>();
-        SpriteRenderer referenceRenderer = GetReferenceRenderer();
-        if (textRenderer != null && referenceRenderer != null)
+        if (referenceRenderer != null && textRenderer != null)
         {
             textRenderer.sortingLayerID = referenceRenderer.sortingLayerID;
             textRenderer.sortingOrder = damageTextSortingOrder;
@@ -240,16 +252,16 @@ public class DamageHitFeedback : MonoBehaviour
 
     private Vector3 GetDamageTextSpawnPosition()
     {
-        SpriteRenderer referenceRenderer = GetReferenceRenderer();
-        if (referenceRenderer == null)
+        SpriteRenderer firstRenderer = GetFirstValidRenderer();
+        if (firstRenderer == null)
         {
             return transform.position + damageTextOffset;
         }
 
-        Bounds bounds = referenceRenderer.bounds;
-        for (int i = 1; i < flashRenderers.Length; i++)
+        Bounds bounds = firstRenderer.bounds;
+        for (int i = 0; i < flashRenderers.Length; i++)
         {
-            if (flashRenderers[i] == null)
+            if (flashRenderers[i] == null || flashRenderers[i] == firstRenderer)
             {
                 continue;
             }
@@ -260,7 +272,7 @@ public class DamageHitFeedback : MonoBehaviour
         return new Vector3(bounds.center.x, bounds.max.y, transform.position.z) + damageTextOffset;
     }
 
-    private SpriteRenderer GetReferenceRenderer()
+    private SpriteRenderer GetFirstValidRenderer()
     {
         if (flashRenderers == null)
         {
@@ -278,107 +290,42 @@ public class DamageHitFeedback : MonoBehaviour
         return null;
     }
 
-    private void AutoAssignReferences()
+    private void ResolveReferences()
     {
         if (objectData == null)
         {
-            objectData = GetComponent<EnemyData>();
+            objectData = GetComponent<ObjectData>();
         }
 
         if (objectData == null)
         {
-            objectData = GetComponentInParent<EnemyData>();
+            objectData = GetComponentInParent<ObjectData>();
         }
 
-        if (flashRenderers == null || flashRenderers.Length == 0)
+        if (flashRenderers != null && flashRenderers.Length > 0)
         {
-            flashRenderers = GetComponentsInChildren<SpriteRenderer>(true);
+            return;
         }
 
-        if ((flashRenderers == null || flashRenderers.Length == 0) && objectData != null)
+        flashRenderers = GetComponentsInChildren<SpriteRenderer>(true);
+        if (flashRenderers != null && flashRenderers.Length > 0)
+        {
+            return;
+        }
+
+        if (objectData != null)
         {
             flashRenderers = objectData.GetComponentsInChildren<SpriteRenderer>(true);
+            if (flashRenderers != null && flashRenderers.Length > 0)
+            {
+                return;
+            }
         }
 
-        if ((flashRenderers == null || flashRenderers.Length == 0) && transform.parent != null)
+        if (transform.parent != null)
         {
             flashRenderers = transform.parent.GetComponentsInChildren<SpriteRenderer>(true);
         }
-    }
-
-    private void EnsureColorBuffer()
-    {
-        if (flashRenderers == null)
-        {
-            preFlashColors = null;
-            return;
-        }
-
-        if (preFlashColors == null || preFlashColors.Length != flashRenderers.Length)
-        {
-            preFlashColors = new Color[flashRenderers.Length];
-        }
-    }
-
-    private void EnsureMaterialBuffer()
-    {
-        if (flashRenderers == null)
-        {
-            flashMaterials = null;
-            preMaterialColors = null;
-            materialColorProperties = null;
-            return;
-        }
-
-        int count = flashRenderers.Length;
-        if (flashMaterials == null || flashMaterials.Length != count)
-        {
-            flashMaterials = new Material[count];
-            preMaterialColors = new Color[count];
-            materialColorProperties = new string[count];
-        }
-
-        for (int i = 0; i < count; i++)
-        {
-            SpriteRenderer renderer = flashRenderers[i];
-            if (renderer == null)
-            {
-                flashMaterials[i] = null;
-                materialColorProperties[i] = null;
-                continue;
-            }
-
-            Material material = renderer.material;
-            flashMaterials[i] = material;
-            materialColorProperties[i] = ResolveColorPropertyName(material);
-        }
-    }
-
-    private bool TryApplyMaterialFlash(int index)
-    {
-        if (!useMaterialIntensity
-            || flashMaterials == null
-            || preMaterialColors == null
-            || materialColorProperties == null
-            || index < 0
-            || index >= flashMaterials.Length
-            || index >= preMaterialColors.Length
-            || index >= materialColorProperties.Length)
-        {
-            return false;
-        }
-
-        Material material = flashMaterials[index];
-        string colorProperty = materialColorProperties[index];
-        if (material == null || string.IsNullOrEmpty(colorProperty))
-        {
-            return false;
-        }
-
-        Color boostedColor = flashColor * Mathf.Max(1f, flashIntensity);
-        boostedColor.a = preMaterialColors[index].a;
-        material.SetColor(colorProperty, boostedColor);
-        return true;
     }
 
     private static string ResolveColorPropertyName(Material material)
@@ -404,8 +351,7 @@ public class DamageHitFeedback : MonoBehaviour
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        AutoAssignReferences();
-        EnsureColorBuffer();
+        ResolveReferences();
     }
 #endif
 }

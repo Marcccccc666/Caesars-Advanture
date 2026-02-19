@@ -79,6 +79,7 @@ public class CharacterDate : ObjectData
     {
         CurrentHealth += health;
         OnHeal?.Invoke(CurrentHealth, MaxHealth);
+        base.OnHeal?.Invoke(health);
     }
 
     /// <summary>
@@ -89,6 +90,7 @@ public class CharacterDate : ObjectData
     {
         CurrentHealth -= damage;
         OnDamage?.Invoke(CurrentHealth, MaxHealth);
+        base.OnDamage?.Invoke(damage);
     }
 #endregion
 }
