@@ -25,6 +25,10 @@ public class CheckoutPage : MonoBehaviour
         {
             gameOverPanel.SetActive(false);
         }
+        if (nextLevelPanel != null)
+        {
+            nextLevelPanel.SetActive(false);
+        }
         
     }
 
@@ -75,6 +79,14 @@ public class CheckoutPage : MonoBehaviour
         if (successPanel != null)
         {
             successPanel.SetActive(true);
+        }
+    }
+
+    public void ShowNextLevelPage()
+    {
+        if (nextLevelPanel != null)
+        {
+            nextLevelPanel.SetActive(true);
         }
     }
 

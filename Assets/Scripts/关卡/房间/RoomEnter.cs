@@ -6,6 +6,7 @@ using UnityEngine;
 public class RoomEnter : MonoBehaviour
 {
     [SerializeField, ChineseLabel("房间控制器")] private RoomBase roomController;
+    [SerializeField, ChineseLabel("进入时直接弹结算成功界面")] private bool showCheckoutOnEnter = false;
     
     private void Awake()
     {
@@ -17,10 +18,30 @@ public class RoomEnter : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Player"))
+        if(!collision.CompareTag("Player"))
         {
-            roomController.PlayerEnterRoom();
+            return;
         }
+
+        if (showCheckoutOnEnter)
+        {
+            ShowCheckoutNextLevelPage();
+            return;
+        }
+
+        roomController.PlayerEnterRoom();
+    }
+
+    private void ShowCheckoutNextLevelPage()
+    {
+        CheckoutPage checkoutPage = FindAnyObjectByType<CheckoutPage>();
+        if (checkoutPage == null)
+        {
+            Debug.LogWarning("未找到 CheckoutPage，无法打开下一关结算界面。", this);
+            return;
+        }
+
+        checkoutPage.ShowNextLevelPage();
     }
 
 #region UNITY_EDITOR
