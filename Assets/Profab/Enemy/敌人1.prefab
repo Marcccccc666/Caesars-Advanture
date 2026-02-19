@@ -741,7 +741,7 @@ MonoBehaviour:
   flashColor: {r: 1, g: 1, b: 1, a: 0}
   flashDuration: 0.2
   useMaterialIntensity: 1
-  flashIntensity: 2.2
+  flashIntensity: 4
   damageTextColor: {r: 1, g: 0.3, b: 0.3, a: 1}
   damageTextFontSize: 3
   damageTextDuration: 0.45

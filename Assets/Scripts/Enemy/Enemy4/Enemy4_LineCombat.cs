@@ -8,120 +8,72 @@ public class Enemy4_LineCombat : MonoBehaviour
     [SerializeField, ChineseLabel("阻挡层")] private LayerMask obstacleMask;
     [SerializeField, ChineseLabel("伤害检测层")] private LayerMask damageMask;
     [SerializeField, ChineseLabel("射线宽度")] private float lineWidth = 0.08f;
+    [SerializeField, Min(1), ChineseLabel("最小像素粗细")] private int minPixelWidth = 2;
     [SerializeField, ChineseLabel("射线颜色")] private Color lineColor = Color.red;
+    [SerializeField, ChineseLabel("射线材质(留空自动创建)")] private Material lineMaterial;
     [SerializeField, ChineseLabel("发射瞬间粗细倍率")] private float fireWidthMultiplier = 2.4f;
     [SerializeField, ChineseLabel("发射瞬间持续时间")] private float fireFlashDuration = 0.08f;
     [SerializeField, ChineseLabel("射线渲染顺序")] private int lineSortingOrder = 50;
+    [SerializeField, ChineseLabel("射线排序层(留空跟随本体)")] private string lineSortingLayerName;
     [SerializeField, ChineseLabel("攻击音效")] private AudioClip hitAudio;
 
     private LineRenderer lineRenderer;
+    private Transform ownerTransform;
     private Vector2 currentStart;
     private Vector2 currentEnd;
-    private Transform ownerTransform;
-    private bool aimingActive;
-    private float fireFlashTimer;
+    private bool isAiming;
+    private float flashTimer;
+
+    private static Material runtimeLineMaterial;
 
     public Transform FirePoint => firePoint;
     public LayerMask ObstacleMask => obstacleMask;
 
     private void Awake()
     {
-        EnemyData ownerData = GetComponentInParent<EnemyData>();
-        ownerTransform = ownerData != null ? ownerData.transform : transform;
+        ownerTransform = GetComponentInParent<EnemyData>()?.transform ?? transform;
         lineRenderer = GetComponent<LineRenderer>();
-        SetupLineRenderer();
-        EndAimLine();
+        ConfigureLineRenderer();
+        HideLine();
     }
 
     private void Update()
     {
-        if (lineRenderer == null || fireFlashTimer <= 0f)
-        {
-            return;
-        }
+        if (lineRenderer == null || flashTimer <= 0f) return;
 
-        fireFlashTimer -= Time.deltaTime;
-        if (fireFlashTimer > 0f)
-        {
-            return;
-        }
+        flashTimer -= Time.deltaTime;
+        if (flashTimer > 0f) return;
 
         SetLineWidth(lineWidth);
-        if (!aimingActive)
-        {
-            lineRenderer.enabled = false;
-        }
-    }
-
-    private void SetupLineRenderer()
-    {
-        if (lineRenderer == null)
-        {
-            return;
-        }
-
-        lineRenderer.positionCount = 2;
-        lineRenderer.useWorldSpace = true;
-        lineRenderer.startWidth = lineWidth;
-        lineRenderer.endWidth = lineWidth;
-        lineRenderer.startColor = lineColor;
-        lineRenderer.endColor = lineColor;
-        lineRenderer.numCapVertices = 4;
-        lineRenderer.sortingOrder = lineSortingOrder;
-        lineRenderer.widthCurve = AnimationCurve.Constant(0f, 1f, 1f);
-        SetLineWidth(lineWidth);
-
-        if (lineRenderer.sharedMaterial == null)
-        {
-            Shader shader = Shader.Find("Universal Render Pipeline/2D/Sprite-Unlit-Default");
-            if (shader == null)
-            {
-                shader = Shader.Find("Sprites/Default");
-            }
-            if (shader != null)
-            {
-                lineRenderer.sharedMaterial = new Material(shader);
-            }
-        }
+        if (!isAiming) HideLine();
     }
 
     public void BeginAimLine(Vector2 targetPosition, float maxDistance)
     {
-        if (lineRenderer == null)
-        {
-            return;
-        }
+        if (lineRenderer == null) return;
 
-        aimingActive = true;
-        fireFlashTimer = 0f;
+        isAiming = true;
+        flashTimer = 0f;
         SetLineWidth(lineWidth);
-        lineRenderer.enabled = true;
+        ShowLine();
         UpdateAimLine(targetPosition, maxDistance);
     }
 
     public void UpdateAimLine(Vector2 targetPosition, float maxDistance)
     {
-        if (lineRenderer == null)
-        {
-            return;
-        }
+        if (lineRenderer == null) return;
 
         Vector2 origin = firePoint != null ? (Vector2)firePoint.position : (Vector2)transform.position;
         Vector2 direction = targetPosition - origin;
         if (direction.sqrMagnitude < 0.0001f)
-        {
             direction = firePoint != null ? (Vector2)firePoint.right : (Vector2)transform.right;
-        }
 
-        Vector2 normalizedDirection = direction.normalized;
-        float distance = Mathf.Max(0.1f, maxDistance);
-        Vector2 end = ResolveBlockedEnd(origin, normalizedDirection, distance);
-
+        Vector2 end = ResolveBlockedEnd(origin, direction.normalized, Mathf.Max(0.1f, maxDistance));
         currentStart = origin;
         currentEnd = end;
 
-        lineRenderer.SetPosition(0, currentStart);
-        lineRenderer.SetPosition(1, currentEnd);
+        lineRenderer.SetPosition(0, origin);
+        lineRenderer.SetPosition(1, end);
     }
 
     public void FireLockedLine(int damage)
@@ -130,91 +82,105 @@ public class Enemy4_LineCombat : MonoBehaviour
 
         Vector2 segment = currentEnd - currentStart;
         float distance = segment.magnitude;
-        if (distance <= 0.001f)
-        {
-            return;
-        }
+        if (distance <= 0.001f) return;
 
         RaycastHit2D[] hits = Physics2D.RaycastAll(currentStart, segment.normalized, distance);
         for (int i = 0; i < hits.Length; i++)
         {
             Collider2D collider = hits[i].collider;
-            if (collider == null)
-            {
-                continue;
-            }
+            if (collider == null || IsSelfCollider(collider)) continue;
+            if (IsBlockingCollider(collider)) break;
+            if (damageMask.value != 0 && !IsLayerInMask(collider.gameObject.layer, damageMask)) continue;
 
-            if (IsSelfCollider(collider))
-            {
-                continue;
-            }
+            if (!TryGetPlayerData(collider, out CharacterDate playerData)) continue;
 
-            if (IsBlockingCollider(collider))
-            {
-                break;
-            }
-
-            if (!IsPlayerCollider(collider))
-            {
-                continue;
-            }
-
-            if (damageMask.value != 0 && !IsLayerInMask(collider.gameObject.layer, damageMask))
-            {
-                continue;
-            }
-
-            CharacterDate playerData = GetPlayerData(collider);
-            if (playerData != null)
-            {
-                playerData.Damage(Mathf.Max(0, damage));
-            }
+            playerData.Damage(Mathf.Max(0, damage));
             break;
         }
 
-        if (hitAudio != null && Camera.main != null)
-        {
-            AudioSource.PlayClipAtPoint(hitAudio, Camera.main.transform.position);
-        }
+        PlayHitAudio();
     }
 
     public void EndAimLine()
     {
-        if (lineRenderer == null)
-        {
-            return;
-        }
+        isAiming = false;
+        if (flashTimer <= 0f) HideLine();
+    }
 
-        aimingActive = false;
-        if (fireFlashTimer <= 0f)
-        {
-            lineRenderer.enabled = false;
-        }
+    private void ConfigureLineRenderer()
+    {
+        if (lineRenderer == null) return;
+
+        lineRenderer.positionCount = 2;
+        lineRenderer.useWorldSpace = true;
+        lineRenderer.alignment = LineAlignment.View;
+        lineRenderer.textureMode = LineTextureMode.Stretch;
+        lineRenderer.startColor = lineColor;
+        lineRenderer.endColor = lineColor;
+        lineRenderer.numCapVertices = 4;
+        lineRenderer.numCornerVertices = 0;
+        lineRenderer.widthCurve = AnimationCurve.Constant(0f, 1f, 1f);
+
+        ApplySortingSettings();
+        SetLineWidth(lineWidth);
+
+        Material material = ResolveLineMaterial();
+        if (material != null) lineRenderer.sharedMaterial = material;
     }
 
     private void TriggerFireFlash()
     {
-        if (lineRenderer == null)
-        {
-            return;
-        }
+        if (lineRenderer == null) return;
 
-        lineRenderer.enabled = true;
-        float flashWidth = lineWidth * Mathf.Max(1f, fireWidthMultiplier);
-        SetLineWidth(flashWidth);
-        fireFlashTimer = Mathf.Max(0.01f, fireFlashDuration);
+        ShowLine();
+        SetLineWidth(lineWidth * Mathf.Max(1f, fireWidthMultiplier));
+        flashTimer = Mathf.Max(0.01f, fireFlashDuration);
     }
 
     private void SetLineWidth(float width)
     {
-        if (lineRenderer == null)
+        if (lineRenderer == null) return;
+
+        float targetWidth = Mathf.Max(0.005f, width);
+        float worldUnitsPerPixel = GetWorldUnitsPerPixel();
+        if (worldUnitsPerPixel > 0f)
         {
-            return;
+            float minWorldWidth = worldUnitsPerPixel * Mathf.Max(1, minPixelWidth);
+            targetWidth = Mathf.Max(targetWidth, minWorldWidth);
         }
 
-        float value = Mathf.Max(0.005f, width);
-        lineRenderer.startWidth = value;
-        lineRenderer.endWidth = value;
+        lineRenderer.startWidth = targetWidth;
+        lineRenderer.endWidth = targetWidth;
+    }
+
+    private void ApplySortingSettings()
+    {
+        if (lineRenderer == null) return;
+
+        if (!string.IsNullOrWhiteSpace(lineSortingLayerName))
+            lineRenderer.sortingLayerName = lineSortingLayerName;
+        else
+        {
+            SpriteRenderer ownerSprite = ownerTransform != null
+                ? ownerTransform.GetComponentInChildren<SpriteRenderer>(true)
+                : GetComponentInParent<SpriteRenderer>(true);
+            if (ownerSprite != null) lineRenderer.sortingLayerID = ownerSprite.sortingLayerID;
+        }
+
+        lineRenderer.sortingOrder = lineSortingOrder;
+    }
+
+    private Material ResolveLineMaterial()
+    {
+        if (lineMaterial != null) return lineMaterial;
+        if (runtimeLineMaterial != null) return runtimeLineMaterial;
+
+        Shader shader = Shader.Find("Universal Render Pipeline/2D/Sprite-Unlit-Default")
+            ?? Shader.Find("Sprites/Default");
+        if (shader == null) return null;
+
+        runtimeLineMaterial = new Material(shader) { name = "Enemy4_RuntimeLineMaterial" };
+        return runtimeLineMaterial;
     }
 
     private Vector2 ResolveBlockedEnd(Vector2 origin, Vector2 direction, float maxDistance)
@@ -224,96 +190,69 @@ public class Enemy4_LineCombat : MonoBehaviour
         for (int i = 0; i < hits.Length; i++)
         {
             Collider2D collider = hits[i].collider;
-            if (collider == null || IsSelfCollider(collider))
-            {
-                continue;
-            }
-
-            if (!IsBlockingCollider(collider))
-            {
-                continue;
-            }
-
-            return hits[i].point;
+            if (collider == null || IsSelfCollider(collider)) continue;
+            if (IsBlockingCollider(collider)) return hits[i].point;
         }
-
         return fallbackEnd;
     }
 
     private bool IsSelfCollider(Collider2D collider)
     {
-        if (collider == null || ownerTransform == null)
-        {
-            return false;
-        }
-
+        if (collider == null || ownerTransform == null) return false;
         Transform hitTransform = collider.transform;
         return hitTransform == ownerTransform || hitTransform.IsChildOf(ownerTransform);
     }
 
     private bool IsBlockingCollider(Collider2D collider)
     {
-        if (collider == null)
-        {
-            return false;
-        }
-
-        if (collider.CompareTag("Wall"))
-        {
-            return true;
-        }
-
-        return IsLayerInMask(collider.gameObject.layer, obstacleMask);
+        if (collider == null) return false;
+        return collider.CompareTag("Wall") || IsLayerInMask(collider.gameObject.layer, obstacleMask);
     }
 
-    private bool IsPlayerCollider(Collider2D collider)
+    private bool TryGetPlayerData(Collider2D collider, out CharacterDate playerData)
     {
-        if (collider == null)
-        {
-            return false;
-        }
+        playerData = null;
+        if (collider == null) return false;
+
+        CharacterDate directData = collider.GetComponentInParent<CharacterDate>();
+        CharacterDate currentPlayer = CharacterManager.Instance?.GetCurrentPlayerCharacterData;
 
         if (collider.CompareTag("Player"))
         {
-            return true;
+            playerData = directData != null ? directData : currentPlayer;
+            return playerData != null;
         }
 
-        CharacterDate data = collider.GetComponentInParent<CharacterDate>();
-        if (data != null)
+        if (currentPlayer == null)
         {
-            return true;
+            playerData = directData;
+            return playerData != null;
         }
 
-        CharacterManager manager = CharacterManager.Instance;
-        if (manager == null || manager.GetCurrentPlayerCharacterData == null)
-        {
-            return false;
-        }
-
-        Transform playerRoot = manager.GetCurrentPlayerCharacterData.transform;
         Transform hitTransform = collider.transform;
-        return hitTransform == playerRoot || hitTransform.IsChildOf(playerRoot);
+        Transform playerRoot = currentPlayer.transform;
+        bool samePlayer = hitTransform == playerRoot || hitTransform.IsChildOf(playerRoot) || directData == currentPlayer;
+        if (!samePlayer) return false;
+
+        playerData = currentPlayer;
+        return true;
     }
 
-    private CharacterDate GetPlayerData(Collider2D collider)
+    private void PlayHitAudio()
     {
-        if (collider == null)
-        {
-            return null;
-        }
-
-        CharacterDate directData = collider.GetComponentInParent<CharacterDate>();
-        if (directData != null)
-        {
-            return directData;
-        }
-
-        CharacterManager manager = CharacterManager.Instance;
-        return manager != null ? manager.GetCurrentPlayerCharacterData : null;
+        if (hitAudio == null || Camera.main == null) return;
+        AudioSource.PlayClipAtPoint(hitAudio, Camera.main.transform.position);
     }
 
-    private static bool IsLayerInMask(int layer, LayerMask mask)
+    private void ShowLine() { if (lineRenderer != null) lineRenderer.enabled = true; }
+    private void HideLine() { if (lineRenderer != null) lineRenderer.enabled = false; }
+
+    private static float GetWorldUnitsPerPixel()
     {
-        return (mask.value & (1 << layer)) != 0;
+        Camera cam = Camera.main;
+        if (cam == null || !cam.orthographic || Screen.height <= 0) return 0f;
+        return (cam.orthographicSize * 2f) / Screen.height;
     }
+
+    private static bool IsLayerInMask(int layer, LayerMask mask) => (mask.value & (1 << layer)) != 0;
 }
