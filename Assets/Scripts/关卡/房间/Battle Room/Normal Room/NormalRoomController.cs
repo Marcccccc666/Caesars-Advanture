@@ -7,6 +7,7 @@ using UnityHFSM;
 /// </summary>
 public class NormalRoomController : BattleRoomController
 {
+    public bool isFirstRoom = false;
     protected override void RoomStateMachineInit()
     {
         //增加状态
@@ -17,7 +18,7 @@ public class NormalRoomController : BattleRoomController
             M_StateMachine.AddState(RoomState.Fighting, new RoomFighting());
 
             //已清除状态
-            M_StateMachine.AddState(RoomState.Cleared, new RoomCleared(this));
+            M_StateMachine.AddState(RoomState.Cleared, new RoomCleared(this, isFirstRoom));
 
         // 转换条件
             M_StateMachine.AddTransition(RoomState.Unvisited, RoomState.Fighting, t => LockRoom == true);

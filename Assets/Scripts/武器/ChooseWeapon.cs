@@ -2,13 +2,18 @@ using UnityEngine;
 
 public class ChooseWeapon : MonoBehaviour
 {
-    public GameObject weapon;
+    public WeaponData weapon;
     [SerializeField, ChineseLabel("提示交互")] private GameObject interactionHint;
     private InputManager inputManager => InputManager.Instance;
+    private CharacterManager characterManager => CharacterManager.Instance;
+
+    private bool playerInRange = false;
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && !playerInRange)
         {
+            playerInRange = true;
+            inputManager.OnInteractionPressed -= GetWeapon;
             inputManager.OnInteractionPressed += GetWeapon;
             interactionHint.SetActive(true);
         }
@@ -16,8 +21,9 @@ public class ChooseWeapon : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && playerInRange)
         {
+            playerInRange = false;
             inputManager.OnInteractionPressed -= GetWeapon;
             interactionHint.SetActive(false);
         }
@@ -40,7 +46,8 @@ public class ChooseWeapon : MonoBehaviour
 
     private void GetWeapon()
     {
-        weapon.SetActive(true);
-        Destroy(gameObject);
+        Transform weaponHoldPoint = characterManager.GetCurrentPlayerCharacterData.GetWeaponHoldPoint();
+        GameObject weaponObj = Instantiate(weapon.gameObject, weaponHoldPoint.position, Quaternion.identity, weaponHoldPoint);
+        gameObject.SetActive(false);
     }
 }

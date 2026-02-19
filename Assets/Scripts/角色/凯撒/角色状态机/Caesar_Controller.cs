@@ -1,15 +1,18 @@
 using UnityEngine;
+using UnityEngine.Pool;
 using UnityHFSM;
 
 public enum Character{}
 
 [RequireComponent(typeof(Rigidbody2D), typeof(CaesarData))]
-public class Caesar_Controller : MonoBehaviour
+public class Caesar_Controller : Singleton<Caesar_Controller>, IPoolable<Caesar_Controller>
 {
     /// <summary>
     /// 角色数据
     /// </summary>
     private CaesarData M_chData;
+
+    [SerializeField, ChineseLabel("武器挂点")] private Transform weaponHoldPoint;
 
     [Header("动画设置")]
     [SerializeField,ChineseLabel("动画控制器")] private Animator M_animator;
@@ -40,6 +43,8 @@ public class Caesar_Controller : MonoBehaviour
     private GameManager gameManager => GameManager.Instance;
 
     private BuffManager buffManager => BuffManager.Instance;
+
+    private IObjectPool<Caesar_Controller> pool;
     public enum Caesar_StateID
     {
         Idle,
@@ -47,18 +52,28 @@ public class Caesar_Controller : MonoBehaviour
         Die
     }
 
-    private void Awake()
+    public void SetPool(IObjectPool<Caesar_Controller> pool)
     {
+       this.pool = pool;
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
         M_chData = GetComponent<CaesarData>();
         
         M_chData.InitObjectData();
-        characterManager.SetCurrentPlayerCharacterData(M_chData);
-        M_rigidbody2D = GetComponent<Rigidbody2D>();
-
+        M_chData.SetweaponHoldPoint(weaponHoldPoint);
         
+        M_rigidbody2D = GetComponent<Rigidbody2D>();
         
         CharacterStateMachine();
+        
+    }
 
+    public void OnSpawn()
+    {
+        characterManager.SetCurrentPlayerCharacterData(M_chData);
         Caesar_stateMachine.Init();
     }
     
@@ -90,6 +105,19 @@ public class Caesar_Controller : MonoBehaviour
         Caesar_stateMachine.OnLogic();
     }
 
+    public void OnDespawn()
+    {
+        // 在对象被释放回池中时执行必要的清理和状态重置
+        M_rigidbody2D.linearVelocity = Vector2.zero;
+        M_rigidbody2D.angularVelocity = 0f;
+        Caesar_stateMachine.OnExit();
+    }
+
+    public void Release()
+    {
+        pool.Release(this);
+    }
+
     /// <summary>
     /// 角色状态机
     /// </summary>
@@ -112,4 +140,14 @@ public class Caesar_Controller : MonoBehaviour
         // 设置初始状态
         Caesar_stateMachine.SetStartState(Caesar_StateID.Idle);
     }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        if (weaponHoldPoint == null)
+        {
+            weaponHoldPoint = transform.Find("武器");
+        }
+    }
+#endif
 }

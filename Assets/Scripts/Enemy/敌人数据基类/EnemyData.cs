@@ -65,9 +65,9 @@ public class EnemyData : ObjectData
 #endregion
 
 #region 血量变化
-    public Action<int> OnHeal;
+    public new Action<int> OnHeal;
 
-    public Action<int> OnDamage;
+    public new Action<int> OnDamage;
 
     /// <summary>
     /// 受伤事件

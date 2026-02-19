@@ -185,6 +185,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7faf726d5d9be78478a94669168f86b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunData
-  weaponBaseData: {fileID: 11400000, guid: 9a8d4c3d0d871a04988b36e63dd2bfcf, type: 2}
+  weaponBaseData: {fileID: 11400000, guid: 7741e30c11d0d0c41af1d2c5a6d4792c, type: 2}
   ballisticsBonus: 0
   penetrationBonus: 0

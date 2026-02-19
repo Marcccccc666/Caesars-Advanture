@@ -40,13 +40,13 @@ public class CharacterDate : ObjectData
     /// 加血事件
     /// </summary>
     /// <param name="health">加血值</param>
-    public Action<int, int> OnHeal;
+    public new Action<int, int> OnHeal;
 
     /// <summary>
     /// 受伤事件
     /// </summary>
     /// <param name="damage">受伤值</param>
-    public Action<int, int> OnDamage;
+    public new Action<int, int> OnDamage;
 
 
     public override int CurrentHealth
@@ -91,6 +91,20 @@ public class CharacterDate : ObjectData
         CurrentHealth -= damage;
         OnDamage?.Invoke(CurrentHealth, MaxHealth);
         base.OnDamage?.Invoke(damage);
+    }
+#endregion
+
+#region 武器
+    private Transform weaponHoldPoint;
+
+    public void SetweaponHoldPoint(Transform point)
+    {
+        weaponHoldPoint = point;
+    }
+
+    public Transform GetWeaponHoldPoint()
+    {
+        return weaponHoldPoint;
     }
 #endregion
 }

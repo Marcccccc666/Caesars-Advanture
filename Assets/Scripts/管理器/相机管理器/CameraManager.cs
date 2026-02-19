@@ -28,6 +28,10 @@ public class CameraManager : Singleton<CameraManager>
         if (currentCamera != null)
         {
             currentCamera.Priority = 20; // 设置新相机优先级为最高
+            if(CharacterManager.Instance.GetCurrentPlayerCharacterData != null)
+            {
+                currentCamera.Follow = CharacterManager.Instance.GetCurrentPlayerCharacterData.transform;
+            }
         }
     }
 

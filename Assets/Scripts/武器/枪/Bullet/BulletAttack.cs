@@ -1,7 +1,8 @@
 using UnityEngine;
+using UnityEngine.Pool;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class BulletAttack : PoolableObject<BulletAttack>
+public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
 {
     /// <summary>
     /// 子弹伤害值，默认为10，可以通过SetBulletDamage方法进行设置
@@ -22,7 +23,8 @@ public class BulletAttack : PoolableObject<BulletAttack>
     private GameManager GameManager => GameManager.Instance;
     private WeaponManager weaponManager => WeaponManager.Instance;
     private EnemyManager enemyManager => EnemyManager.Instance;
-    private PoolManager poolManager => PoolManager.Instance;
+    
+    private IObjectPool<BulletAttack> pool;
 
     private void Awake()
     {
@@ -70,11 +72,7 @@ public class BulletAttack : PoolableObject<BulletAttack>
         }
     }
 
-    public override void OnDespawn()
-    {
-        base.OnDespawn();
-        RG2D.linearVelocity = Vector2.zero;
-    }
+    
 
     public void Initialize(Vector2 direction, float speed, int damage, int penetration)
     {
@@ -82,6 +80,35 @@ public class BulletAttack : PoolableObject<BulletAttack>
         bulletPenetration = penetration;
         moveDirection = direction;
         moveSpeed = speed;
+    }
+
+    public void SetPool(IObjectPool<BulletAttack> pool)
+    {
+        this.pool = pool;
+    }
+
+    /// <summary>
+    /// 当子弹被生成时调用，执行必要的初始化逻辑
+    /// </summary>
+    public void OnSpawn()
+    {
+        // 可以在这里添加任何需要在子弹生成时执行的逻辑，例如重置状态、播放动画等
+    }
+    
+    /// <summary>
+    /// 将子弹释放回对象池，准备下次使用
+    /// </summary>
+    public void Release()
+    {
+        pool.Release(this);
+    }
+
+    /// <summary>
+    /// 当对象被释放回池中时调用，重置子弹状态以准备下次使用
+    /// </summary>
+    public void OnDespawn()
+    {
+        RG2D.linearVelocity = Vector2.zero;
     }
 
 #region UNITY_EDITOR

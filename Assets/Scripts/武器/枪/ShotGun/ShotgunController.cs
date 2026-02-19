@@ -64,14 +64,18 @@ public class ShotgunController : GunController
             float angle = Mathf.Atan2(instancePositions[i].y, instancePositions[i].x) * Mathf.Rad2Deg;
             Quaternion rotation = Quaternion.Euler(0, 0, angle);
             // 实例化子弹并设置其伤害
-            bullets[i] = poolManager.Spawn(gunBaseData.BulletPrefab, bulletSpawnPoint.position,rotation , false);
+            bullets[i] = poolManager.Spawn(
+                prefab:gunBaseData.BulletPrefab, 
+                position:bulletSpawnPoint.position, 
+                rotation:rotation, 
+                autoActive:false);
             bullets[i].Initialize(
                 direction: instancePositions[i].normalized,
                 speed: gunBaseData.BulletSpeed,
                 damage: finalDamage,
                 penetration: finalPenetration
             );
-            poolManager.Activate(bullets[i]);
+            poolManager.Activate(gunBaseData.BulletPrefab, bullets[i]);
         }
 
         if(M_attackAudioClip != null)

@@ -7,12 +7,18 @@ public class DefaultCameraController : MonoBehaviour
     [SerializeField, ChineseLabel("默认相机")] private CinemachineCamera defaultCamera;
 
     private CameraManager cameraManager => CameraManager.Instance;
+    private CharacterManager characterManager => CharacterManager.Instance;
     void Awake()
     {
         cameraManager.SetDefaultCamera(defaultCamera);
     }
 
-#region UNITY_EDITOR
+    void OnEnable()
+    {
+        defaultCamera.Follow = characterManager.GetCurrentPlayerCharacterData?.transform;
+    }
+
+    #region UNITY_EDITOR
     /// <summary>
     /// Called when the script is loaded or a value is changed in the
     /// inspector (Called in the editor only).

@@ -1,87 +1,56 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 
 public class PoolManager : Singleton<PoolManager>
 {
-    private Dictionary<Component, object> poolDictionary = new();
+    private Dictionary<Component, object> pools = new();
 
-    /// <summary>
-    /// 释放对象
-    /// </summary>
-    /// <param name="prefab">预制体</param>
-    /// <param name="position">位置</param>
-    /// <param name="rotation">旋转</param>
-    public T Spawn<T>(T prefab, Vector3 position, Quaternion rotation, bool autoActive = true) where T : PoolableObject<T>
+    private GameObjectPool<T> GetOrCreatePool<T>(T prefab, int defaultCapacity = 20, int maxSize = 100)
+        where T : Component
     {
-        if (!poolDictionary.TryGetValue(prefab, out var poolObj))
+        if (!pools.TryGetValue(prefab, out var poolObj))
         {
-            poolObj = CreatePool(prefab);
-            poolDictionary.Add(prefab, poolObj);
+            var newPool = new GameObjectPool<T>(prefab, defaultCapacity, maxSize);
+            pools.Add(prefab, newPool);
+            poolObj = newPool;
         }
 
-        var pool = (ObjectPool<T>)poolObj;
-        T obj = pool.Get();
+        return poolObj as GameObjectPool<T>;
+    }
 
+    /// 🔹 只获取（不激活）
+    public T Get<T>(T prefab) where T : Component
+    {
+        var pool = GetOrCreatePool(prefab);
+        return pool.Get();
+    }
+
+    /// 🔹 手动激活
+    public void Activate<T>(T prefab, T obj) where T : Component
+    {
+        var pool = GetOrCreatePool(prefab);
+        pool.Activate(obj);
+    }
+
+    /// 🔹 快捷生成（旧模式）
+    public T Spawn<T>(T prefab, Vector3 position, Quaternion rotation, int defaultCapacity = 20, int maxSize = 100, bool autoActive = true) where T : Component
+    {
+        var pool = GetOrCreatePool(prefab, defaultCapacity, maxSize);
+
+        var obj = pool.Get();
         obj.transform.SetPositionAndRotation(position, rotation);
 
         if (autoActive)
-            Activate(obj);
+        {
+            pool.Activate(obj);
+        }
 
         return obj;
     }
 
-    /// <summary>
-    /// 生成池
-    /// </summary>
-    private ObjectPool<T> CreatePool<T>(T prefab) where T : PoolableObject<T>
+    public void Release<T>(T prefab, T obj) where T : Component
     {
-        ObjectPool<T> pool = null;
-
-        pool = new ObjectPool<T>(
-                createFunc: () =>
-                {
-                    T obj = Instantiate(prefab);
-
-                    if(obj is PoolableObject<T> poolable)
-                    {
-                        poolable.SetPool(pool);
-                    }
-                    obj.gameObject.SetActive(false);
-                    return obj;
-                },
-                actionOnRelease: obj => GameOnRelease(obj),
-                actionOnDestroy: obj => Destroy(obj.gameObject),
-                collectionCheck: true,
-                defaultCapacity: 50,
-                maxSize: 200
-            );
-        return pool;
-    }
-
-    /// <summary>
-    /// 激活时调用
-    /// </summary>
-    /// <param name="obj">对象</param>
-    public void Activate<T>(T obj) where T : PoolableObject<T>
-    {
-        if(obj is PoolableObject<T> poolable)
-        {
-            poolable.OnSpawn();
-        }
-        obj.gameObject.SetActive(true);
-    }
-
-    /// <summary>
-    /// 回收时调用
-    /// </summary>
-    /// <param name="obj">对象</param>
-    public void GameOnRelease<T>(T obj) where T : PoolableObject<T>
-    {
-        if(obj is PoolableObject<T> poolable)
-        {
-            poolable.OnDespawn();
-        }
-        obj.gameObject.SetActive(false);
+        var pool = GetOrCreatePool(prefab);
+        pool.Release(obj);
     }
 }

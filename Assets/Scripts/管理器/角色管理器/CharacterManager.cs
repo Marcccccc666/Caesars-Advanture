@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using UnityEngine;
 
 /// <summary>
 /// 角色管理器
@@ -35,5 +33,5 @@ public class CharacterManager: Singleton<CharacterManager>
         CurrentPlayerCharacterData = characterData;
         OnCurrentPlayerCharacterDataChanged?.Invoke(characterData);
     }
-#endregion
+    #endregion
 }

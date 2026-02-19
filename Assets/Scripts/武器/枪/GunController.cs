@@ -71,9 +71,13 @@ public class GunController : WeaponBase
         for (int i = 0; i < bulletCount; i++)
         {
             // 实例化子弹并设置其伤害
-            bullets[i] = poolManager.Spawn(gunBaseData.BulletPrefab, instancePositions[i], bulletSpawnPoint.rotation, false);
+            bullets[i] = poolManager.Spawn(
+                prefab:gunBaseData.BulletPrefab, 
+                position:instancePositions[i], 
+                rotation:bulletSpawnPoint.rotation, 
+                autoActive:false);
             bullets[i].Initialize(bulletSpawnPoint.right, gunBaseData.BulletSpeed, finalDamage, finalPenetration);
-            poolManager.Activate(bullets[i]);
+            poolManager.Activate(gunBaseData.BulletPrefab, bullets[i]);
         }
 
         AudioSource.PlayClipAtPoint(M_attackAudioClip, Camera.main.transform.position);
