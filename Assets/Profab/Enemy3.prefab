@@ -221,6 +221,7 @@ GameObject:
   - component: {fileID: 1740422455164711344}
   - component: {fileID: 7073015299503198411}
   - component: {fileID: 5849145859787399124}
+  - component: {fileID: 191102627181661180}
   m_Layer: 7
   m_Name: Enemy3
   m_TagString: Enemy
@@ -450,3 +451,29 @@ MonoBehaviour:
     m_Bits: 768
   requireLineOfSightToAttack: 1
   requireHateRangeForAttack: 1
+--- !u!114 &191102627181661180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8625351930764168971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54dd9f68d904089499a7c3b86a7dc2c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageHitFeedback
+  objectData: {fileID: 1740422455164711344}
+  flashRenderers:
+  - {fileID: 2697991624718251876}
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.2
+  useMaterialIntensity: 1
+  flashIntensity: 2.2
+  damageTextColor: {r: 1, g: 0.3, b: 0.3, a: 1}
+  damageTextFontSize: 3
+  damageTextDuration: 0.45
+  damageTextRiseDistance: 0.8
+  damageTextOffset: {x: 0, y: 0.3, z: 0}
+  damageTextRandomX: 0.2
+  damageTextSortingOrder: 200

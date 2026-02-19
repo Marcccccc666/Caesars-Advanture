@@ -497,6 +497,7 @@ GameObject:
   - component: {fileID: 1942155355687459825}
   - component: {fileID: 6740500160704608436}
   - component: {fileID: 7358893418901203540}
+  - component: {fileID: 3497281452493233910}
   m_Layer: 7
   m_Name: "\u654C\u4EBA1"
   m_TagString: Enemy
@@ -721,3 +722,30 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3497281452493233910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8625351930764168971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54dd9f68d904089499a7c3b86a7dc2c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageHitFeedback
+  objectData: {fileID: 6740500160704608436}
+  flashRenderers:
+  - {fileID: 2697991624718251876}
+  - {fileID: 3903973650608694533}
+  flashColor: {r: 1, g: 1, b: 1, a: 0}
+  flashDuration: 0.2
+  useMaterialIntensity: 1
+  flashIntensity: 2.2
+  damageTextColor: {r: 1, g: 0.3, b: 0.3, a: 1}
+  damageTextFontSize: 3
+  damageTextDuration: 0.45
+  damageTextRiseDistance: 0.8
+  damageTextOffset: {x: 0, y: 0.3, z: 0}
+  damageTextRandomX: 0.2
+  damageTextSortingOrder: 200

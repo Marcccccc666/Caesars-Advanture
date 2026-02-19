@@ -34,7 +34,7 @@ public class BulletAttack : PoolableObject<BulletAttack>
         {
             int enemyID = collision.gameObject.GetInstanceID();
             EnemyData enemyData = enemyManager.GetEnemyDataDict[enemyID];
-            enemyData.CurrentHealth -= bulletDamage;
+            enemyData.Damage(bulletDamage);
 
             if(enemyData.CurrentHealth <= 0)
             {

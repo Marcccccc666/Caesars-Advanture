@@ -30,7 +30,7 @@ public class Enemy_Health : MonoBehaviour
             return;
         }
 
-        enemyData.CurrentHealth -= damage;
+        enemyData.Damage(damage);
 
         Transform hitSource = characterManager.GetCurrentPlayerCharacterData != null
             ? characterManager.GetCurrentPlayerCharacterData.transform
