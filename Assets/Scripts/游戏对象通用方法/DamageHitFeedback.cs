@@ -6,7 +6,7 @@ using UnityEngine;
 public class DamageHitFeedback : MonoBehaviour
 {
     [Header("数据源")]
-    [SerializeField, ChineseLabel("数据组件(自动查找)")] private ObjectData objectData;
+    [SerializeField, ChineseLabel("数据组件(自动查找)")] private EnemyData objectData;
 
     [Header("闪白配置")]
     [SerializeField, ChineseLabel("受击渲染器(留空自动查找)")] private SpriteRenderer[] flashRenderers;
@@ -219,7 +219,7 @@ public class DamageHitFeedback : MonoBehaviour
         text.fontSize = Mathf.Max(0.1f, damageTextFontSize);
         text.alignment = TextAlignmentOptions.Center;
         text.color = damageTextColor;
-        text.enableWordWrapping = false;
+        text.textWrappingMode = TextWrappingModes.NoWrap;
 
         if (TMP_Settings.defaultFontAsset != null)
         {
@@ -282,12 +282,12 @@ public class DamageHitFeedback : MonoBehaviour
     {
         if (objectData == null)
         {
-            objectData = GetComponent<ObjectData>();
+            objectData = GetComponent<EnemyData>();
         }
 
         if (objectData == null)
         {
-            objectData = GetComponentInParent<ObjectData>();
+            objectData = GetComponentInParent<EnemyData>();
         }
 
         if (flashRenderers == null || flashRenderers.Length == 0)

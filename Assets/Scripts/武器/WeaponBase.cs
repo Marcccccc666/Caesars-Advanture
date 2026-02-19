@@ -1,20 +1,24 @@
 using UnityEngine;
 
-[RequireComponent(typeof(WeaponData))]
 public abstract class WeaponBase : MonoBehaviour
 {
     [SerializeField, ChineseLabel("武器数据")] protected WeaponData WeaponData;
 
-    private InputManager inputManager => InputManager.Instance;
+    [SerializeField,ChineseLabel("攻击音效")]protected AudioClip M_attackAudioClip;
+
+    protected InputManager inputManager => InputManager.Instance;
 
     protected GameManager gameManager => GameManager.Instance;
 
-    private BuffManager buffManager => BuffManager.Instance;
+    protected BuffManager buffManager => BuffManager.Instance;
+    protected WeaponManager weaponManager => WeaponManager.Instance;
+    protected PoolManager poolManager => PoolManager.Instance;
+    protected MultiTimerManager MultiTimerManager => MultiTimerManager.Instance;
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
-    private void Awake()
+    protected virtual void Awake()
     {
         if (WeaponData == null)
         {
@@ -31,7 +35,7 @@ public abstract class WeaponBase : MonoBehaviour
     {
         // 使武器始终朝向鼠标位置
         Vector2 mouseWorldPosition = inputManager.MouseWorldPosition;
-        ObjectRotation.RotateTowardsTarget(this.transform, mouseWorldPosition, 1000f);
+        ObjectRotation.RotateTowardsTarget(this.transform, mouseWorldPosition, WeaponData.WeaponBaseData.WeaponRotationSpeed);
     }
 
     protected virtual void OnDisable()

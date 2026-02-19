@@ -11,65 +11,70 @@ public class CharacterHPUI : MonoBehaviour
     /// <summary>
     /// 当前订阅的角色
     /// </summary>
-    private CharacterDate currentCharacter;
+    private CharacterDate subscribedCharacter;
 
-    /// <summary>
-    /// Awake is called when the script instance is being loaded.
-    /// </summary>
     private void OnEnable()
     {
-        if(characterManager.GetCurrentPlayerCharacterData != null)
+        characterManager.OnCurrentPlayerCharacterDataChanged += OnCharacterChanged;
+
+        if (characterManager.GetCurrentPlayerCharacterData != null)
         {
-            BindCharacter(characterManager.GetCurrentPlayerCharacterData);
-        }
-        else
-        {
-            characterManager.OnCurrentPlayerCharacterDataChanged += BindCharacter;
+            Subscribe(characterManager.GetCurrentPlayerCharacterData);
         }
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
-        if(characterManager != null)
-        {
-            characterManager.OnCurrentPlayerCharacterDataChanged -= BindCharacter;
-        }
-        UnbindCharacter(characterManager.GetCurrentPlayerCharacterData);
-    }
-
-    private void BindCharacter(CharacterDate character)
-    {
-        if(currentCharacter != null)
-        {
-            UnbindCharacter(currentCharacter);
-        }
-        currentCharacter = character;
-        
-        character.OnDamage += (damage) => UpdateHPDisplay(character);
-        character.OnHeal += (heal) => UpdateHPDisplay(character);
-        character.OnDie += () => UpdateHPDisplay(character);
-        UpdateHPDisplay(character);
-    }
-
-    private void UnbindCharacter(CharacterDate character)
-    {
-        if(character == null)
+        if(!characterManager)
         {
             return;
         }
-        character.OnDamage -= (damage) => UpdateHPDisplay(character);
-        character.OnHeal -= (heal) => UpdateHPDisplay(character);
-        character.OnDie -= () => UpdateHPDisplay(character);
+        characterManager.OnCurrentPlayerCharacterDataChanged -= OnCharacterChanged;
+        Unsubscribe();
     }
+
+    private void OnCharacterChanged(CharacterDate newCharacter)
+    {
+        Unsubscribe();
+        Subscribe(newCharacter);
+    }
+
+    private void Subscribe(CharacterDate character)
+    {
+        if (character == null) return;
+
+        subscribedCharacter = character;
+        character.OnHeal += UpdateHPDisplay;
+        character.OnDamage += UpdateHPDisplay;
+
+        UpdateHPDisplay(character);
+    }
+
+    private void Unsubscribe()
+    {
+        if (subscribedCharacter == null) return;
+
+        subscribedCharacter.OnHeal -= UpdateHPDisplay;
+        subscribedCharacter.OnDamage -= UpdateHPDisplay;
+        subscribedCharacter = null;
+    }
+
 
     /// <summary>
     /// 更新HP显示
     /// </summary>
-    private void UpdateHPDisplay(CharacterDate character)
+    private void UpdateHPDisplay(int currentHealth, int maxHealth)
     {
-        int currentHP = character.CurrentHealth;
-        int maxHP = character.MaxHealth;
-        Debug.Log($"当前HP: {currentHP}, 最大HP: {maxHP}");
-        HPText.text = $"{prefix}{currentHP} / {maxHP}";
+        if (HPText != null)
+            HPText.text = $"{prefix}{currentHealth}/{maxHealth}";
+    }
+
+    private void UpdateHPDisplay(CharacterDate characterData)
+    {
+        if(characterData != null)
+        {
+            Debug.Log("角色数据已更新，刷新HP显示");
+            HPText.text = $"{prefix}{characterData.CurrentHealth}/{characterData.MaxHealth}";
+        }
     }
 }

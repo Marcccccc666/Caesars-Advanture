@@ -4,6 +4,12 @@ using UnityEngine;
 public class GunBaseData : WeaponBaseData
 {
     [Header("射击属性")]
+    [SerializeField, ChineseLabel("弹夹容量")] private int magazineCapacity;
+    /// <summary>
+    /// 弹夹容量
+    /// </summary>
+    public int MagazineCapacity => magazineCapacity;
+    
     [SerializeField, ChineseLabel("初试弹道数量")] private int initialBallisticsCount = 1;
     /// <summary>
     /// 初始弹道数量
@@ -21,6 +27,13 @@ public class GunBaseData : WeaponBaseData
     /// 弹道间隔距离
     /// </summary>
     public float BulletIntervalDistance => bulletIntervalDistance;
+
+    [SerializeField, ChineseLabel("扇形弹道角度")] private float fanShapedAngle;
+
+    /// <summary>
+    /// 扇形弹道角度
+    /// <summary>
+    public float FanShapedAngle => fanShapedAngle;
 
     [Header("子弹属性")]
     [SerializeField, ChineseLabel("子弹刚体预制体")] private BulletAttack bulletPrefab;

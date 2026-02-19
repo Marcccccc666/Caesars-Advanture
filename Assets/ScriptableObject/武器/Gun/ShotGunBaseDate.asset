@@ -9,16 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0734a9836baa84642b24e1140ea4c9f3, type: 3}
-  m_Name: GunBaseData
-  m_EditorClassIdentifier: Assembly-CSharp::GunBaseData
+  m_Script: {fileID: 11500000, guid: 9c4c36bf78a7ca441b81e9908e516d85, type: 3}
+  m_Name: ShotGunBaseDate
+  m_EditorClassIdentifier: Assembly-CSharp::ShotGunBaseDate
   weaponName: 
   weaponDamage: 2
-  attackInterval: 0.5
+  attackInterval: 1
   weaponRotationSpeed: 1000
-  initialBallisticsCount: 1
-  ballisticsType: 0
-  bulletIntervalDistance: 0.2
+  magazineCapacity: 5
+  initialBallisticsCount: 3
+  ballisticsType: 1
+  bulletIntervalDistance: 0
+  fanShapedAngle: 15
   bulletPrefab: {fileID: -3245512310463744862, guid: e6a8d1d9c0cd27747a94af0db40f53f6, type: 3}
-  bulletSpeed: 10
-  bulletPenetration: 1
+  bulletSpeed: 5
+  bulletPenetration: 0

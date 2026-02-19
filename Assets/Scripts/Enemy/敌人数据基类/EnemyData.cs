@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class EnemyData : ObjectData
@@ -60,6 +61,32 @@ public class EnemyData : ObjectData
         {
             currentAttackInterval = value;
         }
+    }
+#endregion
+
+#region 血量变化
+    public Action<int> OnHeal;
+
+    public Action<int> OnDamage;
+
+    /// <summary>
+    /// 受伤事件
+    /// </summary>
+    /// <param name="damage">受伤值</param>
+    public override void Damage(int damage)
+    {
+        base.Damage(damage);
+        OnDamage?.Invoke(damage);
+    }
+
+    /// <summary>
+    /// 加血事件
+    /// </summary>
+    /// <param name="health">加血值</param>
+    public override void Heal(int health)
+    {
+        base.Heal(health);
+        OnHeal?.Invoke(health);
     }
 #endregion
 }

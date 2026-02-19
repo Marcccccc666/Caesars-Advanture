@@ -13,6 +13,10 @@ public class BulletAttack : PoolableObject<BulletAttack>
     /// </summary>
     private int bulletPenetration = 0;
 
+    private Vector2 moveDirection;
+
+    private float moveSpeed;
+
     [SerializeField] private Rigidbody2D RG2D;
 
     private GameManager GameManager => GameManager.Instance;
@@ -28,6 +32,15 @@ public class BulletAttack : PoolableObject<BulletAttack>
         }
     }
 
+    private void FixedUpdate()
+    {
+        if(!GameManager.IsPlayerControllable)
+        {
+            return;
+        }
+        RG2D.linearVelocity = moveDirection * moveSpeed;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Enemy"))
@@ -39,7 +52,6 @@ public class BulletAttack : PoolableObject<BulletAttack>
             if(enemyData.CurrentHealth <= 0)
             {
                 enemyManager.RemoveEnemyData(enemyID);
-
             }
 
             // 如果子弹穿透值大于0，则继续穿透下一个敌人
@@ -64,25 +76,13 @@ public class BulletAttack : PoolableObject<BulletAttack>
         RG2D.linearVelocity = Vector2.zero;
     }
 
-    /// <summary>
-    /// 设置子弹伤害值
-    /// </summary>
-    /// <param name="damage">子弹伤害值</param>
-    public void SetBulletDamage(int damage)
+    public void Initialize(Vector2 direction, float speed, int damage, int penetration)
     {
         bulletDamage = damage;
-    }
-
-    /// <summary>
-    /// 设置子弹穿透值
-    /// </summary>
-    /// <param name="penetration">子弹穿透值</param>
-    public void SetBulletPenetration(int penetration)
-    {
         bulletPenetration = penetration;
+        moveDirection = direction;
+        moveSpeed = speed;
     }
-
-    public Rigidbody2D GetRG2D => RG2D;
 
 #region UNITY_EDITOR
     private void OnValidate()

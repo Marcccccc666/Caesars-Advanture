@@ -3,27 +3,22 @@ using UnityEngine;
 public class GunController : WeaponBase
 {
     [Header("动画相关")]
-    [SerializeField, ChineseLabel("动画控制器")] private Animator gunAnimator;
-    [SerializeField, ChineseLabel("射击动画名")] private string shootAnimationName = "Shoot";
+    [SerializeField, ChineseLabel("动画控制器")] protected Animator gunAnimator;
+    [SerializeField, ChineseLabel("射击动画名")] protected string shootAnimationName = "Shoot";
 
     [Header("射击相关")]
-    [SerializeField, ChineseLabel("子弹生成点")] private Transform bulletSpawnPoint;
-
-    [SerializeField,ChineseLabel("攻击音效")]private AudioClip M_attackAudioClip;
+    [SerializeField, ChineseLabel("子弹生成点")] protected Transform bulletSpawnPoint;
 
     /// <summary>
     /// 枪械数据
     /// </summary>
     private GunData M_gunData => WeaponData as GunData;
-    
-    private InputManager inputManager => InputManager.Instance;
-    private WeaponManager weaponManager => WeaponManager.Instance;
-    private PoolManager poolManager => PoolManager.Instance;
-    private MultiTimerManager MultiTimerManager => MultiTimerManager.Instance;
 
-    private void Awake()
+    protected override void Awake()
     {
-        weaponManager.SwitchWeapon(WeaponData);
+        base.Awake();
+
+        weaponManager.SwitchWeapon(M_gunData);
         MultiTimerManager.Create_DownTimer("GunAttackCooldown");
     }
 
@@ -62,22 +57,20 @@ public class GunController : WeaponBase
 
         // 计算每个子弹的生成位置
         Vector3[] instancePositions = new Vector3[bulletCount];
-        instancePositions = BulletMovement.MoveBullet(bulletSpawnPoint, gunBaseData.BulletIntervalDistance, bulletCount);
+        instancePositions = BulletMovement.BulletMoveTypes(
+            bulletSpawnPoint: bulletSpawnPoint,
+            bulletType: gunBaseData.BallisticsType,
+            intervalDistance: gunBaseData.BulletIntervalDistance,
+            bulletCount: bulletCount
+        );
 
         // 实例化子弹
         for (int i = 0; i < bulletCount; i++)
         {
             // 实例化子弹并设置其伤害
             bullets[i] = poolManager.Spawn(gunBaseData.BulletPrefab, instancePositions[i], bulletSpawnPoint.rotation, false);
-            bullets[i].SetBulletDamage(finalDamage);
-            bullets[i].SetBulletPenetration(finalPenetration);
-        }
-
-        // 发射子弹
-        foreach (var bullet in bullets)
-        {
-            poolManager.Activate(bullet);
-            bullet.GetRG2D.AddForce(bulletSpawnPoint.right * gunBaseData.BulletSpeed, ForceMode2D.Impulse);
+            bullets[i].Initialize(bulletSpawnPoint.right, gunBaseData.BulletSpeed, finalDamage, finalPenetration);
+            poolManager.Activate(bullets[i]);
         }
 
         AudioSource.PlayClipAtPoint(M_attackAudioClip, Camera.main.transform.position);

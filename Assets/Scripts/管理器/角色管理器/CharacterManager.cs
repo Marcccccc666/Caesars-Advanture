@@ -22,7 +22,7 @@ public class CharacterManager: Singleton<CharacterManager>
     }
 
     /// <summary>
-    /// 当前玩家角色数据改变时的事件
+    /// 当前玩家控制的角色数据改变事件
     /// </summary>
     public Action<CharacterDate> OnCurrentPlayerCharacterDataChanged;
 

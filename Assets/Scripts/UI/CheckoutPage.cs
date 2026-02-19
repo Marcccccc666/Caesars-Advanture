@@ -11,7 +11,7 @@ public class CheckoutPage : MonoBehaviour
 
     private CharacterManager characterManager => CharacterManager.Instance;
 
-    private LevelManager levelManager => LevelManager.Instance;
+    private CharacterDate subscribedCharacter;
    
 
     void Awake()
@@ -30,14 +30,43 @@ public class CheckoutPage : MonoBehaviour
 
     private void OnEnable()
     {
-        characterManager.GetCurrentPlayerCharacterData.OnDie += ShowGameOverPage;
+        characterManager.OnCurrentPlayerCharacterDataChanged += OnCharacterChanged;
+
+        if (characterManager.GetCurrentPlayerCharacterData != null)
+        {
+            OnCharacterChanged(characterManager.GetCurrentPlayerCharacterData);
+        }
     }
 
     private void OnDisable()
     {
-        if(characterManager.GetCurrentPlayerCharacterData != null)
+        if(characterManager)
         {
-            characterManager.GetCurrentPlayerCharacterData.OnDie -= ShowGameOverPage;
+            characterManager.OnCurrentPlayerCharacterDataChanged -= OnCharacterChanged;
+        }
+        if(subscribedCharacter)
+        {
+            subscribedCharacter.OnDie -= ShowGameOverPage;
+        }
+    }
+
+    /// <summary>
+    /// 当前玩家控制的角色数据发生变化时调用
+    /// <para>取消订阅旧角色的死亡事件，订阅新角色的死亡事件</para>
+    /// <para>如果新角色不为null，则订阅其死亡事件以显示游戏结束页面</para>
+    /// <para>如果新角色为null，则不订阅任何事件</para>
+    /// </summary>
+    /// <param name="newCharacter"></param>
+    private void OnCharacterChanged(CharacterDate newCharacter)
+    {
+        if (subscribedCharacter != null)
+        {
+            subscribedCharacter.OnDie -= ShowGameOverPage;
+        }
+        subscribedCharacter = newCharacter;
+        if (subscribedCharacter != null)
+        {
+            subscribedCharacter.OnDie += ShowGameOverPage;
         }
     }
 
@@ -64,39 +93,7 @@ public class CheckoutPage : MonoBehaviour
         ResetSingletons();
     }
 
-    public void checkPageOpen()
-    {
-        if (characterManager.GetCurrentPlayerCharacterData == null)
-        {
-            return;
-        }
-
-        if (characterManager.GetCurrentPlayerCharacterData.CurrentHealth <= 0)
-        {
-          //  ShowGameOverPage();
-            return;
-        }
-
-        if (CanShowSuccessPage())
-        {
-          //  ShowSuccessPage();
-            return;
-        }
-        if (CanNextLevel())
-        {
-           // ShowBuffSelection();
-        }
-    }
-
-    bool CanNextLevel()
-    {
-        return characterManager.GetCurrentPlayerCharacterData.CurrentHealth > 0 && enemyManager.GetEnemyDataDict.Count == 0 && !levelManager.IsLastLevel();
-    }
-
-    bool CanShowSuccessPage()
-    {
-        return characterManager.GetCurrentPlayerCharacterData.CurrentHealth > 0 && enemyManager.GetEnemyDataDict.Count == 0 && levelManager.IsLastLevel();
-    }
+    
 
     private void ResetSingletons()
     {

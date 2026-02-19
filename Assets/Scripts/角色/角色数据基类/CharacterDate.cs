@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CharacterDate : ObjectData
@@ -34,6 +35,20 @@ public class CharacterDate : ObjectData
 #endregion
 
 
+#region HP 变化
+    /// <summary>
+    /// 加血事件
+    /// </summary>
+    /// <param name="health">加血值</param>
+    public Action<int, int> OnHeal;
+
+    /// <summary>
+    /// 受伤事件
+    /// </summary>
+    /// <param name="damage">受伤值</param>
+    public Action<int, int> OnDamage;
+
+
     public override int CurrentHealth
     {
         get => currentHealth;
@@ -55,4 +70,25 @@ public class CharacterDate : ObjectData
             }
         }
     }
+
+    /// <summary>
+    /// 加血
+    /// </summary>
+    /// <param name="health">加血值</param>
+    public override void Heal(int health)
+    {
+        CurrentHealth += health;
+        OnHeal?.Invoke(CurrentHealth, MaxHealth);
+    }
+
+    /// <summary>
+    /// 受伤 
+    /// </summary>
+    /// <param name="damage">受伤值</param>
+    public override void Damage(int damage)
+    {
+        CurrentHealth -= damage;
+        OnDamage?.Invoke(CurrentHealth, MaxHealth);
+    }
+#endregion
 }

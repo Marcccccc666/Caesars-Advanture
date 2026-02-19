@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0734a9836baa84642b24e1140ea4c9f3, type: 3}
+  m_Name: GunBaseData
+  m_EditorClassIdentifier: Assembly-CSharp::GunBaseData
+  weaponName: 
+  weaponDamage: 2
+  attackInterval: 0.5
+  weaponRotationSpeed: 1000
+  magazineCapacity: 5
+  initialBallisticsCount: 1
+  ballisticsType: 0
+  bulletIntervalDistance: 0.2
+  fanShapedAngle: 0
+  bulletPrefab: {fileID: -3245512310463744862, guid: e6a8d1d9c0cd27747a94af0db40f53f6, type: 3}
+  bulletSpeed: 10
+  bulletPenetration: 1

@@ -25,7 +25,6 @@ public abstract class PoolableObject<T> : MonoBehaviour where T : PoolableObject
         }
         else
         {
-            Debug.LogError("对象池未设置，无法释放对象！");
             Destroy(gameObject);
         }
     }

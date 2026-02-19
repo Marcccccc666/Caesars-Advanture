@@ -15,6 +15,8 @@ public class Caesar_Controller : MonoBehaviour
     [SerializeField,ChineseLabel("动画控制器")] private Animator M_animator;
     [SerializeField,ChineseLabel("移动动画名")] private string M_moveAnimaeName;
 
+    [SerializeField, ChineseLabel("待机动画名")] private string M_idleAnimateName;
+
     /// <summary>
     /// 角色刚体
     /// </summary>
@@ -95,20 +97,17 @@ public class Caesar_Controller : MonoBehaviour
     {
         // 添加状态
             // 待机状态
-                Caesar_stateMachine.AddState(Caesar_StateID.Idle, new Idle());
+                Caesar_stateMachine.AddState(Caesar_StateID.Idle, new Idle(M_animator, M_idleAnimateName));
             
             // 移动状态
-                Caesar_stateMachine.AddState(Caesar_StateID.Move, new Move(M_animator, Animator.StringToHash(M_moveAnimaeName)));
+                Caesar_stateMachine.AddState(Caesar_StateID.Move, new Move(M_animator, M_moveAnimaeName));
 
             // 死亡状态
                 Caesar_stateMachine.AddState(Caesar_StateID.Die, new Die());
 
         // 转换条件
             // 待机 -> 移动
-                Caesar_stateMachine.AddTransition(Caesar_StateID.Idle, Caesar_StateID.Move, t => inputManager.MoveDirection != Vector2.zero);
-
-            // 移动 -> 待机
-                Caesar_stateMachine.AddTransition(Caesar_StateID.Move, Caesar_StateID.Idle, t => inputManager.MoveDirection == Vector2.zero);
+                Caesar_stateMachine.AddTwoWayTransition(Caesar_StateID.Idle, Caesar_StateID.Move, t => inputManager.MoveDirection != Vector2.zero);
 
         // 设置初始状态
         Caesar_stateMachine.SetStartState(Caesar_StateID.Idle);
