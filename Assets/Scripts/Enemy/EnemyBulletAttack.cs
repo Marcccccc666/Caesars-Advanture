@@ -1,7 +1,8 @@
 using UnityEngine;
+using UnityEngine.Pool;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
-public class EnemyBulletAttack : MonoBehaviour
+public class EnemyBulletAttack : MonoBehaviour, IPoolable<EnemyBulletAttack>
 {
     [SerializeField, ChineseLabel("默认伤害")] private int defaultDamage = 1;
     [SerializeField, ChineseLabel("默认速度")] private float defaultSpeed = 8f;
@@ -17,6 +18,13 @@ public class EnemyBulletAttack : MonoBehaviour
     private bool hasLastPosition;
     private Vector2 lastPosition;
 
+    private float lifetime = 0.1f;
+
+    private DownTimer downTimer;
+
+    private MultiTimerManager timerManager => MultiTimerManager.Instance;
+    private IObjectPool<EnemyBulletAttack> pool;
+
     private void Awake()
     {
         rb2D = GetComponent<Rigidbody2D>();
@@ -27,6 +35,7 @@ public class EnemyBulletAttack : MonoBehaviour
         // 防止 prefab 的 Layer Overrides 过滤掉玩家/墙体触发。
         bulletCollider.includeLayers = Physics2D.AllLayers;
         bulletCollider.excludeLayers = 0;
+
     }
 
     private void Start()
@@ -37,7 +46,7 @@ public class EnemyBulletAttack : MonoBehaviour
         }
 
         rb2D.linearVelocity = (Vector2)transform.right * Mathf.Max(0f, defaultSpeed);
-        Destroy(gameObject, Mathf.Max(0.1f, defaultLifetime));
+        lifetime = Mathf.Max(lifetime, defaultLifetime);
     }
 
     private void OnEnable()
@@ -68,6 +77,14 @@ public class EnemyBulletAttack : MonoBehaviour
 
         SweepForHit(lastPosition, currentPosition);
         lastPosition = currentPosition;
+    }
+
+    private void Update()
+    {
+        if (downTimer.IsComplete())
+        {
+            Consume();
+        }
     }
 
     public void SetBulletDamage(int damage)
@@ -103,7 +120,9 @@ public class EnemyBulletAttack : MonoBehaviour
         float angle = Mathf.Atan2(normalizedDirection.y, normalizedDirection.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
-        Destroy(gameObject, Mathf.Max(0.1f, lifetime));
+        downTimer = timerManager.Create_DownTimer("EnemyBulletAttack"+ gameObject.GetInstanceID(), lifetime);
+        downTimer.SetDuration(Mathf.Max(0.1f, lifetime));
+        downTimer.StartTimer();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -196,7 +215,7 @@ public class EnemyBulletAttack : MonoBehaviour
     private void Consume()
     {
         consumed = true;
-        Destroy(gameObject);
+        Release();
     }
 
     private bool IsOwnerCollider(Collider2D collision)
@@ -259,5 +278,20 @@ public class EnemyBulletAttack : MonoBehaviour
     private static bool IsLayerInMask(int layer, LayerMask mask)
     {
         return (mask.value & (1 << layer)) != 0;
+    }
+
+    public void SetPool(IObjectPool<EnemyBulletAttack> pool)
+    {
+        this.pool = pool;
+    }
+
+    public void Release()
+    {
+        if(timerManager != null && downTimer != null)
+        {
+            timerManager.Pause_DownTimer(downTimer);
+        }
+
+        pool.Release(this);
     }
 }

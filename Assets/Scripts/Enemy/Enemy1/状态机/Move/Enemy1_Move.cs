@@ -9,6 +9,5 @@ public class Enemy1_Move : BaseState<Enemy1HFSM.Enemy1StateID>
     public override void OnEnter()
     {
         base.OnEnter();
-        Debug.Log("敌人1进入移动状态");
     }
 }

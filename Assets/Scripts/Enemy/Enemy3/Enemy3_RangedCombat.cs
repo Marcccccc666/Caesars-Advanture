@@ -3,7 +3,7 @@ using UnityEngine;
 public class Enemy3_RangedCombat : MonoBehaviour
 {
     [Header("远程攻击")]
-    [SerializeField, ChineseLabel("子弹刚体预制体")] private Rigidbody2D projectilePrefab;
+    [SerializeField, ChineseLabel("子弹刚体预制体")] private EnemyBulletAttack projectilePrefab;
     [SerializeField, ChineseLabel("子弹发射点")] private Transform firePoint;
     [SerializeField, ChineseLabel("子弹速度")] private float projectileSpeed = 8f;
     [SerializeField, ChineseLabel("子弹存活时长")] private float projectileLifetime = 3f;
@@ -11,6 +11,8 @@ public class Enemy3_RangedCombat : MonoBehaviour
     private Transform ownerTransform;
 
     public Transform FirePoint => firePoint;
+    
+    private PoolManager poolManager => PoolManager.Instance;
 
     private void Awake()
     {
@@ -33,17 +35,18 @@ public class Enemy3_RangedCombat : MonoBehaviour
 
         Vector2 normalizedDirection = direction.normalized;
         float angle = Mathf.Atan2(normalizedDirection.y, normalizedDirection.x) * Mathf.Rad2Deg;
-        Rigidbody2D projectileInstance = Instantiate(
-            projectilePrefab,
-            firePoint.position,
-            Quaternion.Euler(0f, 0f, angle)
-        );
+        EnemyBulletAttack projectileInstance = poolManager.Spawn(
+            prefab: projectilePrefab,
+            position: firePoint.position,
+            rotation: Quaternion.Euler(0f, 0f, angle),
+            defaultCapacity: 40,
+            maxSize: 200,
+            autoActive: true);
 
-        EnemyBulletAttack enemyBullet = projectileInstance.GetComponent<EnemyBulletAttack>();
-        if (enemyBullet != null)
+        if (projectileInstance != null)
         {
-            enemyBullet.SetBulletDamage(damage);
-            enemyBullet.Launch(
+            projectileInstance.SetBulletDamage(damage);
+            projectileInstance.Launch(
                 normalizedDirection,
                 projectileSpeed,
                 projectileLifetime,
@@ -65,7 +68,8 @@ public class Enemy3_RangedCombat : MonoBehaviour
             }
             else
             {
-                projectileInstance.linearVelocity = normalizedDirection * projectileSpeed;
+                Rigidbody2D projectileInstanceRb2D = projectileInstance.GetComponent<Rigidbody2D>();
+                projectileInstanceRb2D.linearVelocity = normalizedDirection * projectileSpeed;
                 Destroy(projectileInstance.gameObject, Mathf.Max(0.1f, projectileLifetime));
             }
         }

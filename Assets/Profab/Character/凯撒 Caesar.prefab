@@ -149,6 +149,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3013454240134528536}
+  - component: {fileID: 8622552566972790847}
   m_Layer: 6
   m_Name: "\u6B66\u5668"
   m_TagString: Untagged
@@ -171,6 +172,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 222130087363202059}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8622552566972790847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3038501855911578812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48cf361362afba0479eb58ba54906294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponController
+  currentWeaponDataProfab: {fileID: 0}
+  currentWeaponObject: {fileID: 0}
 --- !u!1 &3536581408305761036
 GameObject:
   m_ObjectHideFlags: 0

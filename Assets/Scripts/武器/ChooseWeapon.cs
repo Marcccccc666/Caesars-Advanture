@@ -5,7 +5,7 @@ public class ChooseWeapon : MonoBehaviour
     public WeaponData weapon;
     [SerializeField, ChineseLabel("提示交互")] private GameObject interactionHint;
     private InputManager inputManager => InputManager.Instance;
-    private CharacterManager characterManager => CharacterManager.Instance;
+    private WeaponManager weaponManager => WeaponManager.Instance;
 
     private bool playerInRange = false;
     void OnTriggerEnter2D(Collider2D collision)
@@ -46,8 +46,7 @@ public class ChooseWeapon : MonoBehaviour
 
     private void GetWeapon()
     {
-        Transform weaponHoldPoint = characterManager.GetCurrentPlayerCharacterData.GetWeaponHoldPoint();
-        GameObject weaponObj = Instantiate(weapon.gameObject, weaponHoldPoint.position, Quaternion.identity, weaponHoldPoint);
+        weaponManager.SwitchWeapon(weapon);
         gameObject.SetActive(false);
     }
 }

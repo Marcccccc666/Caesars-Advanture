@@ -28,7 +28,6 @@ public class Enemy1_Attack : BaseState<Enemy1HFSM.Enemy1StateID>
     public override void OnEnter()
     {
         base.OnEnter();
-        Debug.Log("敌人1进入攻击状态");
 
         startPosition = M_enemy1HFSM.transform.position;
         M_enemy1HFSM.SetAttackDirection(M_enemy1HFSM.GetDirectionToPlayer());

@@ -11,8 +11,6 @@ public class ShotgunController : GunController
     {
         base.Awake();
         shootAnimationHash = Animator.StringToHash(shootAnimationName);
-
-        weaponManager.SwitchWeapon(M_gunData);
     }
 
     protected override void Update()
@@ -57,6 +55,8 @@ public class ShotgunController : GunController
             fanAngle: gunBaseData.FanShapedAngle,
             bulletCount: bulletCount
         );
+
+
 
         // 设置子弹
         for (int i = 0; i < bulletCount; i++)

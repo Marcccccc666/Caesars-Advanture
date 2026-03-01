@@ -12,11 +12,12 @@ public enum GunType
     Sniper
 }
 
-[System.Serializable]public class GunBrach
-    {
-        public GunType Type;
-        public GunData Data;
-    }
+[System.Serializable]
+public class GunBrach
+{
+    public GunType Type;
+    public GunData Data;
+}
 
 [CreateAssetMenu(fileName = "InitialGunData", menuName = "Scriptable Objects/Gun/InitialGunData")]
 public class InitialGunData : GunBaseData

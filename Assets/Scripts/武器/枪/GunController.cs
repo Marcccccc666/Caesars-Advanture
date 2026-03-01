@@ -17,8 +17,7 @@ public class GunController : WeaponBase
     protected override void Awake()
     {
         base.Awake();
-
-        weaponManager.SwitchWeapon(M_gunData);
+        
         MultiTimerManager.Create_DownTimer("GunAttackCooldown");
     }
 

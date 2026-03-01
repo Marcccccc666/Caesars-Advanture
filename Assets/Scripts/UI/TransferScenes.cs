@@ -11,10 +11,9 @@ public class TransferScenes : MonoBehaviour
 {
     [SerializeField, ChineseLabel("要传送到的场景名称"), Readonly] private string sceneName;
 
-    public void TransferScene()
-    {
-        SceneManager.LoadScene(sceneName);
-    }
+    [SerializeField, ChineseLabel("玩家子弹")] private BulletAttack playerBulletPrefab;
+
+    private PoolManager poolManager => PoolManager.Instance;
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -22,6 +21,12 @@ public class TransferScenes : MonoBehaviour
         {
             TransferScene();
         }
+    }
+
+    private void TransferScene()
+    {
+        poolManager.ReleasePool(playerBulletPrefab);
+        SceneManager.LoadScene(sceneName);
     }
 
 #if UNITY_EDITOR

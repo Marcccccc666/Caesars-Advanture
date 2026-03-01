@@ -3,11 +3,16 @@ using UnityEngine;
 public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
 {
     private static T instance;
+    private static bool isQuitting = false;
 
     public static T Instance
     {   
         get
         {
+            if(isQuitting)
+            {
+                return null;
+            }
             if (instance == null)
             {
                 // 先尝试在场景中查找
@@ -46,6 +51,14 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
 
     protected virtual void OnAwake() { return; }
 
+    protected virtual void OnDestroy()
+    {
+        isQuitting = true;
+    }
 
+    protected virtual void OnApplicationQuit()
+    {
+        isQuitting = true;
+    }
 
 }

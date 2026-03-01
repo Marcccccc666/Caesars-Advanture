@@ -181,6 +181,14 @@ public class MultiTimerManager : Singleton<MultiTimerManager>
     }
 
     /// <summary>
+    /// 暂停前进计时器
+    /// </summary>
+    public void Pause_UpTimer(UpTimer timer)
+    {
+        timer.PauseTimer();
+    }
+
+    /// <summary>
     /// 暂停指定名称的后退计时器
     /// </summary>
     /// <param name="timerName">计时器名称</param>
@@ -194,6 +202,15 @@ public class MultiTimerManager : Singleton<MultiTimerManager>
         {
             Debug.LogError($"计时器名称 {timerName} 不存在");
         }
+    }
+
+    /// <summary>
+    /// 暂停倒计时器
+    /// </summary>
+    /// <param name="timer">倒计时器</param>
+    public void Pause_DownTimer(DownTimer timer)
+    {
+        timer.PauseTimer();
     }
 
     #endregion 暂停计时器

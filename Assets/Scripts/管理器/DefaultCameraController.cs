@@ -15,7 +15,33 @@ public class DefaultCameraController : MonoBehaviour
 
     void OnEnable()
     {
-        defaultCamera.Follow = characterManager.GetCurrentPlayerCharacterData?.transform;
+        characterManager.OnCurrentPlayerCharacterDataChanged += SetDefaultCameraFollowTarget;
+    }
+
+    void OnDisable()
+    {
+        if(characterManager != null)
+        {
+            characterManager.OnCurrentPlayerCharacterDataChanged -= SetDefaultCameraFollowTarget;
+        }
+    }
+
+    /// <summary>
+    /// 设置默认相机的跟随目标为当前玩家控制的角色数据，如果当前玩家控制的角色数据为null，则取消跟随目标
+     /// 当当前玩家控制的角色数据发生变化时调用
+     /// 订阅于CharacterManager.OnCurrentPlayerCharacterDataChanged事件
+    /// </summary>
+    /// <param name="newCharacter"></param>
+    private void SetDefaultCameraFollowTarget(CharacterDate newCharacter)
+    {
+        if (newCharacter != null)
+        {
+            defaultCamera.Follow = newCharacter.transform;
+        }
+        else
+        {
+            defaultCamera.Follow = null;
+        }
     }
 
     #region UNITY_EDITOR

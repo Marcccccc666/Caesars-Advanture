@@ -21,10 +21,11 @@ public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
     [SerializeField] private Rigidbody2D RG2D;
 
     private GameManager GameManager => GameManager.Instance;
-    private WeaponManager weaponManager => WeaponManager.Instance;
     private EnemyManager enemyManager => EnemyManager.Instance;
     
     private IObjectPool<BulletAttack> pool;
+
+    private bool hasCollided = false;
 
     private void Awake()
     {
@@ -40,13 +41,18 @@ public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
         {
             return;
         }
-        RG2D.linearVelocity = moveDirection * moveSpeed;
+        ObjectMove.MoveObject(RG2D, moveDirection, moveSpeed);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy"))
+        if(hasCollided)
         {
+            return;
+        }
+        if (collision.CompareTag("Enemy") && !hasCollided)
+        {
+            hasCollided = true;
             int enemyID = collision.gameObject.GetInstanceID();
             EnemyData enemyData = enemyManager.GetEnemyDataDict[enemyID];
             enemyData.Damage(bulletDamage);
@@ -66,8 +72,9 @@ public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
                 Release();
             }
         }
-        else if(collision.CompareTag("Wall") || collision.CompareTag("Obstacle"))
+        else if((collision.CompareTag("Wall") || collision.CompareTag("Obstacle")) && !hasCollided)
         {
+            hasCollided = true;
            Release();
         }
     }
@@ -76,6 +83,7 @@ public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
 
     public void Initialize(Vector2 direction, float speed, int damage, int penetration)
     {
+        hasCollided = false;
         bulletDamage = damage;
         bulletPenetration = penetration;
         moveDirection = direction;
@@ -86,29 +94,14 @@ public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
     {
         this.pool = pool;
     }
-
-    /// <summary>
-    /// 当子弹被生成时调用，执行必要的初始化逻辑
-    /// </summary>
-    public void OnSpawn()
-    {
-        // 可以在这里添加任何需要在子弹生成时执行的逻辑，例如重置状态、播放动画等
-    }
     
     /// <summary>
     /// 将子弹释放回对象池，准备下次使用
     /// </summary>
     public void Release()
     {
-        pool.Release(this);
-    }
-
-    /// <summary>
-    /// 当对象被释放回池中时调用，重置子弹状态以准备下次使用
-    /// </summary>
-    public void OnDespawn()
-    {
         RG2D.linearVelocity = Vector2.zero;
+        pool.Release(this);
     }
 
 #region UNITY_EDITOR

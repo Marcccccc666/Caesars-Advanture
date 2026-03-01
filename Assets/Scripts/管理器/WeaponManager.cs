@@ -7,7 +7,7 @@ using UnityEngine;
 public class WeaponManager: Singleton<WeaponManager>
 {
     /// <summary>
-    /// 当前武器
+    /// 当前武器Prefab数据
     /// </summary>
     [SerializeField]private WeaponData currentWeapon;
 

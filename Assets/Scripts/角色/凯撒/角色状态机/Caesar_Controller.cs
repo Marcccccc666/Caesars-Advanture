@@ -5,7 +5,7 @@ using UnityHFSM;
 public enum Character{}
 
 [RequireComponent(typeof(Rigidbody2D), typeof(CaesarData))]
-public class Caesar_Controller : Singleton<Caesar_Controller>, IPoolable<Caesar_Controller>
+public class Caesar_Controller : MonoBehaviour
 {
     /// <summary>
     /// 角色数据
@@ -57,9 +57,8 @@ public class Caesar_Controller : Singleton<Caesar_Controller>, IPoolable<Caesar_
        this.pool = pool;
     }
 
-    protected override void Awake()
+    protected void Awake()
     {
-        base.Awake();
         M_chData = GetComponent<CaesarData>();
         
         M_chData.InitObjectData();
@@ -68,12 +67,10 @@ public class Caesar_Controller : Singleton<Caesar_Controller>, IPoolable<Caesar_
         M_rigidbody2D = GetComponent<Rigidbody2D>();
         
         CharacterStateMachine();
-        
     }
 
-    public void OnSpawn()
+    private void OnEnable()
     {
-        characterManager.SetCurrentPlayerCharacterData(M_chData);
         Caesar_stateMachine.Init();
     }
     
@@ -105,7 +102,7 @@ public class Caesar_Controller : Singleton<Caesar_Controller>, IPoolable<Caesar_
         Caesar_stateMachine.OnLogic();
     }
 
-    public void OnDespawn()
+    private void OnDisable()
     {
         // 在对象被释放回池中时执行必要的清理和状态重置
         M_rigidbody2D.linearVelocity = Vector2.zero;

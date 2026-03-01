@@ -5,7 +5,7 @@ public class ChooseWeaponBranch : MonoBehaviour
     [SerializeField, ChineseLabel("分支选择界面")] private GameObject branchSelectionUI;
 
     [SerializeField, ChineseLabel("分支卡")] private WeaponBranch[] weaponBranches;
-    private WeaponData weaponData => WeaponManager.Instance.GetCurrentWeapon;
+    private WeaponManager weaponManager => WeaponManager.Instance;
     private int selectedBranchIndex = -1;
 
     /// <summary>
@@ -18,7 +18,39 @@ public class ChooseWeaponBranch : MonoBehaviour
             branchSelectionUI.SetActive(false);
         }
 
-        if(weaponData.WeaponBaseData is InitialGunData initialGunData)
+        var currentWeaponData = weaponManager.GetCurrentWeapon;
+        if(currentWeaponData != null)
+        {
+            UpdateSelectionUI(currentWeaponData);
+        }
+    }
+
+    private void OnEnable()
+    {
+        weaponManager.UpgradeCurrentWeapon += OpenBranchSelectionUI;
+        weaponManager.OnWeaponSwitched += UpdateSelectionUI;
+    }
+
+    private void OnDisable()
+    {
+        if(weaponManager != null)
+        {
+            weaponManager.UpgradeCurrentWeapon -= OpenBranchSelectionUI;
+            weaponManager.OnWeaponSwitched -= UpdateSelectionUI;
+        }
+    }
+
+    private void OpenBranchSelectionUI()
+    {
+        if (branchSelectionUI != null)
+        {
+            branchSelectionUI.SetActive(true);
+        }
+    }
+
+    private void UpdateSelectionUI(WeaponData newWeapon)
+    {
+        if(newWeapon.WeaponBaseData is InitialGunData initialGunData)
         {
             GunBrach[] gunBranches = initialGunData.GunBrachs;
             for (int i = 0; i < weaponBranches.Length; i++)
@@ -27,25 +59,11 @@ public class ChooseWeaponBranch : MonoBehaviour
                 {
                     weaponBranches[i].SetWeaponBranch(gunBranches[i].Data, gunBranches[i].Type);
                 }
+                else
+                {
+                    weaponBranches[i].SetWeaponBranch(null, default);
+                }
             }
-        }
-    }
-
-    private void OnEnable()
-    {
-        WeaponManager.Instance.UpgradeCurrentWeapon += OpenBranchSelectionUI;
-    }
-
-    private void OnDisable()
-    {
-        WeaponManager.Instance.UpgradeCurrentWeapon -= OpenBranchSelectionUI;
-    }
-
-    private void OpenBranchSelectionUI()
-    {
-        if (branchSelectionUI != null)
-        {
-            branchSelectionUI.SetActive(true);
         }
     }
 
@@ -64,12 +82,10 @@ public class ChooseWeaponBranch : MonoBehaviour
 
     public void ConfirmSelection()
     {
-        if (selectedBranchIndex >= 0 && weaponData.WeaponBaseData is InitialGunData initialGunData)
+        if (selectedBranchIndex >= 0 && weaponManager.GetCurrentWeapon.WeaponBaseData is InitialGunData initialGunData)
         {
-            Destroy(weaponData.gameObject);
             GunBrach selectedBranch = initialGunData.GunBrachs[selectedBranchIndex];
-            Transform weaponHoldPoint = CharacterManager.Instance.GetCurrentPlayerCharacterData.GetWeaponHoldPoint();
-            WeaponData newWeaponData = Instantiate(selectedBranch.Data, weaponHoldPoint.position, weaponHoldPoint.rotation, weaponHoldPoint);
+            weaponManager.SwitchWeapon(selectedBranch.Data);
         }
     }
 }
