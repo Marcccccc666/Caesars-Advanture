@@ -36,7 +36,7 @@ public abstract class BattleRoomController : RoomBase
         SetLockRoom(false);
         for (int i = 0; i < EnemiesInRoom.Length; i++)
         {
-            EnemiesInRoom[i].gameObject.SetActive(false);
+            EnemiesInRoom[i].PlayerEnterRoom = false;
         }
         
         base.Awake();
@@ -59,6 +59,7 @@ public abstract class BattleRoomController : RoomBase
             {
                 int enemyID = EnemiesInRoom[i].gameObject.GetInstanceID();
                 enemyManager.AddEnemyData(enemyID, EnemiesInRoom[i]);
+                EnemiesInRoom[i].PlayerEnterRoom = true;
             }
 
             SetLockRoom(true);

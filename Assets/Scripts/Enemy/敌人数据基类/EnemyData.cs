@@ -89,4 +89,17 @@ public class EnemyData : ObjectData
         OnHeal?.Invoke(health);
     }
 #endregion
+
+    #region 玩家进入房间事件
+    private bool playerEnterRoom= false;
+
+    /// <summary>
+    /// 玩家是否进入房间
+    /// </summary>
+    public bool PlayerEnterRoom
+    {
+        get => playerEnterRoom;
+        set => playerEnterRoom = value;
+    }
+    #endregion
 }
