@@ -110,7 +110,6 @@ public class CheckoutPage : MonoBehaviour
     private void ResetSingletons()
     {
         DestroyIfExists<GameManager>();
-        DestroyIfExists<LevelManager>();
         DestroyIfExists<EnemyManager>();
         DestroyIfExists<CharacterManager>();
         DestroyIfExists<BuffManager>();
