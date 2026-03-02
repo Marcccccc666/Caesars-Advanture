@@ -44,12 +44,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
             Destroy(gameObject);
         }
         DontDestroyOnLoad(this.gameObject);
-
-        OnAwake();
     }
-
-
-    protected virtual void OnAwake() { return; }
 
     protected virtual void OnDestroy()
     {

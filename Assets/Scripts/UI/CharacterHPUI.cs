@@ -1,10 +1,10 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CharacterHPUI : MonoBehaviour
 {
-    [SerializeField,ChineseLabel("文字前缀")] private string prefix = "HP: ";
-    [SerializeField,ChineseLabel("HP文本")] private TextMeshProUGUI HPText;
+    [SerializeField,ChineseLabel("HP文本")] private Slider HPSlider;
 
     private CharacterManager characterManager => CharacterManager.Instance;
 
@@ -65,15 +65,19 @@ public class CharacterHPUI : MonoBehaviour
     /// </summary>
     private void UpdateHPDisplay(int currentHealth, int maxHealth)
     {
-        if (HPText != null)
-            HPText.text = $"{prefix}{currentHealth}/{maxHealth}";
+        if (HPSlider != null)
+        {
+            HPSlider.maxValue = maxHealth;
+            HPSlider.value = currentHealth;
+        }
     }
 
     private void UpdateHPDisplay(CharacterDate characterData)
     {
         if(characterData != null)
         {
-            HPText.text = $"{prefix}{characterData.CurrentHealth}/{characterData.MaxHealth}";
+            HPSlider.maxValue = characterData.MaxHealth;
+            HPSlider.value = characterData.CurrentHealth;
         }
     }
 }

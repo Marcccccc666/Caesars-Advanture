@@ -49,21 +49,16 @@ public abstract class BattleRoomController : RoomBase
     /// </summary>
     public override void PlayerEnterRoom()
     {
-        if(M_StateMachine.ActiveStateName != RoomState.Unvisited)
-        {
-            return;
-        }
-        else
-        {
-            for (int i = 0; i < EnemiesInRoom.Length; i++)
-            {
-                int enemyID = EnemiesInRoom[i].gameObject.GetInstanceID();
-                enemyManager.AddEnemyData(enemyID, EnemiesInRoom[i]);
-                EnemiesInRoom[i].PlayerEnterRoom = true;
-            }
+        base.PlayerEnterRoom();
 
-            SetLockRoom(true);
+        for (int i = 0; i < EnemiesInRoom.Length; i++)
+        {
+            int enemyID = EnemiesInRoom[i].gameObject.GetInstanceID();
+            enemyManager.AddEnemyData(enemyID, EnemiesInRoom[i]);
+            EnemiesInRoom[i].PlayerEnterRoom = true;
         }
+
+        SetLockRoom(true);
     }
 
     /// <summary>

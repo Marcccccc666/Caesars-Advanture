@@ -42,6 +42,10 @@ public abstract class RoomBase : MonoBehaviour
     /// </summary>
     public virtual void PlayerEnterRoom()
     {
+        if(M_StateMachine.ActiveStateName != RoomState.Unvisited)
+        {
+            return;
+        }
         cameraManager.SetCurrentCamera(RoomCamera);
     }
 
