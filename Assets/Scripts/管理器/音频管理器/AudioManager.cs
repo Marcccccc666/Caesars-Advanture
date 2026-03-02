@@ -8,12 +8,24 @@ public class AudioManager : Singleton<AudioManager>
     [SerializeField, ChineseLabel("当前BGM")] private AudioSource currentBGM;
     [SerializeField, ChineseLabel("BGM 混合器")] private AudioMixerGroup bgmMixerGroup;
 
-    
-
 
     protected override void Awake()
     {
         base.Awake();
+
+        if(!bgmMixerGroup || !audioMixerGroup)
+        {
+            AudioMixer mixer = Resources.Load<AudioMixer>("Audio/MainAudioMixer");
+            if(mixer != null)
+            {
+                bgmMixerGroup = mixer.FindMatchingGroups("BGM")[0];
+                audioMixerGroup = mixer.FindMatchingGroups("SFX")[0];
+            }
+            else
+            {
+                Debug.LogError("未找到音频混合器，请确保路径和名称正确");
+            }
+        }
 
         //设置BGM
         if (currentBGM == null)

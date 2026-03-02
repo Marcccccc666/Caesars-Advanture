@@ -48,12 +48,18 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
 
     protected virtual void OnDestroy()
     {
-        isQuitting = true;
+        if (Instance == this)
+        {
+            isQuitting = true;
+        }
     }
 
     protected virtual void OnApplicationQuit()
     {
-        isQuitting = true;
+        if (Instance == this)
+        {
+            isQuitting = true;
+        }
     }
 
 }

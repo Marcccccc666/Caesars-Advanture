@@ -25,7 +25,10 @@ public class TransferScenes : MonoBehaviour
 
     private void TransferScene()
     {
-        poolManager.ReleasePool(playerBulletPrefab);
+        if(playerBulletPrefab)
+        {
+            poolManager.ReleasePool(playerBulletPrefab);
+        }
         SceneManager.LoadScene(sceneName);
     }
 

@@ -14,6 +14,7 @@ public abstract class WeaponBase : MonoBehaviour
     protected WeaponManager weaponManager => WeaponManager.Instance;
     protected PoolManager poolManager => PoolManager.Instance;
     protected MultiTimerManager MultiTimerManager => MultiTimerManager.Instance;
+    protected AudioManager audioManager => AudioManager.Instance;
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -29,6 +30,14 @@ public abstract class WeaponBase : MonoBehaviour
     protected virtual void OnEnable()
     {
         
+    }
+
+    protected virtual void Start()
+    {
+        if(M_attackAudioClip != null)
+        {
+            audioManager.CreateSFXPool(M_attackAudioClip, 5);
+        }
     }
 
     protected virtual void Update()

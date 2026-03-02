@@ -34,6 +34,10 @@ public class GunController : WeaponBase
             if(MultiTimerManager.IsDownTimerComplete("GunAttackCooldown") )
             {
                 Attack();
+                if(M_attackAudioClip != null)
+                {
+                    audioManager.PlaySFX(M_attackAudioClip);
+                }
                 MultiTimerManager.Start_DownTimer("GunAttackCooldown", weaponManager.GetFinalAttackInterval(M_gunData.WeaponBaseData.AttackInterval));
             }
         }
@@ -78,8 +82,6 @@ public class GunController : WeaponBase
             bullets[i].Initialize(bulletSpawnPoint.right, gunBaseData.BulletSpeed, finalDamage, finalPenetration);
             poolManager.Activate(gunBaseData.BulletPrefab, bullets[i]);
         }
-
-        AudioSource.PlayClipAtPoint(M_attackAudioClip, Camera.main.transform.position);
     }
 
 }

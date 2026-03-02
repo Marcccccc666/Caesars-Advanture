@@ -67,6 +67,11 @@ public class PoolManager : Singleton<PoolManager>
         {
             poolObj.ReleaseAll();
         }
+        else
+        {
+            Debug.LogWarning($"没有找到预制体 {prefab.name} 对应的对象池");
+            return;
+        }
     }
 
     /// <summary>

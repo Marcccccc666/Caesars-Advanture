@@ -676,6 +676,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TransferScenes
   sceneName: PreparationRoom
+  playerBulletPrefab: {fileID: 0}
   scene: {fileID: 102900000, guid: e418104ee363fef40a20322a2750d966, type: 3}
 --- !u!1 &1458836465
 GameObject:
