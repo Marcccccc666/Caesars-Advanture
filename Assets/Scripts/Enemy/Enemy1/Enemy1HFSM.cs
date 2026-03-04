@@ -119,13 +119,16 @@ public class Enemy1HFSM : MonoBehaviour
     void FixedUpdate()
     {
         M_rigidbody2D.angularVelocity = 0f;
+
+        if (!CanSwitchState())
+            return;
+
         if (M_stateMachine.ActiveStateName != Enemy1StateID.Move)
         {
             pathRepathTimer = 0f;
             ClearPath();
         }
 
-        // 移动游戏对象
         if (M_stateMachine.ActiveStateName == Enemy1StateID.Move && ShouldChase())
         {
             MoveWithPathfinding();
@@ -138,6 +141,9 @@ public class Enemy1HFSM : MonoBehaviour
 
     void Update()
     {
+        if (!CanSwitchState())
+            return;
+
         M_stateMachine.OnLogic();
         UpdateAnimationByState();
     }

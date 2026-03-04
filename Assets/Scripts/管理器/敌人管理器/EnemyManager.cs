@@ -84,6 +84,7 @@ public class EnemyManager : Singleton<EnemyManager>
         {
             EnemyDataDict[id].gameObject.SetActive(false);
             EnemyDataDict.Remove(id);
+            Debug.Log($"[EnemyManager] 敌人已移除 ID={id}, 剩余数量={EnemyDataDict.Count}");
         }
     }
 }

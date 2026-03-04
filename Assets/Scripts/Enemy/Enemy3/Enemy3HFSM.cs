@@ -121,6 +121,9 @@ public class Enemy3HFSM : MonoBehaviour
 
     private void Update()
     {
+        if (!CanSwitchState())
+            return;
+
         UpdateRuntimeTimers();
         stateMachine.OnLogic();
         UpdateFacing();
@@ -130,6 +133,13 @@ public class Enemy3HFSM : MonoBehaviour
     private void FixedUpdate()
     {
         rb2D.angularVelocity = 0f;
+
+        if (!CanSwitchState())
+        {
+            rb2D.linearVelocity = Vector2.zero;
+            return;
+        }
+
         if (stateMachine.ActiveStateName != Enemy3StateID.Chase && chasePathfinder != null)
         {
             chasePathfinder.ResetPath();
