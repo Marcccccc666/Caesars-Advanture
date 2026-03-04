@@ -49,6 +49,9 @@ public abstract class BattleRoomController : RoomBase
     /// </summary>
     public override void PlayerEnterRoom()
     {
+        if (M_StateMachine.ActiveStateName != RoomState.Unvisited)
+            return;
+
         base.PlayerEnterRoom();
         SetLockRoom(true);
 

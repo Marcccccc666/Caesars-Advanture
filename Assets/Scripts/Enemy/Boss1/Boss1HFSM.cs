@@ -139,10 +139,13 @@ public class Boss1HFSM : MonoBehaviour
 
     private PoolManager poolManager => PoolManager.Instance;
 
+    private EnemyManager enemyManager => EnemyManager.Instance;
+
     private void Awake()
     {
         enemyData = GetComponent<EnemyData>();
         enemyData.InitObjectData();
+        enemyData.OnDamage += OnTakeDamage;
 
         rb2D = GetComponent<Rigidbody2D>();
         if (bossAnimator == null)
@@ -236,6 +239,15 @@ public class Boss1HFSM : MonoBehaviour
             _ => phaseTransitionComplete);
 
         stateMachine.SetStartState(Boss1StateID.Idle);
+    }
+
+    private void OnTakeDamage(int damage)
+    {
+        if (enemyData == null || enemyData.CurrentHealth > 0)
+            return;
+
+        enemyManager.RemoveEnemyData(gameObject.GetInstanceID());
+        gameObject.SetActive(false);
     }
 
     private bool CanSwitchState()

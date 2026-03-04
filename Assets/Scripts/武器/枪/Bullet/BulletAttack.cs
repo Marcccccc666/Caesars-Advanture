@@ -64,11 +64,6 @@ public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
             }
             enemyData.Damage(bulletDamage);
 
-            if(enemyData.CurrentHealth <= 0)
-            {
-                enemyManager.RemoveEnemyData(enemyID);
-            }
-
             // 如果子弹穿透值大于0，则继续穿透下一个敌人
             if (bulletPenetration > 0)
             {

@@ -64,10 +64,13 @@ public class Enemy3HFSM : MonoBehaviour
         get => vision != null ? vision.PlayerTransform : null;
     }
 
+    private EnemyManager enemyManager => EnemyManager.Instance;
+
     private void Awake()
     {
         enemyData = GetComponent<EnemyData>();
         enemyData.InitObjectData();
+        enemyData.OnDamage += OnTakeDamage;
 
         rb2D = GetComponent<Rigidbody2D>();
         if (enemyAnimator == null)
@@ -293,6 +296,15 @@ public class Enemy3HFSM : MonoBehaviour
     private bool HasPlayer()
     {
         return vision != null && vision.HasPlayer();
+    }
+
+    private void OnTakeDamage(int damage)
+    {
+        if (enemyData == null || enemyData.CurrentHealth > 0)
+            return;
+
+        enemyManager.RemoveEnemyData(gameObject.GetInstanceID());
+        gameObject.SetActive(false);
     }
 
     private bool CanSwitchState()

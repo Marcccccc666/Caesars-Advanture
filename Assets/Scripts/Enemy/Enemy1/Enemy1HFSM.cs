@@ -86,11 +86,14 @@ public class Enemy1HFSM : MonoBehaviour
 
     private StateMachine<Enemy1StateID, Enemy1> M_stateMachine = new();
     
+    private EnemyManager enemyManager => EnemyManager.Instance;
+
     void Awake()
     {
         M_chData = GetComponent<EnemyData>();
         M_chData.InitObjectData();
-        
+        M_chData.OnDamage += OnTakeDamage;
+
         M_rigidbody2D = GetComponent<Rigidbody2D>();
         if (enemyAnimator == null)
         {
@@ -218,6 +221,15 @@ public class Enemy1HFSM : MonoBehaviour
             
         M_stateMachine.SetStartState(Enemy1StateID.Idle);
             
+    }
+
+    private void OnTakeDamage(int damage)
+    {
+        if (M_chData == null || M_chData.CurrentHealth > 0)
+            return;
+
+        enemyManager.RemoveEnemyData(gameObject.GetInstanceID());
+        gameObject.SetActive(false);
     }
 
     private bool CanSwitchState()

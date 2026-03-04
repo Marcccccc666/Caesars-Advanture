@@ -82,8 +82,10 @@ public class EnemyManager : Singleton<EnemyManager>
     {
         if (EnemyDataDict.ContainsKey(id))
         {
-            EnemyDataDict[id].gameObject.SetActive(false);
             EnemyDataDict.Remove(id);
+            foreach (var i in EnemyDataDict) {
+                Debug.Log($"[EnemyManager] NAME={i.Value.gameObject.name}");
+            }
             Debug.Log($"[EnemyManager] 敌人已移除 ID={id}, 剩余数量={EnemyDataDict.Count}");
         }
     }
