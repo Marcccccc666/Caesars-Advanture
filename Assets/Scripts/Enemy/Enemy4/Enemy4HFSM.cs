@@ -175,28 +175,60 @@ public class Enemy4HFSM : MonoBehaviour
         stateMachine.AddState(Enemy4StateID.Cooldown, new Enemy4_Cooldown(this));
         stateMachine.AddState(Enemy4StateID.Die, new Enemy4_Die(this));
 
-        stateMachine.AddTransition(Enemy4StateID.Idle, Enemy4StateID.Chase, _ => ShouldChase());
-        stateMachine.AddTransition(Enemy4StateID.Idle, Enemy4StateID.Attack, _ => CanEnterAttack());
+        stateMachine.AddTransition(
+            Enemy4StateID.Idle,
+            Enemy4StateID.Chase,
+            _ => CanSwitchState() && ShouldChase()
+        );
+        stateMachine.AddTransition(
+            Enemy4StateID.Idle,
+            Enemy4StateID.Attack,
+            _ => CanSwitchState() && CanEnterAttack()
+        );
         stateMachine.AddTransition(
             Enemy4StateID.Idle,
             Enemy4StateID.Cooldown,
-            _ => IsPlayerInAttackRange() && HasLineOfSightToPlayer() && cooldownTimer > 0f
+            _ => CanSwitchState() && IsPlayerInAttackRange() && HasLineOfSightToPlayer() && cooldownTimer > 0f
         );
 
-        stateMachine.AddTransition(Enemy4StateID.Chase, Enemy4StateID.Idle, _ => ShouldIdle());
-        stateMachine.AddTransition(Enemy4StateID.Chase, Enemy4StateID.Attack, _ => CanEnterAttack());
+        stateMachine.AddTransition(
+            Enemy4StateID.Chase,
+            Enemy4StateID.Idle,
+            _ => CanSwitchState() && ShouldIdle()
+        );
+        stateMachine.AddTransition(
+            Enemy4StateID.Chase,
+            Enemy4StateID.Attack,
+            _ => CanSwitchState() && CanEnterAttack()
+        );
         stateMachine.AddTransition(
             Enemy4StateID.Chase,
             Enemy4StateID.Cooldown,
-            _ => IsPlayerInAttackRange() && HasLineOfSightToPlayer() && cooldownTimer > 0f
+            _ => CanSwitchState() && IsPlayerInAttackRange() && HasLineOfSightToPlayer() && cooldownTimer > 0f
         );
 
         // 攻击状态在瞄准时长结束前不会切出。
-        stateMachine.AddTransition(Enemy4StateID.Attack, Enemy4StateID.Cooldown, _ => attackFinished);
+        stateMachine.AddTransition(
+            Enemy4StateID.Attack,
+            Enemy4StateID.Cooldown,
+            _ => CanSwitchState() && attackFinished
+        );
 
-        stateMachine.AddTransition(Enemy4StateID.Cooldown, Enemy4StateID.Idle, _ => ShouldIdle());
-        stateMachine.AddTransition(Enemy4StateID.Cooldown, Enemy4StateID.Chase, _ => ShouldChase());
-        stateMachine.AddTransition(Enemy4StateID.Cooldown, Enemy4StateID.Attack, _ => CanEnterAttack());
+        stateMachine.AddTransition(
+            Enemy4StateID.Cooldown,
+            Enemy4StateID.Idle,
+            _ => CanSwitchState() && ShouldIdle()
+        );
+        stateMachine.AddTransition(
+            Enemy4StateID.Cooldown,
+            Enemy4StateID.Chase,
+            _ => CanSwitchState() && ShouldChase()
+        );
+        stateMachine.AddTransition(
+            Enemy4StateID.Cooldown,
+            Enemy4StateID.Attack,
+            _ => CanSwitchState() && CanEnterAttack()
+        );
 
         stateMachine.SetStartState(Enemy4StateID.Idle);
     }
@@ -268,6 +300,11 @@ public class Enemy4HFSM : MonoBehaviour
     private bool HasPlayer()
     {
         return vision != null && vision.HasPlayer();
+    }
+
+    private bool CanSwitchState()
+    {
+        return enemyData != null && enemyData.PlayerEnterRoom;
     }
 
     private bool IsPlayerInHateRange()

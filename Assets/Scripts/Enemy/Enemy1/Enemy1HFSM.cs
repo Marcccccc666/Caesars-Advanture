@@ -172,22 +172,51 @@ public class Enemy1HFSM : MonoBehaviour
 
         // 添加转换
             //待机 -> 移动
-                M_stateMachine.AddTransition(Enemy1StateID.Idle, Enemy1StateID.Move, t => ShouldChase());
+                M_stateMachine.AddTransition(
+                    Enemy1StateID.Idle,
+                    Enemy1StateID.Move,
+                    t => CanSwitchState() && ShouldChase()
+                );
             //待机 -> 攻击
-                M_stateMachine.AddTransition(Enemy1StateID.Idle, Enemy1StateID.Attack, t => ShouldAttack());
+                M_stateMachine.AddTransition(
+                    Enemy1StateID.Idle,
+                    Enemy1StateID.Attack,
+                    t => CanSwitchState() && ShouldAttack()
+                );
             
             //移动 -> 攻击
-                M_stateMachine.AddTransition(Enemy1StateID.Move, Enemy1StateID.Attack, t => ShouldAttack());
+                M_stateMachine.AddTransition(
+                    Enemy1StateID.Move,
+                    Enemy1StateID.Attack,
+                    t => CanSwitchState() && ShouldAttack()
+                );
             //移动 -> 待机
-                M_stateMachine.AddTransition(Enemy1StateID.Move, Enemy1StateID.Idle, t => ShouldIdle());
+                M_stateMachine.AddTransition(
+                    Enemy1StateID.Move,
+                    Enemy1StateID.Idle,
+                    t => CanSwitchState() && ShouldIdle()
+                );
 
             //攻击 -> 移动
-                M_stateMachine.AddTransition(Enemy1StateID.Attack, Enemy1StateID.Move, t => ShouldChase());
+                M_stateMachine.AddTransition(
+                    Enemy1StateID.Attack,
+                    Enemy1StateID.Move,
+                    t => CanSwitchState() && ShouldChase()
+                );
             //攻击 -> 待机
-                M_stateMachine.AddTransition(Enemy1StateID.Attack, Enemy1StateID.Idle, t => ShouldIdle());
+                M_stateMachine.AddTransition(
+                    Enemy1StateID.Attack,
+                    Enemy1StateID.Idle,
+                    t => CanSwitchState() && ShouldIdle()
+                );
             
         M_stateMachine.SetStartState(Enemy1StateID.Idle);
             
+    }
+
+    private bool CanSwitchState()
+    {
+        return M_chData != null && M_chData.PlayerEnterRoom;
     }
 
     private bool NeedMove()
