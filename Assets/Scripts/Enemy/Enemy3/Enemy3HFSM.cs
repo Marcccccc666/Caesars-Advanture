@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityHFSM;
 
@@ -17,6 +18,7 @@ public class Enemy3HFSM : MonoBehaviour
     [SerializeField, ChineseLabel("追击动画状态名")] private string chaseAnimationState = "move";
     [SerializeField, ChineseLabel("攻击动画状态名")] private string attackAnimationState = "attack";
     [SerializeField, ChineseLabel("死亡动画状态名")] private string dieAnimationState = "die";
+    [SerializeField, ChineseLabel("死亡动画时长")] private float dieAnimationDuration = 0.5f;
 
     [Header("攻击配置")]
     [SerializeField, ChineseLabel("持续开火时长")] private float attackDuration = 1.5f;
@@ -47,6 +49,7 @@ public class Enemy3HFSM : MonoBehaviour
     private float idlePhaseTimer;
     private Vector2 idleDirection;
     private Enemy3StateID? lastAnimationState = null;
+    private bool isDying;
 
     private readonly StateMachine<Enemy3StateID, Enemy3> stateMachine = new();
 
@@ -300,17 +303,33 @@ public class Enemy3HFSM : MonoBehaviour
 
     private void OnTakeDamage(int damage)
     {
-        if (enemyData == null || enemyData.CurrentHealth > 0)
+        if (enemyData == null || enemyData.CurrentHealth > 0 || isDying)
             return;
 
+        isDying = true;
         BuffManager.Instance?.EnemyKilledTriggered?.Invoke(transform);
         enemyManager.RemoveEnemyData(gameObject.GetInstanceID());
+        StartCoroutine(DieRoutine());
+    }
+
+    private IEnumerator DieRoutine()
+    {
+        rb2D.linearVelocity = Vector2.zero;
+
+        Collider2D[] colliders = GetComponentsInChildren<Collider2D>();
+        for (int i = 0; i < colliders.Length; i++)
+            colliders[i].enabled = false;
+
+        PlayFirstAvailableState(dieAnimationState, "Die", "die");
+
+        yield return new WaitForSeconds(dieAnimationDuration);
+
         gameObject.SetActive(false);
     }
 
     private bool CanSwitchState()
     {
-        return enemyData != null && enemyData.PlayerEnterRoom;
+        return !isDying && enemyData != null && enemyData.PlayerEnterRoom;
     }
 
     private bool IsPlayerInHateRange()

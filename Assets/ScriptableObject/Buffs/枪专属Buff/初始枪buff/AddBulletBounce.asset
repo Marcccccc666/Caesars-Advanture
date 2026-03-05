@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97d51294ebded604eb0be59125e227b6, type: 3}
-  m_Name: AddBulletSpeed
-  m_EditorClassIdentifier: Assembly-CSharp::AddBulledSpeed
+  m_Script: {fileID: 11500000, guid: 03f8985994990db44bb52e01bc86f24d, type: 3}
+  m_Name: AddBulletBounce
+  m_EditorClassIdentifier: Assembly-CSharp::AddBulletBounce
   buffId: 0
-  displayName: increase bullet speed
-  description: 
-  bulletSpeedBonus: 2
+  displayName: increase bullet bounce
+  description: bullet bounce+1
+  bounceBonus: 1

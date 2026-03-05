@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityHFSM;
@@ -37,6 +38,8 @@ public class Enemy1HFSM : MonoBehaviour
     [SerializeField, ChineseLabel("待机动画状态名")] private string idleAnimationState = "idle";
     [SerializeField, ChineseLabel("移动动画状态名")] private string moveAnimationState = "move";
     [SerializeField, ChineseLabel("攻击动画状态名")] private string attackAnimationState = "attack";
+    [SerializeField, ChineseLabel("死亡动画状态名")] private string dieAnimationState = "die";
+    [SerializeField, ChineseLabel("死亡动画时长")] private float dieAnimationDuration = 0.5f;
 
     /// <summary>
     /// 攻击范围
@@ -80,6 +83,7 @@ public class Enemy1HFSM : MonoBehaviour
     private bool CanStartAttack = false;
     private Vector2 attackDirection = Vector2.right;
     private Enemy1StateID? lastAnimationState = null;
+    private bool isDying;
     private float pathRepathTimer = 0f;
     private readonly List<Vector2> currentPath = new();
     private int currentPathIndex = 0;
@@ -225,17 +229,33 @@ public class Enemy1HFSM : MonoBehaviour
 
     private void OnTakeDamage(int damage)
     {
-        if (M_chData == null || M_chData.CurrentHealth > 0)
+        if (M_chData == null || M_chData.CurrentHealth > 0 || isDying)
             return;
 
+        isDying = true;
         BuffManager.Instance?.EnemyKilledTriggered?.Invoke(transform);
         enemyManager.RemoveEnemyData(gameObject.GetInstanceID());
+        StartCoroutine(DieRoutine());
+    }
+
+    private IEnumerator DieRoutine()
+    {
+        M_rigidbody2D.linearVelocity = Vector2.zero;
+
+        Collider2D[] colliders = GetComponentsInChildren<Collider2D>();
+        for (int i = 0; i < colliders.Length; i++)
+            colliders[i].enabled = false;
+
+        PlayFirstAvailableState(dieAnimationState, "Die", "die");
+
+        yield return new WaitForSeconds(dieAnimationDuration);
+
         gameObject.SetActive(false);
     }
 
     private bool CanSwitchState()
     {
-        return M_chData != null && M_chData.PlayerEnterRoom;
+        return !isDying && M_chData != null && M_chData.PlayerEnterRoom;
     }
 
     private bool NeedMove()
@@ -515,7 +535,7 @@ public class Enemy1HFSM : MonoBehaviour
                 PlayFirstAvailableState(attackAnimationState, "Attack", "attack", "敌人1_attack");
                 break;
             case Enemy1StateID.Die:
-                // 当前未配置死亡动画，保持现状。
+                //PlayFirstAvailableState(dieAnimationState, "Die", "die");
                 break;
         }
     }
