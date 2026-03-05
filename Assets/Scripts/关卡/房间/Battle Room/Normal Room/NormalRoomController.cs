@@ -11,6 +11,10 @@ public class NormalRoomController : BattleRoomController
     /// 是否是第一间房
     /// </summary>
     public bool isFirstRoom = false;
+
+    public bool isBossRoom = false;
+
+    public GameObject 成功页面;
     protected override void RoomStateMachineInit()
     {
         //增加状态
@@ -21,7 +25,7 @@ public class NormalRoomController : BattleRoomController
             M_StateMachine.AddState(RoomState.Fighting, new RoomFighting());
 
             //已清除状态
-            M_StateMachine.AddState(RoomState.Cleared, new RoomCleared(this, isFirstRoom, enemyBulletProfab));
+            M_StateMachine.AddState(RoomState.Cleared, new RoomCleared(this, isFirstRoom, enemyBulletProfab, isBossRoom, 成功页面));
 
         // 转换条件
             M_StateMachine.AddTransition(RoomState.Unvisited, RoomState.Fighting, t => LockRoom == true);

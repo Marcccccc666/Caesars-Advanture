@@ -6,6 +6,8 @@ public class RoomCleared : BaseState<RoomState>
     private BattleRoomController battleRoomController;
     private bool isFirstRoom;
     private EnemyBulletAttack enemyBulletProfab;
+    private bool isBossRoom;
+    private GameObject 成功页面;
 
     private BuffManager buffManager => BuffManager.Instance;
     private CharacterManager characterManager => CharacterManager.Instance;
@@ -14,11 +16,13 @@ public class RoomCleared : BaseState<RoomState>
     private CameraManager cameraManager => CameraManager.Instance;
 
 
-    public RoomCleared(BattleRoomController battleRoomController, bool isFirstRoom, EnemyBulletAttack enemyBullProfab) : base()
+    public RoomCleared(BattleRoomController battleRoomController, bool isFirstRoom, EnemyBulletAttack enemyBullProfab, bool isBossRoom, GameObject 成功页面) : base()
     {
         this.battleRoomController = battleRoomController;
         this.isFirstRoom = isFirstRoom;
         this.enemyBulletProfab = enemyBullProfab;
+        this.isBossRoom = isBossRoom;
+        this.成功页面 = 成功页面;
     }
 
     public override void OnEnter()
@@ -38,7 +42,12 @@ public class RoomCleared : BaseState<RoomState>
         cameraManager.ResetToDefaultCamera();
 
         int currentHealth = characterManager.GetCurrentPlayerCharacterData.CurrentHealth;
-        if(isFirstRoom && currentHealth > 0)
+
+        if(isBossRoom)
+        {
+            成功页面.SetActive(true);
+        }
+        else if(isFirstRoom && currentHealth > 0)
         {
             weaponManager.UpgradeCurrentWeaponInvoke();
         }

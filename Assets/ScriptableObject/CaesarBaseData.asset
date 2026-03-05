@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d25577d268708a4aa26e89379ff5d0c, type: 3}
   m_Name: CaesarBaseData
   m_EditorClassIdentifier: Assembly-CSharp::CaesarBaseData
-  moveSpeed: 4.5
+  moveSpeed: 3.5
   baseAttack: 2
-  maxHealth: 10
+  maxHealth: 15
   attackInterval: 0.5
   rotationSpeed: 30

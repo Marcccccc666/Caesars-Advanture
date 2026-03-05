@@ -187,8 +187,8 @@ MonoBehaviour:
   p1Attack1BounceCount: 3
   p1Attack1StunDuration: 1
   p1Attack2ChargeUpDuration: 1
-  p1Attack2DashSpeed: 14
-  p1Attack2DashDuration: 1.5
+  p1Attack2DashSpeed: 12
+  p1Attack2DashDuration: 1
   p1Attack2DashInterval: 0.5
   p1Attack2SideBulletInterval: 0.2
   p1Attack2DashCount: 3
@@ -201,8 +201,8 @@ MonoBehaviour:
   p2Attack1BounceCount: 5
   p2Attack1StunDuration: 0.5
   p2Attack2ChargeUpDuration: 1
-  p2Attack2DashSpeed: 14
-  p2Attack2DashDuration: 1.5
+  p2Attack2DashSpeed: 12
+  p2Attack2DashDuration: 1
   p2Attack2DashInterval: 0.5
   p2Attack2SideBulletInterval: 0.1
   p2Attack2DashCount: 5
