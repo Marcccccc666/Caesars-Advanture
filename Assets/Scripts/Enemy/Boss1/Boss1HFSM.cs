@@ -17,10 +17,12 @@ public class Boss1HFSM : MonoBehaviour
     [SerializeField, ChineseLabel("冲刺速度")] private float p1Attack2DashSpeed = 10f;
     [SerializeField, ChineseLabel("冲刺距离")] private float p1Attack2DashDistance = 3f;
     [SerializeField, ChineseLabel("冲刺间隔")] private float p1Attack2DashInterval = 0.8f;
+    [SerializeField, ChineseLabel("冲刺期间子弹发射间隔")] private float p1Attack2SideBulletInterval = 0.15f;
     [SerializeField, ChineseLabel("冲刺次数")] private int p1Attack2DashCount = 3;
     [SerializeField, ChineseLabel("眩晕时长(攻击2后)")] private float p1Attack2StunDuration = 2f;
 
     [Header("阶段一 - 攻击3: 射线旋转")]
+    [SerializeField, ChineseLabel("攻击持续时间")] private float p1Attack3Duration = 4f;
     [SerializeField, ChineseLabel("旋转速度(度/秒)")] private float p1Attack3RotateSpeed = 90f;
     [SerializeField, ChineseLabel("射线长度")] private float p1Attack3LaserLength = 15f;
     [SerializeField, ChineseLabel("射线伤害间隔")] private float p1Attack3DamageInterval = 0.5f;
@@ -35,10 +37,12 @@ public class Boss1HFSM : MonoBehaviour
     [SerializeField, ChineseLabel("冲刺速度")] private float p2Attack2DashSpeed = 12f;
     [SerializeField, ChineseLabel("冲刺距离")] private float p2Attack2DashDistance = 3f;
     [SerializeField, ChineseLabel("冲刺间隔")] private float p2Attack2DashInterval = 0.5f;
+    [SerializeField, ChineseLabel("冲刺期间子弹发射间隔")] private float p2Attack2SideBulletInterval = 0.12f;
     [SerializeField, ChineseLabel("冲刺次数")] private int p2Attack2DashCount = 5;
     [SerializeField, ChineseLabel("眩晕时长(攻击2后)")] private float p2Attack2StunDuration = 1.5f;
 
     [Header("阶段二 - 攻击3: 弹幕旋转")]
+    [SerializeField, ChineseLabel("攻击持续时间")] private float p2Attack3Duration = 3f;
     [SerializeField, ChineseLabel("旋转速度(度/秒)")] private float p2Attack3RotateSpeed = 120f;
     [SerializeField, ChineseLabel("子弹发射间隔")] private float p2Attack3BulletInterval = 0.1f;
 
@@ -68,7 +72,7 @@ public class Boss1HFSM : MonoBehaviour
     [SerializeField, ChineseLabel("死亡动画")] private string dieAnimState = "die";
 
     [Header("阶段转换")]
-    [SerializeField, ChineseLabel("暂停时长")] private float phaseTransitionPauseDuration = 1.5f;
+    [SerializeField, ChineseLabel("暂停时长")] private float phaseTransitionPauseDuration = 3f;
     [SerializeField, ChineseLabel("转换动画时长")] private float phaseTransitionAnimDuration = 1f;
 
     private EnemyData enemyData;
@@ -112,8 +116,10 @@ public class Boss1HFSM : MonoBehaviour
     public float Attack2DashSpeed => currentPhase == 1 ? p1Attack2DashSpeed : p2Attack2DashSpeed;
     public float Attack2DashDistance => currentPhase == 1 ? p1Attack2DashDistance : p2Attack2DashDistance;
     public float Attack2DashInterval => currentPhase == 1 ? p1Attack2DashInterval : p2Attack2DashInterval;
+    public float Attack2SideBulletInterval => currentPhase == 1 ? p1Attack2SideBulletInterval : p2Attack2SideBulletInterval;
     public int Attack2TargetDashCount => currentPhase == 1 ? p1Attack2DashCount : p2Attack2DashCount;
 
+    public float Attack3Duration => currentPhase == 1 ? p1Attack3Duration : p2Attack3Duration;
     public float Attack3RotateSpeed => currentPhase == 1 ? p1Attack3RotateSpeed : p2Attack3RotateSpeed;
     public float Attack3LaserLength => p1Attack3LaserLength;
     public float Attack3DamageInterval => p1Attack3DamageInterval;
@@ -403,7 +409,7 @@ public class Boss1HFSM : MonoBehaviour
     private IEnumerator PhaseTransitionRoutine()
     {
         Time.timeScale = 0f;
-        CameraShake.Shake(3);
+        //CameraShake.Shake(3);
         yield return new WaitForSecondsRealtime(phaseTransitionPauseDuration);
 
         Time.timeScale = 1f;

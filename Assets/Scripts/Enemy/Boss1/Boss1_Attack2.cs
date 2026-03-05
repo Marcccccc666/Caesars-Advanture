@@ -15,6 +15,7 @@ public class Boss1_Attack2 : BaseState<Boss1HFSM.Boss1StateID>
 
     private DownTimer subStateTimer;
     private DownTimer contactDmgTimer;
+    private DownTimer sideBulletTimer;
     private MultiTimerManager timerManager => MultiTimerManager.Instance;
 
     public Boss1_Attack2(Boss1HFSM boss) : base()
@@ -33,6 +34,7 @@ public class Boss1_Attack2 : BaseState<Boss1HFSM.Boss1StateID>
         string id = boss.GetInstanceID().ToString();
         subStateTimer = timerManager.Create_DownTimer("Boss1_A2_Sub_" + id);
         contactDmgTimer = timerManager.Create_DownTimer("Boss1_A2_Contact_" + id);
+        sideBulletTimer = timerManager.Create_DownTimer("Boss1_A2_Bullet_" + id);
         contactDmgTimer.ResetTimer(0f);
 
         BeginChargeUp();
@@ -48,12 +50,20 @@ public class Boss1_Attack2 : BaseState<Boss1HFSM.Boss1StateID>
                 if (subStateTimer.IsComplete())
                 {
                     StartDash();
-                    FireSideBullets();
+                    sideBulletTimer.ResetTimer(0f);
+                    sideBulletTimer.StartTimer();
                     subState = SubState.Dash;
                 }
                 break;
 
             case SubState.Dash:
+                if (sideBulletTimer.IsComplete())
+                {
+                    FireSideBullets();
+                    sideBulletTimer.ResetTimer(boss.Attack2SideBulletInterval);
+                    sideBulletTimer.StartTimer();
+                }
+
                 if (HasDashReachedDistance())
                 {
                     StopDash();
@@ -86,6 +96,8 @@ public class Boss1_Attack2 : BaseState<Boss1HFSM.Boss1StateID>
             subStateTimer.PauseTimer();
         if (contactDmgTimer != null && contactDmgTimer.IsRunning)
             contactDmgTimer.PauseTimer();
+        if (sideBulletTimer != null && sideBulletTimer.IsRunning)
+            sideBulletTimer.PauseTimer();
     }
 
     public void FixedTick()

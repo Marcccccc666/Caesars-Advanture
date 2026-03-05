@@ -186,11 +186,13 @@ MonoBehaviour:
   p1Attack1BounceCount: 3
   p1Attack1StunDuration: 2
   p1Attack2ChargeUpDuration: 1
-  p1Attack2DashSpeed: 5
+  p1Attack2DashSpeed: 10
   p1Attack2DashDistance: 10
   p1Attack2DashInterval: 1
+  p1Attack2SideBulletInterval: 0.25
   p1Attack2DashCount: 3
   p1Attack2StunDuration: 2
+  p1Attack3Duration: 2
   p1Attack3RotateSpeed: 45
   p1Attack3LaserLength: 15
   p1Attack3DamageInterval: 1
@@ -198,11 +200,13 @@ MonoBehaviour:
   p2Attack1BounceCount: 5
   p2Attack1StunDuration: 2
   p2Attack2ChargeUpDuration: 1
-  p2Attack2DashSpeed: 8
+  p2Attack2DashSpeed: 12
   p2Attack2DashDistance: 10
   p2Attack2DashInterval: 1
+  p2Attack2SideBulletInterval: 0.2
   p2Attack2DashCount: 5
   p2Attack2StunDuration: 1.5
+  p2Attack3Duration: 3
   p2Attack3RotateSpeed: 60
   p2Attack3BulletInterval: 0.4
   bulletPrefab: {fileID: 5569169980823808405, guid: af9db1b61804a074ebc0c816342d9f56, type: 3}

@@ -5,8 +5,8 @@ public class Boss1_Attack3 : BaseState<Boss1HFSM.Boss1StateID>
     private readonly Boss1HFSM boss;
 
     private float baseAngle;
-    private float totalRotated;
 
+    private DownTimer attackDurationTimer;
     private DownTimer laserDmgTimer;
     private DownTimer bulletFireTimer;
     private MultiTimerManager timerManager => MultiTimerManager.Instance;
@@ -26,9 +26,11 @@ public class Boss1_Attack3 : BaseState<Boss1HFSM.Boss1StateID>
         boss.OnAttackStart();
 
         baseAngle = 0f;
-        totalRotated = 0f;
 
         string id = boss.GetInstanceID().ToString();
+        attackDurationTimer = timerManager.Create_DownTimer("Boss1_A3_Duration_" + id);
+        attackDurationTimer.ResetTimer(boss.Attack3Duration);
+        attackDurationTimer.StartTimer();
         laserDmgTimer = timerManager.Create_DownTimer("Boss1_A3_LaserDmg_" + id);
         laserDmgTimer.ResetTimer(0f);
         bulletFireTimer = timerManager.Create_DownTimer("Boss1_A3_Bullet_" + id);
@@ -47,7 +49,6 @@ public class Boss1_Attack3 : BaseState<Boss1HFSM.Boss1StateID>
         base.OnLogic();
 
         float angleDelta = boss.Attack3RotateSpeed * Time.deltaTime;
-        totalRotated += angleDelta;
         baseAngle += angleDelta;
 
         if (boss.CurrentPhase == 1)
@@ -60,7 +61,7 @@ public class Boss1_Attack3 : BaseState<Boss1HFSM.Boss1StateID>
             TryFireRotatingBullets();
         }
 
-        if (totalRotated >= 360f)
+        if (attackDurationTimer != null && attackDurationTimer.IsComplete())
         {
             boss.OnAttackComplete(2);
         }
@@ -70,6 +71,8 @@ public class Boss1_Attack3 : BaseState<Boss1HFSM.Boss1StateID>
     {
         base.OnExit();
         HideLasers();
+        if (attackDurationTimer != null && attackDurationTimer.IsRunning)
+            attackDurationTimer.PauseTimer();
         if (laserDmgTimer != null && laserDmgTimer.IsRunning)
             laserDmgTimer.PauseTimer();
         if (bulletFireTimer != null && bulletFireTimer.IsRunning)
@@ -101,6 +104,9 @@ public class Boss1_Attack3 : BaseState<Boss1HFSM.Boss1StateID>
             lr.endColor = boss.LaserColor;
             lr.numCapVertices = 4;
             lr.sortingOrder = boss.LaserSortingOrder;
+            SpriteRenderer ownerSprite = boss.GetComponentInChildren<SpriteRenderer>(true);
+            if (ownerSprite != null)
+                lr.sortingLayerID = ownerSprite.sortingLayerID;
             lr.alignment = LineAlignment.View;
             lr.textureMode = LineTextureMode.Stretch;
             if (mat != null)
