@@ -78,6 +78,7 @@ public class GunController : WeaponBase
         int finalDamage = weaponManager.GetFinalDamage(gunBaseData.WeaponDamage);
         int finalPenetration = weaponManager.GetFinalPenetration(gunBaseData.BulletPenetration);
         float finalBulletSpeed = weaponManager.GetFinalBulletSpeed(gunBaseData.BulletSpeed);
+        int finalBounce = weaponManager.GetFinalBulletBounce(gunBaseData.BulletBounce);
         
         BulletAttack[] bullets = new BulletAttack[bulletCount];
         
@@ -99,7 +100,7 @@ public class GunController : WeaponBase
                 position:instancePositions[i], 
                 rotation:bulletSpawnPoint.rotation, 
                 autoActive:false);
-            bullets[i].Initialize(bulletSpawnPoint.right, finalBulletSpeed, finalDamage, finalPenetration);
+            bullets[i].Initialize(bulletSpawnPoint.right, finalBulletSpeed, finalDamage, finalPenetration, finalBounce);
             poolManager.Activate(gunBaseData.BulletPrefab, bullets[i]);
         }
 

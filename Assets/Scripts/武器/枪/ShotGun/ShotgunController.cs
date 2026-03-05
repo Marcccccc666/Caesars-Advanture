@@ -24,6 +24,7 @@ public class ShotgunController : GunController
         int finalDamage = weaponManager.GetFinalDamage(gunBaseData.WeaponDamage);
         int finalPenetration = weaponManager.GetFinalPenetration(gunBaseData.BulletPenetration);
         float finalBulletSpeed = weaponManager.GetFinalBulletSpeed(gunBaseData.BulletSpeed);
+        int finalBounce = weaponManager.GetFinalBulletBounce(gunBaseData.BulletBounce);
 
         BulletAttack[] bullets = new BulletAttack[bulletCount];
 
@@ -53,7 +54,8 @@ public class ShotgunController : GunController
                 direction: instancePositions[i].normalized,
                 speed: finalBulletSpeed,
                 damage: finalDamage,
-                penetration: finalPenetration
+                penetration: finalPenetration,
+                bounce: finalBounce
             );
             poolManager.Activate(gunBaseData.BulletPrefab, bullets[i]);
         }

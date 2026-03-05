@@ -33,6 +33,8 @@ public class WeaponManager: Singleton<WeaponManager>
     [SerializeField, ChineseLabel("子弹上限加成")] private int bulletCountBonus = 0;
     
     [SerializeField, ChineseLabel("子弹速度加成")] private float bulletSpeedBonus = 0f;
+
+    [SerializeField, ChineseLabel("子弹反弹加成")] private int bulletBounceBonus = 0;
     
     private PoolManager poolManager => PoolManager.Instance;
 #region 武器切换
@@ -250,6 +252,22 @@ public class WeaponManager: Singleton<WeaponManager>
         return Mathf.Max(1f, finalBulletSpeed); // 最少1速度
     }
 
+    #endregion
+
+    #region 子弹反弹（仅枪械使用）
+    /// <summary>
+    /// 增加子弹反弹加成
+    /// </summary>
+    public void AddBulletBounceBonus(int bonus)
+    {
+        bulletBounceBonus += bonus;
+    }
+
+    public int GetFinalBulletBounce(int baseBulletBounce)
+    {
+        int finalBulletBounce = baseBulletBounce + bulletBounceBonus;
+        return Mathf.Max(0, finalBulletBounce); // 最少0次反弹
+    }
     #endregion
 #endregion
 }

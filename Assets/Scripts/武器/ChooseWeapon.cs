@@ -31,7 +31,7 @@ public class ChooseWeapon : MonoBehaviour
 
     private void OnDisable()
     {
-        if (inputManager != null)
+        if (inputManager)
             inputManager.OnInteractionPressed -= GetWeapon;
     }
 
@@ -40,7 +40,7 @@ public class ChooseWeapon : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
-        if (inputManager != null)
+        if (inputManager)
             inputManager.OnInteractionPressed -= GetWeapon;
     }
 

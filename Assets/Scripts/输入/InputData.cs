@@ -55,6 +55,9 @@ public class InputManager : Singleton<InputManager>
 #endregion
 
 #region Interaction
+    /// <summary>
+    /// 交互按键事件
+    /// </summary>
     public Action OnInteractionPressed;
 
 #endregion

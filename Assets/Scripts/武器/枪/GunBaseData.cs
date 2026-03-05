@@ -17,4 +17,10 @@ public class GunBaseData : WeaponBaseData
     /// </summary>
     public float BulletReplenishInterval => bulletReplenishInterval;
 
+    [SerializeField, ChineseLabel("子弹反弹次数")] private int bulletBounce;
+    /// <summary>
+    /// 子弹反弹次数
+    /// </summary>
+    public int BulletBounce => bulletBounce;
+
 }

@@ -6,14 +6,19 @@ using UnityEngine.Pool;
 public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
 {
     /// <summary>
-    /// 子弹伤害值，默认为10，可以通过SetBulletDamage方法进行设置
+    /// 子弹伤害值，默认为10
     /// </summary>
     private int bulletDamage = 10;
 
     /// <summary>
-    /// 当前穿透的敌人数量，默认为0，可以通过SetBulletPenetration方法进行设置
+    /// 当前穿透的敌人数量，默认为0
     /// </summary>
     private int bulletPenetration = 0;
+
+    /// <summary>
+    /// 子弹反弹次数，默认为0
+    /// </summary>
+    private int bulletBounce = 0;
 
     private Vector2 moveDirection;
 
@@ -26,8 +31,6 @@ public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
     
     private IObjectPool<BulletAttack> pool;
 
-    private bool hasCollided = false;
-
     private void Awake()
     {
         if (RG2D == null)
@@ -36,30 +39,53 @@ public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
         }
     }
 
+    void OnEnable()
+    {
+        GameManager.GamePausedAction += OnPaused;
+        GameManager.GameResumedAction += OnResumed;
+
+        RG2D.linearVelocity = moveDirection.normalized * moveSpeed;
+    }
+
     private void FixedUpdate()
     {
         if(!GameManager.IsPlayerControllable)
         {
             return;
         }
-        ObjectMove.MoveObject(RG2D, moveDirection, moveSpeed);
+
+        Vector2 v = RG2D.linearVelocity;
+
+        if (v.sqrMagnitude > 0.001f)
+        {
+            // 🔥 强制保持速度大小不变
+            RG2D.linearVelocity = v.normalized * moveSpeed;
+
+            float angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+            RG2D.rotation = angle;
+        }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnDisable()
     {
-        if(hasCollided)
+        if(GameManager)
         {
-            return;
+            GameManager.GamePausedAction -= OnPaused;
+            GameManager.GameResumedAction -= OnResumed;
         }
-        if (collision.CompareTag("Enemy") && !hasCollided)
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
+        if (collision.collider.CompareTag("Enemy"))
         {
-            hasCollided = true;
             int enemyID = collision.gameObject.GetInstanceID();
             Dictionary<int, EnemyData> enemyDataDict = enemyManager.GetEnemyDataDict;
 
             if(!enemyDataDict.TryGetValue(enemyID, out EnemyData enemyData))
             {
-                hasCollided = false;
+                Debug.LogError("未找到敌人数据");
                 return;
             }
             enemyData.Damage(bulletDamage);
@@ -68,29 +94,50 @@ public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
             if (bulletPenetration > 0)
             {
                 bulletPenetration--;
-                hasCollided = false; // 允许继续碰撞
             }
             else
             {
                 Release();
             }
         }
-        else if((collision.CompareTag("Wall") || collision.CompareTag("Obstacle")) && !hasCollided)
+        else if(collision.collider.CompareTag("Wall") || collision.collider.CompareTag("Obstacle"))
         {
-            hasCollided = true;
-           Release();
+            // 如果子弹反弹值大于0，则继续反弹
+            if (bulletBounce > 0)
+            {
+                bulletBounce--;
+            }
+            else
+            {
+                Release();
+            }
         }
     }
 
     
 
-    public void Initialize(Vector2 direction, float speed, int damage, int penetration)
+    public void Initialize(Vector2 direction, float speed, int damage, int penetration, int bounce)
     {
-        hasCollided = false;
         bulletDamage = damage;
         bulletPenetration = penetration;
+        bulletBounce = bounce;
         moveDirection = direction;
         moveSpeed = speed;
+    }
+
+    /// <summary>
+    /// 当游戏暂停时，停止子弹的移动
+    /// </summary>
+    private Vector2 chachedVelocity = Vector2.zero;
+    private void OnPaused()
+    {
+        chachedVelocity = RG2D.linearVelocity;
+        RG2D.linearVelocity = Vector2.zero;
+    }
+
+    private void OnResumed()
+    {
+        RG2D.linearVelocity = chachedVelocity;
     }
 
     public void SetPool(IObjectPool<BulletAttack> pool)

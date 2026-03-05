@@ -17,7 +17,15 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public bool IsGamePaused => isGamePaused;
 
+    /// <summary>
+    /// 游戏暂停事件
+    /// </summary>
     public Action GamePausedAction;
+
+    /// <summary>
+    /// 游戏恢复事件    
+    /// </summary>
+    public Action GameResumedAction;
 
     /// <summary>
     /// 设置游戏是否暂停
@@ -28,6 +36,10 @@ public class GameManager : Singleton<GameManager>
         if (isGamePaused)
         {
             GamePausedAction?.Invoke();
+        }
+        else
+        {
+            GameResumedAction?.Invoke();
         }
     }
 #endregion

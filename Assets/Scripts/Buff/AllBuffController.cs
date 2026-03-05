@@ -147,6 +147,7 @@ public class AllBuffController : MonoBehaviour
             BuffDefinition selectedBuff = buffManager.CurrentSelection[selectedIndex];
             if (selectedBuff != null)
             {
+                buffManager.AddBuff(selectedBuff);
                 // 应用 Buff 效果
                 selectedBuff.Apply();
             }

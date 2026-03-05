@@ -26,7 +26,7 @@ public class GunData : WeaponData
     /// <summary>
     /// 当前子弹数量
     /// </summary>
-    private int currentBulletCount=0;
+    [SerializeField, ChineseLabel("当前子弹数量")] private int currentBulletCount=0;
 
     /// <summary>
     /// 获取当前子弹数量

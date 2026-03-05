@@ -33,7 +33,6 @@ public class BuffManager : Singleton<BuffManager>
         }
     }
 
-    
     [SerializeField] private List<BuffDefinition> weaponSpecificBuffPool;
     /// <summary>
     /// 武器特定Buff池
@@ -56,8 +55,18 @@ public class BuffManager : Singleton<BuffManager>
         }
     }
 
+    [SerializeField, ChineseLabel("当前选择的Buff")] private List<BuffDefinition> currentBuffs = new List<BuffDefinition>();
+    /// <summary>
+    /// 当前选择的Buff </summary>
+    public IReadOnlyList<BuffDefinition> CurrentBuffs => currentBuffs;
 
-     #endregion
+    public void AddBuff(BuffDefinition buff)
+    {
+        currentBuffs.Add(buff);
+    }
+
+
+    #endregion
 
     #region 选择buff相关
     [SerializeField, ChineseLabel("玩家选择第几个 Buff")] private int selectedBuffIndex = -1;
@@ -107,7 +116,11 @@ public class BuffManager : Singleton<BuffManager>
     /// </summary>
     public void RequestCreateRandomBuff()
     {
-        List<BuffDefinition> combinedBuffs = new();
+        int totalCount =
+                (normalBuffPool?.Buffs?.Count ?? 0) +
+                (InitialWeaponBuffPool?.Count ?? 0) +
+                (weaponSpecificBuffPool?.Count ?? 0);
+        List<BuffDefinition> combinedBuffs = new(totalCount);
         combinedBuffs?.AddRange(normalBuffPool.Buffs);
         combinedBuffs?.AddRange(InitialWeaponBuffPool);
         combinedBuffs?.AddRange(weaponSpecificBuffPool);
