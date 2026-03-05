@@ -426,7 +426,7 @@ MonoBehaviour:
   dieAnimationState: die
   attackDuration: 1.5
   attackCooldown: 1.5
-  fireInterval: 0.2
+  fireInterval: 0.3
   idleMoveSpeedMultiplier: 0.5
   idleMoveDurationRange: {x: 0.35, y: 0.8}
   idleStopDurationRange: {x: 0.3, y: 0.75}

@@ -24,4 +24,4 @@ MonoBehaviour:
   bulletSpeed: 5
   bulletPenetration: 0
   maxBulletCount: 5
-  bulletReplenishInterval: 3
+  bulletReplenishInterval: 1

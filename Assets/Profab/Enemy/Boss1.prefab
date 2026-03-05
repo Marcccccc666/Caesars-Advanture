@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: -4149820735702584555}
   - component: {fileID: 6497835312553012984}
   - component: {fileID: 8238897656270585446}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Boss1
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -182,31 +182,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7712b3845eacfec47b517a39f42142c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Boss1HFSM
-  p1Attack1Speed: 12
-  p1Attack1BounceCount: 4
+  p1Attack1Speed: 8
+  p1Attack1BounceCount: 3
   p1Attack1StunDuration: 2
-  p1Attack2ChargeUpDuration: 0.8
-  p1Attack2DashSpeed: 10
-  p1Attack2DashDistance: 3
-  p1Attack2DashInterval: 0.8
+  p1Attack2ChargeUpDuration: 1
+  p1Attack2DashSpeed: 5
+  p1Attack2DashDistance: 10
+  p1Attack2DashInterval: 1
   p1Attack2DashCount: 3
   p1Attack2StunDuration: 2
-  p1Attack3RotateSpeed: 90
+  p1Attack3RotateSpeed: 45
   p1Attack3LaserLength: 15
-  p1Attack3DamageInterval: 0.5
-  p2Attack1Speed: 16
+  p1Attack3DamageInterval: 1
+  p2Attack1Speed: 12
   p2Attack1BounceCount: 5
-  p2Attack1StunDuration: 1.5
-  p2Attack2ChargeUpDuration: 0.6
-  p2Attack2DashSpeed: 12
-  p2Attack2DashDistance: 3
-  p2Attack2DashInterval: 0.5
+  p2Attack1StunDuration: 2
+  p2Attack2ChargeUpDuration: 1
+  p2Attack2DashSpeed: 8
+  p2Attack2DashDistance: 10
+  p2Attack2DashInterval: 1
   p2Attack2DashCount: 5
   p2Attack2StunDuration: 1.5
-  p2Attack3RotateSpeed: 120
-  p2Attack3BulletInterval: 0.1
+  p2Attack3RotateSpeed: 60
+  p2Attack3BulletInterval: 0.4
   bulletPrefab: {fileID: 5569169980823808405, guid: af9db1b61804a074ebc0c816342d9f56, type: 3}
-  bulletSpeed: 8
+  bulletSpeed: 5
   bulletLifetime: 3
   laserWidth: 0.12
   laserColor: {r: 1, g: 0, b: 0, a: 1}
