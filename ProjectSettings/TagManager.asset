@@ -47,11 +47,11 @@ TagManager:
   - name: "\u5730\u9762"
     uniqueID: 4032116159
     locked: 0
-  - name: "\u654C\u4EBA"
-    uniqueID: 1657374595
-    locked: 0
   - name: "\u5B50\u5F39"
     uniqueID: 776576001
+    locked: 0
+  - name: "\u654C\u4EBA"
+    uniqueID: 1657374595
     locked: 0
   - name: Player
     uniqueID: 234420865

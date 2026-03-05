@@ -55,7 +55,7 @@ public class EnemyBulletAttack : MonoBehaviour, IPoolable<EnemyBulletAttack>
         {
             return;
         }
-
+        consumed = false;
         hasLastPosition = true;
         lastPosition = rb2D.position;
     }
