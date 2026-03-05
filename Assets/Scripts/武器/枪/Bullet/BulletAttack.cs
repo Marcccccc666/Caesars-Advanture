@@ -59,7 +59,7 @@ public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
 
             if(!enemyDataDict.TryGetValue(enemyID, out EnemyData enemyData))
             {
-                Debug.LogError("未找到敌人数据");
+                hasCollided = false;
                 return;
             }
             enemyData.Damage(bulletDamage);

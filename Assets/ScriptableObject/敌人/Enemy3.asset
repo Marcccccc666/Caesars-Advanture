@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e75962a8d2eb8a04abd498c6ce57f701, type: 3}
-  m_Name: Enemy2
+  m_Name: Enemy3
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBaseData
   moveSpeed: 2
   baseAttack: 1
-  maxHealth: 4
+  maxHealth: 6
   attackInterval: 1.5
   rotationSpeed: 50

@@ -20,6 +20,7 @@ public class Enemy4HFSM : MonoBehaviour
 
     [Header("攻击配置")]
     [SerializeField, ChineseLabel("瞄准时长")] private float aimDuration = 2f;
+    [SerializeField, ChineseLabel("锁定瞄准提前量")] private float lockAimBeforeFire = 1.5f;
     [SerializeField, ChineseLabel("攻击冷却时长")] private float attackCooldown = 1.5f;
 
     [Header("待机游走")]
@@ -434,7 +435,7 @@ public class Enemy4HFSM : MonoBehaviour
 
     private void TickAttack()
     {
-        if (HasPlayer())
+        if (HasPlayer() && attackTimer > lockAimBeforeFire)
         {
             lastKnownAimTarget = playerTransform.position;
         }
