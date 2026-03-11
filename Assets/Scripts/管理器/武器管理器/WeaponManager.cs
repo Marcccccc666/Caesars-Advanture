@@ -45,7 +45,10 @@ public class WeaponManager: Singleton<WeaponManager>
     {
         // 回收当前武器实例
         isUpgradeInProgress = false;
-        poolManager.Release(currentWeaponPrefab, currentWeapon);
+        if(currentWeapon is IPoolable poolable)
+        {
+            poolable.Release();
+        }
         currentWeaponPrefab = null;
         currentWeapon = null;
     }
@@ -68,7 +71,10 @@ public class WeaponManager: Singleton<WeaponManager>
 
         if(currentWeapon != null)
         {
-            poolManager.Release(currentWeaponPrefab, currentWeapon); // 回收当前武器实例
+            if(currentWeapon is IPoolable poolable)
+            {
+                poolable.Release();
+            }
         }
 
         currentWeaponPrefab = newWeapon;
@@ -76,14 +82,16 @@ public class WeaponManager: Singleton<WeaponManager>
          // 根据新武器设置Buff池数据
         currentWeapon = poolManager.Spawn(
             prefab: currentWeaponPrefab,
-            position: transform.position,
-            rotation: transform.rotation,
+            pos: transform.position,
+            rot: transform.rotation,
             parent: transform,
             defaultCapacity: 1,
             maxSize: 1,
-            autoActive: true); // 先生成但不激活
+            setActive: false); // 先生成但不激活
 
         OnWeaponSwitched?.Invoke(currentWeaponPrefab, currentWeapon);
+
+        currentWeapon.gameObject.SetActive(true); // 切换完成后激活武器实例
     }
 
     

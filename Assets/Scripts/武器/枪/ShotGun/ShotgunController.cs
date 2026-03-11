@@ -47,9 +47,9 @@ public class ShotgunController : GunController
             // 实例化子弹并设置其伤害
             bullets[i] = poolManager.Spawn(
                 prefab:gunBaseData.BulletPrefab, 
-                position:bulletSpawnPoint.position, 
-                rotation:rotation, 
-                autoActive:false);
+                pos:bulletSpawnPoint.position, 
+                rot:rotation, 
+                setActive:false);
             bullets[i].Initialize(
                 direction: instancePositions[i].normalized,
                 speed: finalBulletSpeed,
@@ -57,7 +57,7 @@ public class ShotgunController : GunController
                 penetration: finalPenetration,
                 bounce: finalBounce
             );
-            poolManager.Activate(gunBaseData.BulletPrefab, bullets[i]);
+            bullets[i].gameObject.SetActive(true);
         }
 
         buffManager.AttackTriggered?.Invoke(transform);

@@ -172,7 +172,7 @@ public class BuffManager : Singleton<BuffManager>
     {
         for (int i = currentBuffs.Count - 1; i >= 0; i--)
         {
-            currentBuffs.RemoveAt(i);
+            currentBuffs[i].Remove();
         }
         currentBuffs.Clear();
     }

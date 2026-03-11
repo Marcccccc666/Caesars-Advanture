@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class GunData : WeaponData
 {
@@ -116,18 +117,16 @@ public class GunData : WeaponData
     }
     #endregion
 
-    public override void OnUnequip()
+    #region 对象池接口实现
+
+    public override void Release()
     {
-        base.OnUnequip();
         if(replenishCoroutine != null)
         {
             StopCoroutine(replenishCoroutine);
         }
+        pool?.Release(this);
     }
-
-    private void OnDisable()
-    {
-        OnUnequip();
-    }
+    #endregion
 
 }

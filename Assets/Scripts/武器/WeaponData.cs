@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class WeaponData : MonoBehaviour
+public class WeaponData : MonoBehaviour, IPoolable
 {
     protected WeaponManager weaponManager => WeaponManager.Instance;
     
@@ -37,4 +37,20 @@ public class WeaponData : MonoBehaviour
     {
         // 可以在这里添加一些通用的卸载逻辑
     }
+
+    #region 对象池管理
+
+    protected IMyPool pool;
+
+    public void SetPool(IMyPool pool)
+    {
+        this.pool = pool;
+    }
+
+    public virtual void Release()
+    {
+        pool?.Release(this);
+    }
+
+    #endregion
 }

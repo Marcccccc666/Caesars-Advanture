@@ -5,7 +5,8 @@ public class PoolManager : Singleton<PoolManager>
 {
     private Dictionary<Component, IGameObjectPool> pools = new();
 
-    public GameObjectPool<T> GetOrCreatePool<T>(T prefab, int defaultCapacity = 20, int maxSize = 100)
+
+    public GameObjectPool<T> GetOrCreatePool<T>(T prefab, int defaultCapacity = 10, int maxSize = 100)
         where T : Component
     {
         if (!pools.TryGetValue(prefab, out var poolObj))
@@ -18,85 +19,45 @@ public class PoolManager : Singleton<PoolManager>
         return poolObj as GameObjectPool<T>;
     }
 
-
-    public T Spawn<T>(
-        T prefab,
-        Vector3 position,
-        Quaternion rotation,
-        int defaultCapacity = 20,
-        int maxSize = 100,
-        bool autoActive = true,
-        Transform parent = null) where T : Component
+    public T Spawn<T>(T prefab, Vector3 pos, Quaternion rot, bool setActive = true,Transform parent = null, int defaultCapacity = 10, int maxSize = 100)
+        where T : Component
     {
         var pool = GetOrCreatePool(prefab, defaultCapacity, maxSize);
-
         var obj = pool.Get();
-        obj.transform.SetPositionAndRotation(position, rotation);
+
+        obj.transform.SetPositionAndRotation(pos, rot);
 
         if (parent != null)
             obj.transform.SetParent(parent);
 
-        if (autoActive)
-            pool.Activate(obj);
-
+        obj.gameObject.SetActive(setActive);
         return obj;
     }
 
-    public void Activate<T>(T prefab, T obj) where T : Component
-    {
-        if (obj == null) return;
-        var pool = GetOrCreatePool(prefab);
-        pool.Activate(obj);
-    }
-
-    public void Release<T>(T prefab, T obj) where T : Component
-    {
-        if (obj == null) return;
-
-        var pool = GetOrCreatePool(prefab);
-        pool.Release(obj);
-    }
-
     /// <summary>
-    /// 🔥 回收某一个池
+    /// 回收指定Profab的所有实例
     /// </summary>
-    /// <param name="prefab"> 要回收的池的预制体 </param>
-    public void ReleasePool<T>(T prefab) where T : Component
+    public void ReleasePool<T>(T prefab)
+        where T : Component
     {
         if (pools.TryGetValue(prefab, out var poolObj))
         {
             poolObj.ReleaseAll();
         }
-        else
-        {
-            Debug.LogWarning($"没有找到预制体 {prefab.name} 对应的对象池");
-            return;
-        }
     }
 
     /// <summary>
-    /// 🔥 回收所有池
+    /// 回收指定实例
     /// </summary>
-    public void ReleaseAllPools()
+    public void Release<T>(T profab, T obj)
+        where T : Component
     {
-        foreach (var pool in pools.Values)
+        if (pools.TryGetValue(profab, out var poolObj))
         {
-            pool.ReleaseAll();
+            if(poolObj is IMyPool myPool)
+            {
+                myPool.Release(obj);
+            }
         }
     }
-
-    /// <summary>
-    /// 🔥 清空所有池
-    /// </summary>
-    public void ClearAllPools()
-    {
-        foreach (var pool in pools.Values)
-        {
-            pool.Clear();
-        }
-
-        pools.Clear();
-    }
-
-    
 }

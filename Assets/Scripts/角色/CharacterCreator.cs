@@ -61,12 +61,12 @@ public class CharacterCreator : MonoBehaviour
         {
             currentCharacterData = poolManager.Spawn(
                 prefab: characterPrefab,
-                position: spawnPoint.position,
-                rotation: Quaternion.identity,
+                pos: spawnPoint.position,
+                rot: Quaternion.identity,
                 parent: poolManager.transform,
                 defaultCapacity: 1,
                 maxSize: 1,
-                autoActive: true);
+                setActive: true);
         }
         characterManager.SetCurrentPlayerCharacterData(currentCharacterData);
     }

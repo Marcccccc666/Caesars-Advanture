@@ -2,7 +2,9 @@ using UnityEngine;
 using UnityEngine.Pool;
 using UnityHFSM;
 
-public enum Character{}
+public enum Character
+{
+}
 
 [RequireComponent(typeof(Rigidbody2D), typeof(CaesarData))]
 public class Caesar_Controller : MonoBehaviour
@@ -127,10 +129,11 @@ public class Caesar_Controller : MonoBehaviour
         // 转换条件
             // 待机 -> 移动
                 Caesar_stateMachine.AddTwoWayTransition(Caesar_StateID.Idle, Caesar_StateID.Move, t => inputManager.MoveDirection != Vector2.zero);
-
         // 设置初始状态
         Caesar_stateMachine.SetStartState(Caesar_StateID.Idle);
     }
+
+
 
 #if UNITY_EDITOR
     private void OnValidate()

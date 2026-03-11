@@ -27,15 +27,15 @@ public class DeathExplosionBuff : BuffDefinition
 
         ExplosionController explosion = poolManager.Spawn(
                                             prefab: explosionPrefab,
-                                            position: position.position,
-                                            rotation: Quaternion.identity,
-                                            autoActive: false
+                                            pos: position.position,
+                                            rot: Quaternion.identity,
+                                            setActive: false
                                         );
         if (explosion)
         {
             int finalDamage = weaponManager.GetExplosionDamage;
             explosion.Initialize(finalDamage);
-            poolManager.Activate(explosionPrefab, explosion);
+            explosion.gameObject.SetActive(true);
         }
 
     }

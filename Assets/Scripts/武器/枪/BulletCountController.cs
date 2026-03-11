@@ -19,11 +19,6 @@ public class BulletCountController : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        // 初始化时清除现有的子弹UI
-        foreach (Transform child in bulletUIParent)
-        {
-            Destroy(child.gameObject);
-        }
         bulletUIInstances?.Clear();
 
         if(weaponManager.GetCurrentWeapon != null)
@@ -39,6 +34,22 @@ public class BulletCountController : MonoBehaviour
     }
 
     private void OnDisable()
+    {
+        if(weaponManager)
+        {
+            weaponManager.OnWeaponSwitched -= UpdateBulletCountUI;
+        }
+
+        if (currentWeaponData is GunData gunData)
+        {
+            gunData.OnBulletCountAdded -= AddBulletUI;
+            gunData.OnBulletCountDecreased -= RecycleBulletUIInstances;
+        }
+
+        ClearAllBulletUI();
+    }
+
+    private void OnDestroy()
     {
         if(weaponManager)
         {
@@ -87,11 +98,11 @@ public class BulletCountController : MonoBehaviour
                 {
                     Transform bulletUI = poolManager.Spawn(
                         prefab:bulletUIPrefab, 
-                        position: bulletUIParent.position,
-                        rotation: bulletUIParent.rotation,
+                        pos: bulletUIParent.position,
+                        rot: bulletUIParent.rotation,
                         defaultCapacity: bulletCount,
                         maxSize: 20,
-                        autoActive: true,
+                        setActive: true,
                         parent:bulletUIParent);
                     bulletUIInstances.Enqueue(bulletUI);
                 }
@@ -127,11 +138,11 @@ public class BulletCountController : MonoBehaviour
                 {
                     Transform bulletUI = poolManager.Spawn(
                         prefab:bulletUIPrefab, 
-                        position: bulletUIParent.position,
-                        rotation: bulletUIParent.rotation,
+                        pos: bulletUIParent.position,
+                        rot: bulletUIParent.rotation,
                         defaultCapacity: bulletCount,
                         maxSize: 20,
-                        autoActive: true,
+                        setActive: true,
                         parent:bulletUIParent);
                     bulletUIInstances.Enqueue(bulletUI);
                 }
@@ -141,16 +152,12 @@ public class BulletCountController : MonoBehaviour
 
     private void ClearAllBulletUI()
     {
-        while (bulletUIInstances.Count > 0)
+        while (bulletUIInstances!= null && bulletUIInstances.Count > 0)
         {
             var bulletUI = bulletUIInstances.Dequeue();
-
-            if (bulletUI) // 防止已经被销毁
+            if(bulletUI != null)
             {
-                if(poolManager != null)
-                {
-                    poolManager.Release(bulletUIPrefab, bulletUI);
-                }
+                poolManager?.Release(bulletUIPrefab, bulletUI);
             }
         }
     }

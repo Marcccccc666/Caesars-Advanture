@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
-public class EnemyBulletAttack : MonoBehaviour, IPoolable<EnemyBulletAttack>
+public class EnemyBulletAttack : MonoBehaviour, IPoolable
 {
     [SerializeField, ChineseLabel("默认伤害")] private int defaultDamage = 1;
     [SerializeField, ChineseLabel("默认速度")] private float defaultSpeed = 8f;
@@ -23,7 +23,6 @@ public class EnemyBulletAttack : MonoBehaviour, IPoolable<EnemyBulletAttack>
     private DownTimer downTimer;
 
     private MultiTimerManager timerManager => MultiTimerManager.Instance;
-    private IObjectPool<EnemyBulletAttack> pool;
 
     private void Awake()
     {
@@ -280,7 +279,9 @@ public class EnemyBulletAttack : MonoBehaviour, IPoolable<EnemyBulletAttack>
         return (mask.value & (1 << layer)) != 0;
     }
 
-    public void SetPool(IObjectPool<EnemyBulletAttack> pool)
+    #region 对象池设置
+    private IMyPool pool;
+    public void SetPool(IMyPool pool)
     {
         this.pool = pool;
     }
@@ -294,4 +295,5 @@ public class EnemyBulletAttack : MonoBehaviour, IPoolable<EnemyBulletAttack>
 
         pool.Release(this);
     }
+    #endregion
 }

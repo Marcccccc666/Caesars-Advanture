@@ -53,12 +53,16 @@ public abstract class BattleRoomController : RoomBase
             return;
         base.PlayerEnterRoom();
 
-        SetLockRoom(true);
-
         for (int i = 0; i < EnemiesInRoom.Length; i++)
         {
             int enemyID = EnemiesInRoom[i].gameObject.GetInstanceID();
             enemyManager.AddEnemyData(enemyID, EnemiesInRoom[i]);
+        }
+
+        SetLockRoom(true);
+
+        for (int i = 0; i < EnemiesInRoom.Length; i++)
+        {
             EnemiesInRoom[i].PlayerEnterRoom = true;
         }
     }

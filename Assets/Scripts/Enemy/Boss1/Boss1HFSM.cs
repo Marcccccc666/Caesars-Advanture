@@ -349,11 +349,11 @@ public class Boss1HFSM : MonoBehaviour
         {
             bullet = poolManager.Spawn(
                 prefab: bulletPrefab,
-                position: position,
-                rotation: Quaternion.Euler(0f, 0f, angle),
+                pos: position,
+                rot: Quaternion.Euler(0f, 0f, angle),
                 defaultCapacity: 40,
                 maxSize: 200,
-                autoActive: true);
+                setActive: true);
         }
         else
         {

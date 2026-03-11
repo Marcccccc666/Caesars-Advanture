@@ -2,34 +2,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class GameObjectPool<T> : IGameObjectPool where T : Component
+public class GameObjectPool<T> : IGameObjectPool, IMyPool
+    where T : Component
 {
     private IObjectPool<T> pool;
     private T prefab;
     private Transform poolRoot;
 
-    private readonly HashSet<T> allObjects = new();
     private readonly HashSet<T> activeObjects = new();
 
-    private PoolManager poolManager => PoolManager.Instance;
-
     public int ActiveCount => activeObjects.Count;
-    public int InactiveCount => allObjects.Count - activeObjects.Count;
 
-    public GameObjectPool(T prefab, int defaultCapacity = 20, int maxSize = 100, bool collectionCheck = true)
+    public int InactiveCount => pool.CountInactive;
+
+    public GameObjectPool(T prefab, int defaultCapacity = 10, int maxSize = 100)
     {
         this.prefab = prefab;
 
-        GameObject rootGo = new GameObject($"{typeof(T).Name}_Pool");
-        rootGo.transform.SetParent(poolManager.transform);
-        poolRoot = rootGo.transform;
+        GameObject root = new GameObject($"{typeof(T).Name}_Pool");
+        root.transform.SetParent(PoolManager.Instance.transform);
+        poolRoot = root.transform;
 
         pool = new ObjectPool<T>(
             Create,
             OnGet,
             OnRelease,
             OnDestroy,
-            collectionCheck,
+            true,
             defaultCapacity,
             maxSize
         );
@@ -39,11 +38,9 @@ public class GameObjectPool<T> : IGameObjectPool where T : Component
     {
         T obj = Object.Instantiate(prefab, poolRoot);
 
-        allObjects.Add(obj);
-
-        if (obj is IPoolable<T> poolable)
+        if (obj is IPoolable poolable)
         {
-            poolable.SetPool(pool);
+            poolable.SetPool(this);
         }
 
         obj.gameObject.SetActive(false);
@@ -57,22 +54,17 @@ public class GameObjectPool<T> : IGameObjectPool where T : Component
 
     private void OnRelease(T obj)
     {
-        if (obj == null) return;
-
         activeObjects.Remove(obj);
-
         obj.transform.SetParent(poolRoot);
         obj.gameObject.SetActive(false);
     }
 
     private void OnDestroy(T obj)
     {
-        if (obj == null) return;
-
-        allObjects.Remove(obj);
-        activeObjects.Remove(obj);
-
-        Object.Destroy(obj.gameObject);
+        if(obj != null)
+        {
+            Object.Destroy(obj.gameObject);
+        }
     }
 
     public T Get()
@@ -80,67 +72,49 @@ public class GameObjectPool<T> : IGameObjectPool where T : Component
         return pool.Get();
     }
 
-    public void Activate(T obj)
+    public void Release(Component obj)
     {
-        if (obj == null) return;
-
-        obj.gameObject.SetActive(true);
+        if (obj is T t)
+        {
+            pool.Release(t);
+        }
+        else
+        {
+            Debug.LogError($"类型错误: {obj.GetType()} 不能回收到 {typeof(T)} 池");
+        }
     }
 
-    public T Spawn(Vector3 pos, Quaternion rot, Transform parent = null)
-    {
-        var obj = Get();
-        obj.transform.SetPositionAndRotation(pos, rot);
-
-        if (parent != null)
-            obj.transform.SetParent(parent);
-
-        Activate(obj);
-        return obj;
-    }
-
-    public void Release(T obj)
-    {
-        if (obj == null) return;
-
-        pool.Release(obj);
-    }
-
-    // 🔥 回收当前池所有活跃对象
     public void ReleaseAll()
     {
         foreach (var obj in new List<T>(activeObjects))
         {
-            Release(obj);
+            pool.Release(obj);
         }
     }
 
-    // 🔥 彻底销毁整个池
     public void Clear()
     {
-        foreach (var obj in new List<T>(allObjects))
-        {
-            if (obj != null)
-                Object.Destroy(obj.gameObject);
-        }
-
-        allObjects.Clear();
-        activeObjects.Clear();
+        pool.Clear();
     }
 
-    // 🔥 预热
-    public void Prewarm(int count)
+    /// <summary>
+    /// 从池中移除特定的实力，并销毁它（适用于不再需要回收的对象）
+    /// <para>有时用来整理池中是否有空对象，或者强制销毁某个对象而不是回收</para>
+    /// </summary>
+    public void RemoveAndDestroy(T obj)
     {
-        List<T> temp = new();
-
-        for (int i = 0; i < count; i++)
+        if (activeObjects.Contains(obj))
         {
-            temp.Add(pool.Get());
+            activeObjects.Remove(obj);
+            if(obj != null)
+            {
+                pool.Release(obj); // 先回收，触发OnRelease逻辑
+                Object.Destroy(obj.gameObject);
+            }
         }
-
-        foreach (var obj in temp)
+        else
         {
-            pool.Release(obj);
+            Debug.LogWarning($"对象 {obj.name} 不在池中，无法移除和销毁");
         }
     }
 }

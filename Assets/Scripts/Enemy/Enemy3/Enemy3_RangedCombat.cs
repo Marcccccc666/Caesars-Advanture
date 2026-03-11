@@ -37,11 +37,11 @@ public class Enemy3_RangedCombat : MonoBehaviour
         float angle = Mathf.Atan2(normalizedDirection.y, normalizedDirection.x) * Mathf.Rad2Deg;
         EnemyBulletAttack projectileInstance = poolManager.Spawn(
             prefab: projectilePrefab,
-            position: firePoint.position,
-            rotation: Quaternion.Euler(0f, 0f, angle),
+            pos: firePoint.position,
+            rot: Quaternion.Euler(0f, 0f, angle),
             defaultCapacity: 40,
             maxSize: 200,
-            autoActive: true);
+            setActive: false);
 
         if (projectileInstance != null)
         {
@@ -52,6 +52,7 @@ public class Enemy3_RangedCombat : MonoBehaviour
                 projectileLifetime,
                 ownerTransform
             );
+            projectileInstance.gameObject.SetActive(true);
         }
         else
         {

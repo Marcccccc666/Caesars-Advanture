@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
+public class BulletAttack : MonoBehaviour, IPoolable
 {
     /// <summary>
     /// 子弹伤害值，默认为10
@@ -28,8 +28,6 @@ public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
 
     private GameManager GameManager => GameManager.Instance;
     private EnemyManager enemyManager => EnemyManager.Instance;
-    
-    private IObjectPool<BulletAttack> pool;
 
     private void Awake()
     {
@@ -75,10 +73,10 @@ public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
 
-        if (collision.collider.CompareTag("Enemy"))
+        if (collision.CompareTag("Enemy"))
         {
             int enemyID = collision.gameObject.GetInstanceID();
             Dictionary<int, EnemyData> enemyDataDict = enemyManager.GetEnemyDataDict;
@@ -100,12 +98,40 @@ public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
                 Release();
             }
         }
-        else if(collision.collider.CompareTag("Wall") || collision.collider.CompareTag("Obstacle"))
+        else if(collision.CompareTag("Wall") || collision.CompareTag("Obstacle"))
         {
-            // 如果子弹反弹值大于0，则继续反弹
             if (bulletBounce > 0)
             {
                 bulletBounce--;
+
+                // 🔥 用 Raycast 获取精确法线
+                RaycastHit2D hit = Physics2D.Raycast(
+                    transform.position,
+                    moveDirection,
+                    0.3f,
+                    LayerMask.GetMask("Wall", "Obstacle")
+                );
+
+                if (hit.collider != null)
+                {
+                    // 计算反射方向
+                    moveDirection = Vector2.Reflect(moveDirection, hit.normal).normalized;
+
+                    // 更新速度
+                    RG2D.linearVelocity = moveDirection * moveSpeed;
+
+                    float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
+                    RG2D.rotation = angle;
+
+                    // 防止卡在墙里
+                    transform.position = hit.point + hit.normal * 0.05f;
+                }
+                else
+                {
+                    // 如果没打到法线（极少情况）
+                    moveDirection = -moveDirection;
+                    RG2D.linearVelocity = moveDirection * moveSpeed;
+                }
             }
             else
             {
@@ -141,7 +167,11 @@ public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
         chachedVelocity = Vector2.zero;
     }
 
-    public void SetPool(IObjectPool<BulletAttack> pool)
+    #region 对象池设置
+
+    private IMyPool pool;
+
+    public void SetPool(IMyPool pool)
     {
         this.pool = pool;
     }
@@ -159,6 +189,8 @@ public class BulletAttack : MonoBehaviour, IPoolable<BulletAttack>
         }
         pool.Release(this);
     }
+
+    #endregion
 
 #region UNITY_EDITOR
     private void OnValidate()

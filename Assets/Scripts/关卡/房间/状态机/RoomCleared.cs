@@ -30,7 +30,7 @@ public class RoomCleared : BaseState<RoomState>
         base.OnEnter();
 
         // 回收房间内的敌人子弹
-        if(enemyBulletProfab != null)
+        if(enemyBulletProfab)
         {
             poolManager.ReleasePool(enemyBulletProfab);
         }

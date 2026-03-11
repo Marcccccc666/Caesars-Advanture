@@ -97,11 +97,16 @@ public class GunController : WeaponBase
             // 实例化子弹并设置其伤害
             bullets[i] = poolManager.Spawn(
                 prefab:gunBaseData.BulletPrefab, 
-                position:instancePositions[i], 
-                rotation:bulletSpawnPoint.rotation, 
-                autoActive:false);
+                pos:instancePositions[i], 
+                rot:bulletSpawnPoint.rotation, 
+                setActive:false);
             bullets[i].Initialize(bulletSpawnPoint.right, finalBulletSpeed, finalDamage, finalPenetration, finalBounce);
-            poolManager.Activate(gunBaseData.BulletPrefab, bullets[i]);
+        }
+
+        // 激活子弹
+        foreach (var bullet in bullets)
+        {
+            bullet.gameObject.SetActive(true);
         }
 
     }

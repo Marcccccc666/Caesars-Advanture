@@ -25,4 +25,4 @@ MonoBehaviour:
   bulletPenetration: 2
   maxBulletCount: 8
   bulletReplenishInterval: 1.5
-  bulletBounce: 0
+  bulletBounce: 1

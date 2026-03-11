@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class ExplosionController : MonoBehaviour, IPoolable<ExplosionController>
+public class ExplosionController : MonoBehaviour, IPoolable
 {
     #region 爆炸设置
     [SerializeField, ChineseLabel("爆炸动画")] private Animator explosionAnimator;
@@ -74,11 +74,11 @@ public class ExplosionController : MonoBehaviour, IPoolable<ExplosionController>
 
     #endregion
     #region 对象池设置
-    private IObjectPool<ExplosionController> pool;
+    private IMyPool pool;
 
-	public void SetPool(IObjectPool<ExplosionController> objectPool)
+	public void SetPool(IMyPool pool)
 	{
-		pool = objectPool;
+		this.pool = pool;
 	}
 
 	public void Release()
