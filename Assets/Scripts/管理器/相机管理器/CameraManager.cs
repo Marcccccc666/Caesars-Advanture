@@ -1,4 +1,3 @@
-using System;
 using Unity.Cinemachine;
 
 public class CameraManager : Singleton<CameraManager>
