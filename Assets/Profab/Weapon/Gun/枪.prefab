@@ -209,5 +209,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunData
   weaponBaseData: {fileID: 11400000, guid: 9a16456765d27d64ca06b553684eedff, type: 2}
-  ballisticsBonus: 0
-  penetrationBonus: 0
+  weaponController: {fileID: 8707443865949164005}
+  currentBulletCount: 0

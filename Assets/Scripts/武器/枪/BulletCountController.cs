@@ -7,75 +7,87 @@ public class BulletCountController : MonoBehaviour
 
     [SerializeField, ChineseLabel("子弹UI父物体")] private Transform bulletUIParent;
 
-    private WeaponData currentWeaponData;
+    private WeaponData currentWeaponData => WeaponManager.Instance?.GetCurrentWeapon;
     
     private Queue<Transform> bulletUIInstances = new();
 
     private WeaponManager weaponManager => WeaponManager.Instance;
     private PoolManager poolManager => PoolManager.Instance;
+    private GameManager gameManager => GameManager.Instance;
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
     /// </summary>
     private void Awake()
     {
+        foreach (Transform child in bulletUIParent)
+        {
+            Destroy(child.gameObject);
+        }
         bulletUIInstances?.Clear();
 
         if(weaponManager.GetCurrentWeapon != null)
         {
-            UpdateBulletCountUI(weaponManager.GetCurrentWeapon);
+            UpdateCurrentWeaponBulletUI();
         }
     }
 
     private void OnEnable()
     {
-        weaponManager.OnWeaponSwitched += UpdateBulletCountUI;
+        weaponManager.OnWeaponSwitched += GetNewWeaponAndUpdateUI;
+        
+        gameManager.GameSceneChangedAction += ClearAllBulletUI;
 
+        if (currentWeaponData is GunData gunData)
+        {
+            gunData.OnBulletCountAdded += AddBulletUI;
+            gunData.OnBulletCountDecreased += RecycleBulletUIInstances;
+        }
     }
 
     private void OnDisable()
     {
         if(weaponManager)
         {
-            weaponManager.OnWeaponSwitched -= UpdateBulletCountUI;
+            weaponManager.OnWeaponSwitched -= GetNewWeaponAndUpdateUI;
         }
 
-        if (currentWeaponData is GunData gunData)
+        if (currentWeaponData is GunData gunData && currentWeaponData != null)
         {
             gunData.OnBulletCountAdded -= AddBulletUI;
             gunData.OnBulletCountDecreased -= RecycleBulletUIInstances;
         }
 
-        ClearAllBulletUI();
+        if(gameManager)
+        {
+            gameManager.GameSceneChangedAction -= ClearAllBulletUI;
+        }
     }
 
     private void OnDestroy()
     {
         if(weaponManager)
         {
-            weaponManager.OnWeaponSwitched -= UpdateBulletCountUI;
+            weaponManager.OnWeaponSwitched -= GetNewWeaponAndUpdateUI;
         }
 
-        if (currentWeaponData is GunData gunData)
+        if (currentWeaponData is GunData gunData && currentWeaponData != null)
         {
             gunData.OnBulletCountAdded -= AddBulletUI;
             gunData.OnBulletCountDecreased -= RecycleBulletUIInstances;
         }
 
-        ClearAllBulletUI();
+        if(gameManager)
+        {
+            gameManager.GameSceneChangedAction -= ClearAllBulletUI;
+        }
     }
 
     /// <summary>
-    /// 显示当前武器的子弹数量UI
+    /// 获得新武器时更新子弹UI显示
     /// </summary>
-    /// <param name="weaponData"> 武器数据 </param>
-    private void UpdateBulletCountUI(WeaponData weaponData)
+    private void GetNewWeaponAndUpdateUI(WeaponData newWeaponData)
     {
-        if (weaponData == null || weaponData == currentWeaponData)
-        {
-            return;
-        }
-
         if (currentWeaponData is GunData oldGunData)
         {
             oldGunData.OnBulletCountAdded -= AddBulletUI;
@@ -84,9 +96,7 @@ public class BulletCountController : MonoBehaviour
             ClearAllBulletUI();
         }
 
-        currentWeaponData = weaponData;
-
-        if(weaponData is GunData gunData)
+        if(newWeaponData is GunData gunData)
         {
             gunData.OnBulletCountAdded += AddBulletUI;
             gunData.OnBulletCountDecreased += RecycleBulletUIInstances;
@@ -105,6 +115,30 @@ public class BulletCountController : MonoBehaviour
                         parent:bulletUIParent);
                     bulletUIInstances.Enqueue(bulletUI);
                 }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 显示当前武器的子弹数量UI
+    /// </summary>
+    private void UpdateCurrentWeaponBulletUI()
+    {
+        if (currentWeaponData is GunData gunData)
+        {
+            int bulletCount = gunData.CurrentBulletCount;
+            ClearAllBulletUI();
+            for (int i = 0; i < bulletCount; i++)
+            {
+                Transform bulletUI = poolManager.Spawn(
+                    prefab:bulletUIPrefab, 
+                    pos: bulletUIParent.position,
+                    rot: bulletUIParent.rotation,
+                    defaultCapacity: bulletCount,
+                    maxSize: 20,
+                    setActive: true,
+                    parent:bulletUIParent);
+                bulletUIInstances.Enqueue(bulletUI);
             }
         }
     }

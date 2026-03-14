@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 /// <summary>
 /// 角色管理器
@@ -9,7 +10,7 @@ public class CharacterManager: Singleton<CharacterManager>
     /// <summary>
     /// 当前玩家控制的角色数据
     /// </summary>
-    private CharacterDate CurrentPlayerCharacterData;
+    [SerializeField] private CharacterDate CurrentPlayerCharacterData;
 
     /// <summary>
     /// 获取当前玩家控制的角色数据
@@ -30,7 +31,12 @@ public class CharacterManager: Singleton<CharacterManager>
     /// <param name="characterData">角色数据</param>
     public void SetCurrentPlayerCharacterData(CharacterDate characterData)
     {
-        CurrentPlayerCharacterData = characterData;
+        if(CurrentPlayerCharacterData == null)
+        {
+            characterData.InitObjectData();
+            CurrentPlayerCharacterData = characterData;
+        }
+        
         OnCurrentPlayerCharacterDataChanged?.Invoke(characterData);
     }
     #endregion

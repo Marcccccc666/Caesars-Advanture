@@ -21,7 +21,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
                 // 如果场景中也没有，就自动创建一个
                 if (instance == null)
                 {
-                    GameObject singletonObject = new GameObject(typeof(T).Name + " (Singleton)");
+                    GameObject singletonObject = new(typeof(T).Name + " (Singleton)");
                     instance = singletonObject.AddComponent<T>();
                     DontDestroyOnLoad(singletonObject);
                 }
@@ -52,15 +52,29 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
         GameManager.Instance.GameResetAction += OnRest;
     }
 
-    protected virtual void OnDestroy()
+    protected virtual void OnDisable()
     {
+        if (Instance == this)
+        {
+            isQuitting = true;
+        }
+
         if(GameManager.Instance)
         {
             GameManager.Instance.GameResetAction -= OnRest;
         }
+    }
+
+    protected virtual void OnDestroy()
+    {
         if (Instance == this)
         {
             isQuitting = true;
+        }
+
+        if(GameManager.Instance)
+        {
+            GameManager.Instance.GameResetAction -= OnRest;
         }
     }
 

@@ -14,6 +14,7 @@ public class TransferScenes : MonoBehaviour
     [SerializeField, ChineseLabel("玩家子弹")] private BulletAttack playerBulletPrefab;
 
     private PoolManager poolManager => PoolManager.Instance;
+    private GameManager gameManager => GameManager.Instance;
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -29,7 +30,7 @@ public class TransferScenes : MonoBehaviour
         {
             poolManager.ReleasePool(playerBulletPrefab);
         }
-        SceneManager.LoadScene(sceneName);
+        gameManager.ChangeScene(sceneName);
     }
 
 #if UNITY_EDITOR

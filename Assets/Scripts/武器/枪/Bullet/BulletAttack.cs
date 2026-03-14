@@ -41,6 +41,7 @@ public class BulletAttack : MonoBehaviour, IPoolable
     {
         GameManager.GamePausedAction += OnPaused;
         GameManager.GameResumedAction += OnResumed;
+        GameManager.GameSceneChangedAction += Release;
 
         RG2D.linearVelocity = moveDirection.normalized * moveSpeed;
     }
@@ -70,6 +71,7 @@ public class BulletAttack : MonoBehaviour, IPoolable
         {
             GameManager.GamePausedAction -= OnPaused;
             GameManager.GameResumedAction -= OnResumed;
+            GameManager.GameSceneChangedAction -= Release;
         }
     }
 

@@ -19,13 +19,28 @@ public class CharacterCreator : MonoBehaviour
     private PoolManager poolManager => PoolManager.Instance;
     private CharacterManager characterManager => CharacterManager.Instance;
     private WeaponManager weaponManager => WeaponManager.Instance;
+    private GameManager gameManager => GameManager.Instance;
 
     private void Awake()
     {
-        #if UNITY_EDITOR
+        BuildCharacter();
+    }
+
+    /// <summary>
+    /// This function is called when the object becomes enabled and active.
+    /// </summary>
+    private void OnEnable()
+    {
+        gameManager.GameSceneChangedAction += RecycleCharacter;
+    }
+
+    #if UNITY_EDITOR
+    private void Start()
+    {
             // 在编辑器模式下，如果当前没有玩家角色数据但有测试武器数据，则切换到测试武器，方便开发和调试
             var currentCharacterData = characterManager.GetCurrentPlayerCharacterData;
-            if(!currentCharacterData && testWeaponData != null)
+            var currentWeaponData = weaponManager.GetCurrentWeapon;
+            if(currentCharacterData && testWeaponData != null && currentWeaponData == null)
             {
                 weaponManager.SwitchWeapon(testWeaponData);
             }
@@ -37,10 +52,26 @@ public class CharacterCreator : MonoBehaviour
                     buff.Apply();
                 }
             }
+    }
+    #endif
 
-        #endif
+    /// <summary>
+    /// This function is called when the behaviour becomes disabled or inactive.
+    /// </summary>
+    private void OnDisable()
+    {
+        if(gameManager)
+        {
+            gameManager.GameSceneChangedAction -= RecycleCharacter;
+        }
+    }
 
-        BuildCharacter();
+    private void OnDestroy()
+    {
+        if(gameManager)
+        {
+            gameManager.GameSceneChangedAction -= RecycleCharacter;
+        }
     }
 
     /// <summary>
@@ -68,6 +99,19 @@ public class CharacterCreator : MonoBehaviour
                 setActive: true);
             characterManager.SetCurrentPlayerCharacterData(currentCharacterData);
         }
-        
     }
+
+    ///<summary>
+    /// 回收角色实例，切换场景时调用
+    /// </summary>
+    public void RecycleCharacter()
+    {
+        var currentCharacterData = characterManager.GetCurrentPlayerCharacterData;
+        if(currentCharacterData != null)
+        {
+            poolManager.Release(characterPrefab, currentCharacterData);
+        }
+    }
+
+
 }

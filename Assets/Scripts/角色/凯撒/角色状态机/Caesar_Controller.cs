@@ -70,7 +70,6 @@ public class Caesar_Controller : MonoBehaviour
 
     private void OnEnable()
     {
-        M_chData.InitObjectData();
         Caesar_stateMachine.Init();
     }
     

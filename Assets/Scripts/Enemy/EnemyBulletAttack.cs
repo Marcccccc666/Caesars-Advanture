@@ -23,6 +23,7 @@ public class EnemyBulletAttack : MonoBehaviour, IPoolable
     private DownTimer downTimer;
 
     private MultiTimerManager timerManager => MultiTimerManager.Instance;
+    private GameManager gameManager => GameManager.Instance;
 
     private void Awake()
     {
@@ -50,6 +51,8 @@ public class EnemyBulletAttack : MonoBehaviour, IPoolable
 
     private void OnEnable()
     {
+        gameManager.PassedRoomAction += Consume;
+
         if (rb2D == null)
         {
             return;
@@ -84,6 +87,11 @@ public class EnemyBulletAttack : MonoBehaviour, IPoolable
         {
             Consume();
         }
+    }
+
+    private void OnDisable()
+    {
+        gameManager.PassedRoomAction -= Consume;
     }
 
     public void SetBulletDamage(int damage)

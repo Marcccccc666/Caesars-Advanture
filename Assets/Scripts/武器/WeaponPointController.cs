@@ -32,6 +32,7 @@ public class WeaponPointController : MonoBehaviour
     private void OnWeaponSwitched(WeaponData weaponData)
     {
         // 切换武器时更新武器到玩家位置
+        currentWeaponObject = weaponData;
         weaponData.transform.SetParent(transform);
         weaponData.transform.SetLocalPositionAndRotation(this.transform.localPosition, this.transform.localRotation);
     }
