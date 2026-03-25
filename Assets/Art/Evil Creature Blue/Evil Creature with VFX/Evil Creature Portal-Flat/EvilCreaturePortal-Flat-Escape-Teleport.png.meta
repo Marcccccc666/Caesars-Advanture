@@ -1,0 +1,377 @@
+fileFormatVersion: 2
+guid: d89990f30b6a33640b6b9d67ada8728a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3067817674395792781
+    second: EvilCreaturePortal-Flat-Escape-Teleport_0
+  - first:
+      213: 7444833186453284198
+    second: EvilCreaturePortal-Flat-Escape-Teleport_1
+  - first:
+      213: 82590838153446377
+    second: EvilCreaturePortal-Flat-Escape-Teleport_2
+  - first:
+      213: 3130683709646713516
+    second: EvilCreaturePortal-Flat-Escape-Teleport_3
+  - first:
+      213: -4115514187853242403
+    second: EvilCreaturePortal-Flat-Escape-Teleport_4
+  - first:
+      213: -4036744915039506630
+    second: EvilCreaturePortal-Flat-Escape-Teleport_5
+  - first:
+      213: 8693399849330136898
+    second: EvilCreaturePortal-Flat-Escape-Teleport_6
+  - first:
+      213: -4231320772474585160
+    second: EvilCreaturePortal-Flat-Escape-Teleport_7
+  - first:
+      213: 6431765523368067803
+    second: EvilCreaturePortal-Flat-Escape-Teleport_8
+  - first:
+      213: 2271616470008879390
+    second: EvilCreaturePortal-Flat-Escape-Teleport_9
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Escape-Teleport_0
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 0
+        width: 24
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37a49f1441cec65d0800000000000000
+      internalID: -3067817674395792781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Escape-Teleport_1
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 0
+        width: 24
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6656692b65c515760800000000000000
+      internalID: 7444833186453284198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Escape-Teleport_2
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 0
+        width: 26
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e386d10eeb652100800000000000000
+      internalID: 82590838153446377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Escape-Teleport_3
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 0
+        width: 35
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca238913f3c627b20800000000000000
+      internalID: 3130683709646713516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Escape-Teleport_4
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 0
+        width: 59
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddf5deca6a1c2e6c0800000000000000
+      internalID: -4115514187853242403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Escape-Teleport_5
+      rect:
+        serializedVersion: 2
+        x: 465
+        y: 0
+        width: 61
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3fa43a23e99af7c0800000000000000
+      internalID: -4036744915039506630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Escape-Teleport_6
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 0
+        width: 61
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 247d1c57a1925a870800000000000000
+      internalID: 8693399849330136898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Escape-Teleport_7
+      rect:
+        serializedVersion: 2
+        x: 643
+        y: 0
+        width: 65
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8bfbbe90d245745c0800000000000000
+      internalID: -4231320772474585160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Escape-Teleport_8
+      rect:
+        serializedVersion: 2
+        x: 732
+        y: 0
+        width: 67
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd245f2aaa8324950800000000000000
+      internalID: 6431765523368067803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Escape-Teleport_9
+      rect:
+        serializedVersion: 2
+        x: 826
+        y: 0
+        width: 392
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e195ec8d427668f10800000000000000
+      internalID: 2271616470008879390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      EvilCreaturePortal-Flat-Escape-Teleport_0: -3067817674395792781
+      EvilCreaturePortal-Flat-Escape-Teleport_1: 7444833186453284198
+      EvilCreaturePortal-Flat-Escape-Teleport_2: 82590838153446377
+      EvilCreaturePortal-Flat-Escape-Teleport_3: 3130683709646713516
+      EvilCreaturePortal-Flat-Escape-Teleport_4: -4115514187853242403
+      EvilCreaturePortal-Flat-Escape-Teleport_5: -4036744915039506630
+      EvilCreaturePortal-Flat-Escape-Teleport_6: 8693399849330136898
+      EvilCreaturePortal-Flat-Escape-Teleport_7: -4231320772474585160
+      EvilCreaturePortal-Flat-Escape-Teleport_8: 6431765523368067803
+      EvilCreaturePortal-Flat-Escape-Teleport_9: 2271616470008879390
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

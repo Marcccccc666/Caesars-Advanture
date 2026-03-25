@@ -1,0 +1,455 @@
+fileFormatVersion: 2
+guid: 483924eb4e9651742b6d774a68e8f1d5
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8122438637475630102
+    second: EvilCreaturePortal-Flat-Die_0
+  - first:
+      213: -3351676330365928402
+    second: EvilCreaturePortal-Flat-Die_1
+  - first:
+      213: -279110596505539771
+    second: EvilCreaturePortal-Flat-Die_2
+  - first:
+      213: -7658764078066212634
+    second: EvilCreaturePortal-Flat-Die_3
+  - first:
+      213: 9141695074211728986
+    second: EvilCreaturePortal-Flat-Die_4
+  - first:
+      213: -5544393282776621113
+    second: EvilCreaturePortal-Flat-Die_5
+  - first:
+      213: 7534151183242655364
+    second: EvilCreaturePortal-Flat-Die_6
+  - first:
+      213: -5367675954957847317
+    second: EvilCreaturePortal-Flat-Die_7
+  - first:
+      213: 2054058161899260563
+    second: EvilCreaturePortal-Flat-Die_8
+  - first:
+      213: 3163142380829717541
+    second: EvilCreaturePortal-Flat-Die_9
+  - first:
+      213: 4988329590391620393
+    second: EvilCreaturePortal-Flat-Die_10
+  - first:
+      213: -5918577017178213725
+    second: EvilCreaturePortal-Flat-Die_11
+  - first:
+      213: 8829977616890906348
+    second: EvilCreaturePortal-Flat-Die_12
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Die_0
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 0
+        width: 24
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61c84a008e2b8b070800000000000000
+      internalID: 8122438637475630102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Die_1
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 0
+        width: 24
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2c347ea2247c71d0800000000000000
+      internalID: -3351676330365928402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Die_2
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 0
+        width: 25
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54b6d3a2466602cf0800000000000000
+      internalID: -279110596505539771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Die_3
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 0
+        width: 23
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e0675c16aa96b590800000000000000
+      internalID: -7658764078066212634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Die_4
+      rect:
+        serializedVersion: 2
+        x: 394
+        y: 0
+        width: 23
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5e04573c33ddde70800000000000000
+      internalID: 9141695074211728986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Die_5
+      rect:
+        serializedVersion: 2
+        x: 483
+        y: 0
+        width: 25
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cf990d4fab5e03b0800000000000000
+      internalID: -5544393282776621113
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Die_6
+      rect:
+        serializedVersion: 2
+        x: 571
+        y: 0
+        width: 28
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4867441659eae8860800000000000000
+      internalID: 7534151183242655364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Die_7
+      rect:
+        serializedVersion: 2
+        x: 666
+        y: 0
+        width: 23
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be4f45b782f2285b0800000000000000
+      internalID: -5367675954957847317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Die_8
+      rect:
+        serializedVersion: 2
+        x: 753
+        y: 0
+        width: 23
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 39a4fffe30b718c10800000000000000
+      internalID: 2054058161899260563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Die_9
+      rect:
+        serializedVersion: 2
+        x: 841
+        y: 0
+        width: 28
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 524b65f7c3db5eb20800000000000000
+      internalID: 3163142380829717541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Die_10
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 0
+        width: 33
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 923ccd9455b1a3540800000000000000
+      internalID: 4988329590391620393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Die_11
+      rect:
+        serializedVersion: 2
+        x: 1018
+        y: 0
+        width: 35
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a23d439f8dfcdda0800000000000000
+      internalID: -5918577017178213725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Die_12
+      rect:
+        serializedVersion: 2
+        x: 1108
+        y: 0
+        width: 35
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce6ce6dfbd16a8a70800000000000000
+      internalID: 8829977616890906348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      EvilCreaturePortal-Flat-Die_0: 8122438637475630102
+      EvilCreaturePortal-Flat-Die_1: -3351676330365928402
+      EvilCreaturePortal-Flat-Die_10: 4988329590391620393
+      EvilCreaturePortal-Flat-Die_11: -5918577017178213725
+      EvilCreaturePortal-Flat-Die_12: 8829977616890906348
+      EvilCreaturePortal-Flat-Die_2: -279110596505539771
+      EvilCreaturePortal-Flat-Die_3: -7658764078066212634
+      EvilCreaturePortal-Flat-Die_4: 9141695074211728986
+      EvilCreaturePortal-Flat-Die_5: -5544393282776621113
+      EvilCreaturePortal-Flat-Die_6: 7534151183242655364
+      EvilCreaturePortal-Flat-Die_7: -5367675954957847317
+      EvilCreaturePortal-Flat-Die_8: 2054058161899260563
+      EvilCreaturePortal-Flat-Die_9: 3163142380829717541
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
