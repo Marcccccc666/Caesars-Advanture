@@ -1,0 +1,611 @@
+fileFormatVersion: 2
+guid: cecf7fed72a5b514a8116b0d2a8aa53d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8258840895785341089
+    second: EvilCreaturePortal-Flat-Attack2_0
+  - first:
+      213: 2637438015338202438
+    second: EvilCreaturePortal-Flat-Attack2_1
+  - first:
+      213: -7310921554069341953
+    second: EvilCreaturePortal-Flat-Attack2_2
+  - first:
+      213: -730842305666715104
+    second: EvilCreaturePortal-Flat-Attack2_3
+  - first:
+      213: 8712209572521785423
+    second: EvilCreaturePortal-Flat-Attack2_4
+  - first:
+      213: 8093417167515076360
+    second: EvilCreaturePortal-Flat-Attack2_5
+  - first:
+      213: 8367351379631768569
+    second: EvilCreaturePortal-Flat-Attack2_6
+  - first:
+      213: -3719997719559230660
+    second: EvilCreaturePortal-Flat-Attack2_7
+  - first:
+      213: -3576041421308497158
+    second: EvilCreaturePortal-Flat-Attack2_8
+  - first:
+      213: -1150816846225693068
+    second: EvilCreaturePortal-Flat-Attack2_9
+  - first:
+      213: -7043071129640396427
+    second: EvilCreaturePortal-Flat-Attack2_10
+  - first:
+      213: 3114096167156621558
+    second: EvilCreaturePortal-Flat-Attack2_11
+  - first:
+      213: -5870347987253179971
+    second: EvilCreaturePortal-Flat-Attack2_12
+  - first:
+      213: -6973563227371355088
+    second: EvilCreaturePortal-Flat-Attack2_13
+  - first:
+      213: 7412794516104508694
+    second: EvilCreaturePortal-Flat-Attack2_14
+  - first:
+      213: -6218019119677034557
+    second: EvilCreaturePortal-Flat-Attack2_15
+  - first:
+      213: -3961081795906510689
+    second: EvilCreaturePortal-Flat-Attack2_16
+  - first:
+      213: -725740398781644917
+    second: EvilCreaturePortal-Flat-Attack2_17
+  - first:
+      213: 3361604338891894582
+    second: EvilCreaturePortal-Flat-Attack2_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_0
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 0
+        width: 24
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5fee3666f3b26d80800000000000000
+      internalID: -8258840895785341089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_1
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 31
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6454855b6ef0a9420800000000000000
+      internalID: 2637438015338202438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_2
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 0
+        width: 61
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff833fcd4936a8a90800000000000000
+      internalID: -7310921554069341953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_3
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 0
+        width: 67
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02278ef8bc68bd5f0800000000000000
+      internalID: -730842305666715104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_4
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 0
+        width: 67
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f483bea627cf7e870800000000000000
+      internalID: 8712209572521785423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_5
+      rect:
+        serializedVersion: 2
+        x: 462
+        y: 0
+        width: 67
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 807c8c87808915070800000000000000
+      internalID: 8093417167515076360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_6
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 0
+        width: 67
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f383d56fbdce1470800000000000000
+      internalID: 8367351379631768569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_7
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 0
+        width: 67
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3ba86098c9ef5cc0800000000000000
+      internalID: -3719997719559230660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_8
+      rect:
+        serializedVersion: 2
+        x: 719
+        y: 0
+        width: 80
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af2f2d426495f5ec0800000000000000
+      internalID: -3576041421308497158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_9
+      rect:
+        serializedVersion: 2
+        x: 809
+        y: 0
+        width: 80
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 476ae27fc2a7700f0800000000000000
+      internalID: -1150816846225693068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_10
+      rect:
+        serializedVersion: 2
+        x: 899
+        y: 0
+        width: 80
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57999f59f1cf14e90800000000000000
+      internalID: -7043071129640396427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_11
+      rect:
+        serializedVersion: 2
+        x: 989
+        y: 0
+        width: 80
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f0a6cff6fd773b20800000000000000
+      internalID: 3114096167156621558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_12
+      rect:
+        serializedVersion: 2
+        x: 1093
+        y: 0
+        width: 67
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db948d7ab95588ea0800000000000000
+      internalID: -5870347987253179971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_13
+      rect:
+        serializedVersion: 2
+        x: 1187
+        y: 0
+        width: 67
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 034cdc5313de83f90800000000000000
+      internalID: -6973563227371355088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_14
+      rect:
+        serializedVersion: 2
+        x: 1276
+        y: 0
+        width: 67
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6157f5576598fd660800000000000000
+      internalID: 7412794516104508694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_15
+      rect:
+        serializedVersion: 2
+        x: 1369
+        y: 0
+        width: 61
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3cf201d1e8825b9a0800000000000000
+      internalID: -6218019119677034557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_16
+      rect:
+        serializedVersion: 2
+        x: 1472
+        y: 0
+        width: 31
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f90e9b4e7196709c0800000000000000
+      internalID: -3961081795906510689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_17
+      rect:
+        serializedVersion: 2
+        x: 1562
+        y: 0
+        width: 25
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8f3873d3f6ade5f0800000000000000
+      internalID: -725740398781644917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EvilCreaturePortal-Flat-Attack2_18
+      rect:
+        serializedVersion: 2
+        x: 1653
+        y: 0
+        width: 24
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63f201fe551d6ae20800000000000000
+      internalID: 3361604338891894582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      EvilCreaturePortal-Flat-Attack2_0: -8258840895785341089
+      EvilCreaturePortal-Flat-Attack2_1: 2637438015338202438
+      EvilCreaturePortal-Flat-Attack2_10: -7043071129640396427
+      EvilCreaturePortal-Flat-Attack2_11: 3114096167156621558
+      EvilCreaturePortal-Flat-Attack2_12: -5870347987253179971
+      EvilCreaturePortal-Flat-Attack2_13: -6973563227371355088
+      EvilCreaturePortal-Flat-Attack2_14: 7412794516104508694
+      EvilCreaturePortal-Flat-Attack2_15: -6218019119677034557
+      EvilCreaturePortal-Flat-Attack2_16: -3961081795906510689
+      EvilCreaturePortal-Flat-Attack2_17: -725740398781644917
+      EvilCreaturePortal-Flat-Attack2_18: 3361604338891894582
+      EvilCreaturePortal-Flat-Attack2_2: -7310921554069341953
+      EvilCreaturePortal-Flat-Attack2_3: -730842305666715104
+      EvilCreaturePortal-Flat-Attack2_4: 8712209572521785423
+      EvilCreaturePortal-Flat-Attack2_5: 8093417167515076360
+      EvilCreaturePortal-Flat-Attack2_6: 8367351379631768569
+      EvilCreaturePortal-Flat-Attack2_7: -3719997719559230660
+      EvilCreaturePortal-Flat-Attack2_8: -3576041421308497158
+      EvilCreaturePortal-Flat-Attack2_9: -1150816846225693068
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

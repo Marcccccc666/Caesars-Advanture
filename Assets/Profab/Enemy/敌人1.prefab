@@ -207,8 +207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ca36896be7f13f40910e01e64695054, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HPUpdata
-  prefix: 
-  HPText: {fileID: 8691679963352588689}
+  HPSlider: {fileID: 0}
 --- !u!1 &5590672625034155132
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,7 +468,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1657374595
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 1
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 0.9854934, b: 0, a: 1}
@@ -569,7 +568,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1657374595
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 875683455564992526, guid: e4c505609ad2d5d4997f304bd39a3dba, type: 3}
   m_Color: {r: 1, g: 0.9803922, b: 0.9803922, a: 1}
@@ -674,6 +673,8 @@ MonoBehaviour:
   idleAnimationState: idle
   moveAnimationState: move
   attackAnimationState: attack
+  dieAnimationState: die
+  dieAnimationDuration: 0.5
   defaultHateRange: 12
   obstacleMask:
     serializedVersion: 2
