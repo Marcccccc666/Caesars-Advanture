@@ -109,7 +109,7 @@ public class CharacterCreator : MonoBehaviour
         var currentCharacterData = characterManager.GetCurrentPlayerCharacterData;
         if(currentCharacterData != null)
         {
-            poolManager.Release(characterPrefab, currentCharacterData);
+        //    poolManager.Release(characterPrefab, currentCharacterData);
         }
     }
 

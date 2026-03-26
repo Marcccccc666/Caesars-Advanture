@@ -12574,9 +12574,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2114576496}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9aebe08b8be5f447b5836979c4dddb4, type: 3}
+  m_Script: {fileID: 11500000, guid: b16f5918f7747174b8640854eaceacaa, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BossRoom
+  m_EditorClassIdentifier: Assembly-CSharp::NormalRoomController
   RoomCamera: {fileID: 677335434}
   OpenDoors: {fileID: 661674601}
   CloseDoors: {fileID: 1676303482}
@@ -12589,6 +12589,9 @@ MonoBehaviour:
   - {fileID: 381287204}
   - {fileID: 720354589}
   enemyBulletProfab: {fileID: 0}
+  isFirstRoom: 0
+  isBossRoom: 0
+  "\u6210\u529F\u9875\u9762": {fileID: 0}
 --- !u!1 &2115288121
 GameObject:
   m_ObjectHideFlags: 0
