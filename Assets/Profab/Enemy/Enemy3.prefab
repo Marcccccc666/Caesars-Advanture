@@ -222,6 +222,7 @@ GameObject:
   - component: {fileID: 7073015299503198411}
   - component: {fileID: 5849145859787399124}
   - component: {fileID: 191102627181661180}
+  - component: {fileID: 8855787763091402141}
   m_Layer: 7
   m_Name: Enemy3
   m_TagString: Enemy
@@ -294,7 +295,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1657374595
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 1028906776217498605, guid: e4c505609ad2d5d4997f304bd39a3dba, type: 3}
   m_Color: {r: 1, g: 0.9803922, b: 0.9803922, a: 1}
@@ -424,6 +425,7 @@ MonoBehaviour:
   chaseAnimationState: move
   attackAnimationState: attack
   dieAnimationState: die
+  dieAnimationDuration: 0.5
   attackDuration: 1.5
   attackCooldown: 1.5
   fireInterval: 0.3
@@ -477,3 +479,20 @@ MonoBehaviour:
   damageTextOffset: {x: 0, y: 0.3, z: 0}
   damageTextRandomX: 0.2
   damageTextSortingOrder: 200
+--- !u!114 &8855787763091402141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8625351930764168971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d5d3671bf1847d428b4f27afc13e5dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy3_RangedCombat
+  projectilePrefab: {fileID: 5569169980823808405, guid: af9db1b61804a074ebc0c816342d9f56, type: 3}
+  firePoint: {fileID: 819042794018667150}
+  projectileSpeed: 5
+  projectileLifetime: 3
+  shootAudio: {fileID: 0}

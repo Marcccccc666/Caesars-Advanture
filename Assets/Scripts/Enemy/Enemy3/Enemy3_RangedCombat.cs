@@ -35,13 +35,25 @@ public class Enemy3_RangedCombat : MonoBehaviour
 
         Vector2 normalizedDirection = direction.normalized;
         float angle = Mathf.Atan2(normalizedDirection.y, normalizedDirection.x) * Mathf.Rad2Deg;
-        EnemyBulletAttack projectileInstance = poolManager.Spawn(
-            prefab: projectilePrefab,
-            pos: firePoint.position,
-            rot: Quaternion.Euler(0f, 0f, angle),
-            defaultCapacity: 40,
-            maxSize: 200,
-            setActive: false);
+        EnemyBulletAttack projectileInstance = null;
+        if (poolManager != null)
+        {
+            projectileInstance = poolManager.Spawn(
+                prefab: projectilePrefab,
+                pos: firePoint.position,
+                rot: Quaternion.Euler(0f, 0f, angle),
+                defaultCapacity: 40,
+                maxSize: 200,
+                setActive: true);
+        }
+        else
+        {
+            projectileInstance = Instantiate(
+                projectilePrefab,
+                firePoint.position,
+                Quaternion.Euler(0f, 0f, angle)
+            );
+        }
 
         if (projectileInstance != null)
         {
@@ -52,27 +64,6 @@ public class Enemy3_RangedCombat : MonoBehaviour
                 projectileLifetime,
                 ownerTransform
             );
-            projectileInstance.gameObject.SetActive(true);
-        }
-        else
-        {
-            Enemy3Projectile projectile = projectileInstance.GetComponent<Enemy3Projectile>();
-            if (projectile != null)
-            {
-                projectile.Initialize(
-                    normalizedDirection,
-                    projectileSpeed,
-                    damage,
-                    projectileLifetime,
-                    ownerTransform
-                );
-            }
-            else
-            {
-                Rigidbody2D projectileInstanceRb2D = projectileInstance.GetComponent<Rigidbody2D>();
-                projectileInstanceRb2D.linearVelocity = normalizedDirection * projectileSpeed;
-                Destroy(projectileInstance.gameObject, Mathf.Max(0.1f, projectileLifetime));
-            }
         }
 
         if (shootAudio != null && Camera.main != null)

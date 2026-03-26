@@ -19,6 +19,7 @@ public class Enemy5HFSM : MonoBehaviour
 
     [Header("Visual")]
     [SerializeField, ChineseLabel("模型根节点")] private Transform visualRoot;
+    [SerializeField, ChineseLabel("默认朝向是否为右")] private bool visualFacesRight = false;
 
     [Header("动画")]
     [SerializeField, ChineseLabel("动画控制器")] private Animator enemyAnimator;
@@ -420,7 +421,13 @@ public class Enemy5HFSM : MonoBehaviour
             return;
         }
 
-        float targetScaleX = baseVisualScaleX * (deltaX >= 0f ? 1f : -1f);
+        float facingSign = deltaX >= 0f ? 1f : -1f;
+        if (!visualFacesRight)
+        {
+            facingSign *= -1f;
+        }
+
+        float targetScaleX = baseVisualScaleX * facingSign;
         Vector3 scale = visualRoot.localScale;
         if (!Mathf.Approximately(scale.x, targetScaleX))
         {

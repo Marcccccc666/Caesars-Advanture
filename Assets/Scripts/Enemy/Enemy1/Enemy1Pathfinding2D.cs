@@ -86,7 +86,7 @@ public static class Enemy1Pathfinding2D
 
             if (current.Cell == goalCell)
             {
-                BuildWorldPath(current, goalWorld, cellSize, outPath);
+                BuildWorldPath(current, startWorld, goalWorld, cellSize, checkRadius, obstacleMask, outPath);
                 return outPath.Count > 0;
             }
 
@@ -115,6 +115,11 @@ public static class Enemy1Pathfinding2D
                     {
                         continue;
                     }
+                }
+
+                if (!IsTransitionClear(current.Cell, neighborCell, cellSize, checkRadius, obstacleMask))
+                {
+                    continue;
                 }
 
                 PathNode neighborNode = GetOrCreateNode(neighborCell, allNodes);
@@ -176,8 +181,11 @@ public static class Enemy1Pathfinding2D
 
     private static void BuildWorldPath(
         PathNode endNode,
+        Vector2 startWorld,
         Vector2 goalWorld,
         float cellSize,
+        float checkRadius,
+        LayerMask obstacleMask,
         List<Vector2> outPath
     )
     {
@@ -195,7 +203,9 @@ public static class Enemy1Pathfinding2D
             outPath.Add(CellToWorld(reversedCells[i], cellSize));
         }
 
-        if (outPath.Count == 0 || Vector2.Distance(outPath[outPath.Count - 1], goalWorld) > cellSize * 0.2f)
+        Vector2 lastPoint = outPath.Count > 0 ? outPath[outPath.Count - 1] : startWorld;
+        if ((outPath.Count == 0 || Vector2.Distance(lastPoint, goalWorld) > cellSize * 0.2f)
+            && IsDirectPathClear(lastPoint, goalWorld, checkRadius, obstacleMask))
         {
             outPath.Add(goalWorld);
         }
@@ -271,8 +281,70 @@ public static class Enemy1Pathfinding2D
         }
 
         Vector2 center = CellToWorld(cell, cellSize);
-        Collider2D hit = Physics2D.OverlapCircle(center, checkRadius, obstacleMask);
+        return IsWorldPositionBlocked(center, checkRadius, obstacleMask);
+    }
+
+    public static bool IsWorldPositionBlocked(
+        Vector2 worldPosition,
+        float checkRadius,
+        LayerMask obstacleMask
+    )
+    {
+        if (obstacleMask.value == 0)
+        {
+            return false;
+        }
+
+        Collider2D hit = Physics2D.OverlapCircle(worldPosition, Mathf.Max(0.01f, checkRadius), obstacleMask);
         return hit != null;
+    }
+
+    public static bool IsDirectPathClear(
+        Vector2 startWorld,
+        Vector2 goalWorld,
+        float checkRadius,
+        LayerMask obstacleMask
+    )
+    {
+        checkRadius = Mathf.Max(0.01f, checkRadius);
+        if (obstacleMask.value == 0)
+        {
+            return true;
+        }
+
+        if (IsWorldPositionBlocked(goalWorld, checkRadius, obstacleMask))
+        {
+            return false;
+        }
+
+        Vector2 delta = goalWorld - startWorld;
+        float distance = delta.magnitude;
+        if (distance <= 0.0001f)
+        {
+            return !IsWorldPositionBlocked(startWorld, checkRadius, obstacleMask);
+        }
+
+        RaycastHit2D hit = Physics2D.CircleCast(
+            startWorld,
+            checkRadius,
+            delta / distance,
+            distance,
+            obstacleMask
+        );
+        return hit.collider == null;
+    }
+
+    private static bool IsTransitionClear(
+        Vector2Int fromCell,
+        Vector2Int toCell,
+        float cellSize,
+        float checkRadius,
+        LayerMask obstacleMask
+    )
+    {
+        Vector2 fromWorld = CellToWorld(fromCell, cellSize);
+        Vector2 toWorld = CellToWorld(toCell, cellSize);
+        return IsDirectPathClear(fromWorld, toWorld, checkRadius, obstacleMask);
     }
 
     private static Vector2Int WorldToCell(Vector2 worldPosition, float cellSize)
