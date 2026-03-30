@@ -84,7 +84,13 @@ public class CharacterCreator : MonoBehaviour
         if(currentCharacterData)
         {
             IsCharacterOpen = currentCharacterData.gameObject.activeInHierarchy;
-            characterManager.transform.position = spawnPoint.position;
+            currentCharacterData.transform.SetPositionAndRotation(spawnPoint.position, Quaternion.identity);
+
+            if (currentCharacterData.TryGetComponent<Rigidbody2D>(out var playerRigidbody))
+            {
+                playerRigidbody.linearVelocity = Vector2.zero;
+                playerRigidbody.angularVelocity = 0f;
+            }
         }
 
         if (!currentCharacterData || !IsCharacterOpen)
