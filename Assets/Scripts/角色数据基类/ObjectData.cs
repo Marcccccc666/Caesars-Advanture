@@ -29,7 +29,7 @@ public class ObjectData : MonoBehaviour
     public Action OnDie;
 
 #region 生命值
-    protected int maxHealth;
+    [SerializeField, ChineseLabel("最大生命值")]protected int maxHealth;
     /// <summary>
     /// 最大生命值
     /// </summary>
@@ -51,7 +51,7 @@ public class ObjectData : MonoBehaviour
             }
         }
     }
-    protected int currentHealth;
+    [SerializeField, ChineseLabel("当前生命值")]protected int currentHealth;
 
     /// <summary>
     /// 当前生命值

@@ -346,8 +346,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e81ad62477e46428756cff75283eea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChooseWeapon
-  weapon: {fileID: 5261869638763488654, guid: 551c5734d2ca4be4db7ce4f0aad5389b, type: 3}
   interactionHint: {fileID: 966447665}
+  weapon: {fileID: 5261869638763488654, guid: 551c5734d2ca4be4db7ce4f0aad5389b, type: 3}
 --- !u!58 &359300424
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -2242,27 +2242,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2670292419030481133, guid: 042889937e6aa4e4b836f3e9ce154050, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2670292419030481133, guid: 042889937e6aa4e4b836f3e9ce154050, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2670292419030481133, guid: 042889937e6aa4e4b836f3e9ce154050, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2670292419030481133, guid: 042889937e6aa4e4b836f3e9ce154050, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2670292419030481133, guid: 042889937e6aa4e4b836f3e9ce154050, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2670292419030481133, guid: 042889937e6aa4e4b836f3e9ce154050, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2670292419030481133, guid: 042889937e6aa4e4b836f3e9ce154050, type: 3}
       propertyPath: m_LocalPosition.x

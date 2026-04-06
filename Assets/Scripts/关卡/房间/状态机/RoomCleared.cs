@@ -41,7 +41,7 @@ public class RoomCleared : BaseState<RoomState>
         // 重置摄像机
         cameraManager.ResetToDefaultCamera();
 
-        int currentHealth = characterManager.GetCurrentPlayerCharacterData.CurrentHealth;
+        int currentHealth = characterManager.GetCurrentPlayerCharacterData?.CurrentHealth ?? 0;
 
         if(isBossRoom)
         {

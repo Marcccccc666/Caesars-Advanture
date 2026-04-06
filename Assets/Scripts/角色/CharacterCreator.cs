@@ -31,7 +31,7 @@ public class CharacterCreator : MonoBehaviour
     /// </summary>
     private void OnEnable()
     {
-        gameManager.GameSceneChangedAction += RecycleCharacter;
+        gameManager.GameResetAction += RecycleCharacter;
     }
 
     #if UNITY_EDITOR
@@ -62,7 +62,7 @@ public class CharacterCreator : MonoBehaviour
     {
         if(gameManager)
         {
-            gameManager.GameSceneChangedAction -= RecycleCharacter;
+            gameManager.GameResetAction -= RecycleCharacter;
         }
     }
 
@@ -70,7 +70,7 @@ public class CharacterCreator : MonoBehaviour
     {
         if(gameManager)
         {
-            gameManager.GameSceneChangedAction -= RecycleCharacter;
+            gameManager.GameResetAction -= RecycleCharacter;
         }
     }
 
@@ -115,7 +115,9 @@ public class CharacterCreator : MonoBehaviour
         var currentCharacterData = characterManager.GetCurrentPlayerCharacterData;
         if(currentCharacterData != null)
         {
-        //    poolManager.Release(characterPrefab, currentCharacterData);
+            poolManager.Release(characterPrefab, currentCharacterData);
+
+            characterManager.SetCurrentPlayerCharacterData(null);
         }
     }
 
