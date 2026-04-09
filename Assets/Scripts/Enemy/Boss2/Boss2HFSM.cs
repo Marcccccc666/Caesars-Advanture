@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityHFSM;
 
 public enum Boss2 { }
@@ -43,6 +44,7 @@ public class Boss2HFSM : MonoBehaviour
     [Header("休眠")]
     [SerializeField, ChineseLabel("生成休眠时长(s)")] private float spawnSleepDuration = 2f;
 
+    public UnityEvent BossDie;
     private EnemyData enemyData;
     private Rigidbody2D rb2D;
     private Collider2D bodyCollider;
@@ -243,6 +245,11 @@ public class Boss2HFSM : MonoBehaviour
         if (dieRoutine == null)
         {
             dieRoutine = StartCoroutine(DieAndDestroyRoutine());
+        }
+
+        if (BossDie != null)
+        {
+            BossDie.Invoke();
         }
     }
 
