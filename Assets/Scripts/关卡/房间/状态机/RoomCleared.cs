@@ -1,10 +1,8 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RoomCleared : BaseState<RoomState>
 {
     private BattleRoomController battleRoomController;
-    private bool isFirstRoom;
     private EnemyBulletAttack enemyBulletProfab;
     private bool isBossRoom;
     private GameObject 成功页面;
@@ -16,10 +14,9 @@ public class RoomCleared : BaseState<RoomState>
     private CameraManager cameraManager => CameraManager.Instance;
 
 
-    public RoomCleared(BattleRoomController battleRoomController, bool isFirstRoom, EnemyBulletAttack enemyBullProfab, bool isBossRoom, GameObject 成功页面) : base()
+    public RoomCleared(BattleRoomController battleRoomController, EnemyBulletAttack enemyBullProfab, bool isBossRoom, GameObject 成功页面) : base()
     {
         this.battleRoomController = battleRoomController;
-        this.isFirstRoom = isFirstRoom;
         this.enemyBulletProfab = enemyBullProfab;
         this.isBossRoom = isBossRoom;
         this.成功页面 = 成功页面;
@@ -41,15 +38,13 @@ public class RoomCleared : BaseState<RoomState>
         // 重置摄像机
         cameraManager.ResetToDefaultCamera();
 
+        battleRoomController.NotifyRoomCleared();
+
         int currentHealth = characterManager.GetCurrentPlayerCharacterData?.CurrentHealth ?? 0;
 
         if(isBossRoom)
         {
             成功页面.SetActive(true);
-        }
-        else if(isFirstRoom && currentHealth > 0)
-        {
-            weaponManager?.UpgradeCurrentWeaponInvoke();
         }
         else if(currentHealth > 0)
         {
