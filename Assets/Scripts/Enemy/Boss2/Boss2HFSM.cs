@@ -246,7 +246,7 @@ public class Boss2HFSM : MonoBehaviour
         {
             dieRoutine = StartCoroutine(DieAndDestroyRoutine());
         }
-
+        EnemyManager.Instance.RemoveEnemyData(gameObject.GetInstanceID());
         if (BossDie != null)
         {
             BossDie.Invoke();

@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 #endif
 
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TransferScenes : MonoBehaviour
@@ -43,6 +44,8 @@ public class TransferScenes : MonoBehaviour
     public void TransferScene(bool needReset)
     {
         gameManager.ChangeScene(sceneName, needReset);
+        Dictionary<int, EnemyData> dict = EnemyManager.Instance.GetEnemyDataDict;
+        dict.Clear();
     }
 
     private IEnumerator ShowHintTemporarily()
