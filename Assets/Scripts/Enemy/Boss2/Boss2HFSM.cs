@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityHFSM;
 
@@ -37,6 +38,10 @@ public class Boss2HFSM : MonoBehaviour
     [SerializeField, ChineseLabel("破土动画")] private string emergeAnim = "emerge";
     [SerializeField, ChineseLabel("攻击动画")] private string sweepAnim = "sweep";
     [SerializeField, ChineseLabel("死亡动画")] private string dieAnim = "die";
+    [SerializeField, ChineseLabel("死亡动画时长(s)")] private float dieAnimationDuration = 1f;
+
+    [Header("休眠")]
+    [SerializeField, ChineseLabel("生成休眠时长(s)")] private float spawnSleepDuration = 2f;
 
     private EnemyData enemyData;
     private Rigidbody2D rb2D;
@@ -48,6 +53,9 @@ public class Boss2HFSM : MonoBehaviour
     private int p2ComboDone = 0;
     private bool emergeDamageArmed = false;
     private bool sweepDamageArmed = false;
+    private bool isSleeping = false;
+    private float sleepTimer = 0f;
+    private Coroutine dieRoutine;
 
     private readonly StateMachine<Boss2StateID, Boss2> stateMachine = new();
 
@@ -112,15 +120,33 @@ public class Boss2HFSM : MonoBehaviour
         stateMachine.Init();
     }
 
+    private void OnEnable()
+    {
+        BeginSpawnSleep();
+    }
+
+    private void OnDestroy()
+    {
+        if (enemyData == null)
+            return;
+
+        enemyData.OnDamage -= OnTakeDamage;
+        enemyData.OnDie -= OnDieAction;
+    }
+
     private void Update()
     {
         if (isDead) return;
+
+        if (UpdateSleepState())
+            return;
+
         stateMachine.OnLogic();
     }
 
     private void FixedUpdate()
     {
-        if (isDead)
+        if (isDead || isSleeping)
         {
             rb2D.linearVelocity = Vector2.zero;
             return;
@@ -176,6 +202,15 @@ public class Boss2HFSM : MonoBehaviour
 
     private void OnTakeDamage(int damage)
     {
+        if (enemyData == null || isDead)
+            return;
+
+        if (enemyData.CurrentHealth <= 0)
+        {
+            OnDieAction();
+            return;
+        }
+
         if (currentPhase == 1 && enemyData.CurrentHealth <= enemyData.MaxHealth * 0.5f)
         {
             currentPhase = 2;
@@ -185,8 +220,132 @@ public class Boss2HFSM : MonoBehaviour
 
     private void OnDieAction()
     {
+        if (isDead)
+            return;
+
         isDead = true;
+        isSleeping = false;
+        sleepTimer = 0f;
+        if (enemyData != null)
+        {
+            enemyData.PlayerEnterRoom = false;
+        }
+
+        if (rb2D != null)
+        {
+            rb2D.linearVelocity = Vector2.zero;
+        }
+
+        DisableAllColliders();
+        EnterDie();
         stateMachine.RequestStateChange(Boss2StateID.Die);
+
+        if (dieRoutine == null)
+        {
+            dieRoutine = StartCoroutine(DieAndDestroyRoutine());
+        }
+    }
+
+    private IEnumerator DieAndDestroyRoutine()
+    {
+        yield return null;
+
+        float waitDuration = GetCurrentAnimationLength();
+        if (waitDuration > 0f)
+        {
+            yield return new WaitForSeconds(waitDuration);
+        }
+
+        Destroy(gameObject);
+    }
+
+    private float GetCurrentAnimationLength()
+    {
+        if (bossAnimator == null)
+            return Mathf.Max(0f, dieAnimationDuration);
+
+        AnimatorStateInfo stateInfo = bossAnimator.GetCurrentAnimatorStateInfo(0);
+        if ((stateInfo.IsName(dieAnim) || stateInfo.IsName($"Base Layer.{dieAnim}")) && stateInfo.length > 0f)
+        {
+            return stateInfo.length;
+        }
+
+        return Mathf.Max(0f, dieAnimationDuration);
+    }
+
+    private void DisableAllColliders()
+    {
+        Collider2D[] colliders = GetComponentsInChildren<Collider2D>(true);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            colliders[i].enabled = false;
+        }
+    }
+
+    private void BeginSpawnSleep()
+    {
+        if (enemyData == null)
+            return;
+
+        if (spawnSleepDuration <= 0f)
+        {
+            isSleeping = false;
+            sleepTimer = 0f;
+            enemyData.PlayerEnterRoom = true;
+            RefreshInvulnerableState();
+            return;
+        }
+
+        isSleeping = true;
+        sleepTimer = spawnSleepDuration;
+        enemyData.PlayerEnterRoom = false;
+
+        if (rb2D != null)
+        {
+            rb2D.linearVelocity = Vector2.zero;
+        }
+
+        SetInvulnerable(true);
+    }
+
+    private bool UpdateSleepState()
+    {
+        if (!isSleeping)
+            return false;
+
+        sleepTimer -= Time.deltaTime;
+        if (sleepTimer > 0f)
+        {
+            if (rb2D != null)
+            {
+                rb2D.linearVelocity = Vector2.zero;
+            }
+
+            return true;
+        }
+
+        EndSpawnSleep();
+        return false;
+    }
+
+    private void EndSpawnSleep()
+    {
+        isSleeping = false;
+        sleepTimer = 0f;
+
+        if (enemyData != null)
+        {
+            enemyData.PlayerEnterRoom = true;
+        }
+
+        RefreshInvulnerableState();
+    }
+
+    private void RefreshInvulnerableState()
+    {
+        Boss2StateID activeState = stateMachine.ActiveStateName;
+        bool shouldBeInvulnerable = activeState == Boss2StateID.Move || activeState == Boss2StateID.Die;
+        SetInvulnerable(shouldBeInvulnerable);
     }
 
     #region Helper Methods for States

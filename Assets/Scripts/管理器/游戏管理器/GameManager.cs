@@ -95,16 +95,31 @@ public class GameManager : Singleton<GameManager>
     #endregion
 
     #region 玩家可操作
+    private int playerControlLockCount = 0;
+
     /// <summary>
     /// 玩家是否可操作
     /// <para> 玩家不可操作的情况包括：游戏暂停、正在选择 Buff </para>
     /// <para> Ture 表示玩家可操作, False 表示玩家不可操作 </para>
     /// </summary>
-    public bool IsPlayerControllable => !isGamePaused && !BuffManager.Instance.IsBuffSelectionOpen && !WeaponManager.Instance.IsUpgradeInProgress;
+    public bool IsPlayerControllable => !isGamePaused && playerControlLockCount <= 0 && !BuffManager.Instance.IsBuffSelectionOpen && !WeaponManager.Instance.IsUpgradeInProgress;
+
+    public void SetPlayerControlLocked(bool locked)
+    {
+        if (locked)
+        {
+            playerControlLockCount++;
+        }
+        else
+        {
+            playerControlLockCount = Mathf.Max(0, playerControlLockCount - 1);
+        }
+    }
     #endregion
 
     protected override void OnRest()
     {
         isGamePaused = false;
+        playerControlLockCount = 0;
     }
 }

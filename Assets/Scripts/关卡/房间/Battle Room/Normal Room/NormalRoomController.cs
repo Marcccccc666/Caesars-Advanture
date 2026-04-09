@@ -25,7 +25,7 @@ public class NormalRoomController : BattleRoomController
             M_StateMachine.AddState(RoomState.Fighting, new RoomFighting());
 
             //已清除状态
-            M_StateMachine.AddState(RoomState.Cleared, new RoomCleared(this, isFirstRoom, enemyBulletProfab, isBossRoom, 成功页面));
+            M_StateMachine.AddState(RoomState.Cleared, new RoomCleared(this, enemyBulletProfab, isBossRoom, 成功页面));
 
         // 转换条件
             M_StateMachine.AddTransition(RoomState.Unvisited, RoomState.Fighting, t => LockRoom == true);

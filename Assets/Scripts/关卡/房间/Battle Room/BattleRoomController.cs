@@ -1,3 +1,4 @@
+using System;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ using UnityEngine;
 /// </summary>
 public abstract class BattleRoomController : RoomBase
 {   
+    public Action<BattleRoomController> RoomClearedAction;
+
     /// <summary>
     /// 开门列表
     /// </summary>
@@ -20,7 +23,7 @@ public abstract class BattleRoomController : RoomBase
     /// <summary>
     /// 房间内敌人列表
     /// </summary>
-    [SerializeField, ChineseListLabel("房间内敌人")] private EnemyData[] EnemiesInRoom;
+    [SerializeField, ChineseListLabel("房间内敌人")] protected EnemyData[] EnemiesInRoom;
 
     [SerializeField, ChineseLabel("房间清空后，要回收的子弹")] protected EnemyBulletAttack enemyBulletProfab;
 
@@ -29,15 +32,17 @@ public abstract class BattleRoomController : RoomBase
     /// </summary>
     protected bool LockRoom = false;
 
+    private bool isRoomCleared = false;
+    protected bool HasPendingPlayerEnter { get; private set; } = false;
+
+    public bool IsRoomCleared => isRoomCleared;
+
     protected EnemyManager enemyManager => EnemyManager.Instance;
 
     protected override void Awake()
     {
         SetLockRoom(false);
-        for (int i = 0; i < EnemiesInRoom.Length; i++)
-        {
-            EnemiesInRoom[i].PlayerEnterRoom = false;
-        }
+        SetEnemiesPlayerEnterState(false);
         
         base.Awake();
     }
@@ -51,20 +56,80 @@ public abstract class BattleRoomController : RoomBase
     {
         if (M_StateMachine.ActiveStateName != RoomState.Unvisited)
             return;
+
+        if (!CanStartBattleOnPlayerEnter())
+        {
+            HasPendingPlayerEnter = true;
+            OnBlockedPlayerEnter();
+            return;
+        }
+
+        StartBattleRoomFight();
+    }
+
+    protected virtual bool CanStartBattleOnPlayerEnter()
+    {
+        return true;
+    }
+
+    protected virtual void OnBlockedPlayerEnter()
+    {
+        
+    }
+
+    protected virtual void OnBattleStarted()
+    {
+        
+    }
+
+    protected void StartBattleRoomFight()
+    {
+        if (M_StateMachine.ActiveStateName != RoomState.Unvisited || LockRoom)
+            return;
+
         base.PlayerEnterRoom();
 
-        for (int i = 0; i < EnemiesInRoom.Length; i++)
-        {
-            int enemyID = EnemiesInRoom[i].gameObject.GetInstanceID();
-            enemyManager.AddEnemyData(enemyID, EnemiesInRoom[i]);
-        }
+        RegisterRoomEnemies();
 
         SetLockRoom(true);
 
+        SetEnemiesPlayerEnterState(true);
+
+        HasPendingPlayerEnter = false;
+
+        OnBattleStarted();
+    }
+
+    protected void RegisterRoomEnemies()
+    {
         for (int i = 0; i < EnemiesInRoom.Length; i++)
         {
-            EnemiesInRoom[i].PlayerEnterRoom = true;
+            if (EnemiesInRoom[i] == null)
+                continue;
+
+            int enemyID = EnemiesInRoom[i].gameObject.GetInstanceID();
+            enemyManager.AddEnemyData(enemyID, EnemiesInRoom[i]);
         }
+    }
+
+    protected void SetEnemiesPlayerEnterState(bool playerEnterRoom)
+    {
+        for (int i = 0; i < EnemiesInRoom.Length; i++)
+        {
+            if (EnemiesInRoom[i] == null)
+                continue;
+
+            EnemiesInRoom[i].PlayerEnterRoom = playerEnterRoom;
+        }
+    }
+
+    public void NotifyRoomCleared()
+    {
+        if (isRoomCleared)
+            return;
+
+        isRoomCleared = true;
+        RoomClearedAction?.Invoke(this);
     }
 
     /// <summary>

@@ -7,8 +7,18 @@
     <list default="true" id="31198abb-deae-41b1-9021-91e834a3dcd8" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.CTIN532/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.CTIN532/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Profab/Enemy/Boss2.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Profab/Enemy/Boss2.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Enemy/Boss2/Boss2_EmergeAttack.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Enemy/Boss2/Boss2_EmergeAttack.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Enemy/Boss2/Boss2_Idle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Enemy/Boss2/Boss2_Idle.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Profab/Room/Level 1/Map.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Profab/Room/Level 1/Map.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Level 1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Level 1.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Level 2.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Level 2.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObject/CaesarBaseData.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObject/CaesarBaseData.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObject/武器/Gun/手枪基础数据.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObject/武器/Gun/手枪基础数据.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Enemy/Boss2/Boss2HFSM.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Enemy/Boss2/Boss2HFSM.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/关卡/房间/Battle Room/BattleRoomController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/关卡/房间/Battle Room/BattleRoomController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/关卡/房间/Battle Room/Boss Room/BossRoomController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/关卡/房间/Battle Room/Boss Room/BossRoomController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/关卡/房间/Battle Room/Normal Room/NormalRoomController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/关卡/房间/Battle Room/Normal Room/NormalRoomController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/关卡/房间/状态机/RoomCleared.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/关卡/房间/状态机/RoomCleared.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/管理器/游戏管理器/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/管理器/游戏管理器/GameManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/管理器/相机管理器/CameraManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/管理器/相机管理器/CameraManager.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +62,8 @@
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "junie.application.models",
     "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+    "vue.rearranger.settings.migration": "true",
+    "附加到 Unity 编辑器.附加到 Unity 编辑器.executor": "Debug"
   }
 }]]></component>
   <component name="RunManager" selected="附加到 Unity 编辑器.附加到 Unity 编辑器">
@@ -86,13 +97,15 @@
       <option name="MIXED_MODE_DEBUG" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false">
+    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false" ignored-value-for-modified-check="32348">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="32348" />
       <option name="projectPathOnTarget" />
       <option name="runtimes">
-        <list />
+        <list>
+          <MonoRuntime />
+        </list>
       </option>
       <option name="selectedOptions">
         <list />
@@ -110,7 +123,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1775706399338</updated>
-      <workItem from="1775706401829" duration="9356000" />
+      <workItem from="1775706401829" duration="17172000" />
     </task>
     <servers />
   </component>

@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: "\u624B\u67AA\u57FA\u7840\u6570\u636E"
   m_EditorClassIdentifier: Assembly-CSharp::InitialGunData
   weaponName: Handgun
-  weaponDamage: 2
+  weaponDescription: 
+  weaponDamage: 100
   attackInterval: 0.5
   weaponRotationSpeed: 1000
   initialBallisticsCount: 1

@@ -2956,6 +2956,11 @@ PrefabInstance:
       addedObject: {fileID: 771972934}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a74a3bf9d05af34abad34ca2cfa3ef4, type: 3}
+--- !u!1 &443139043 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1020920922127641922, guid: 7a74a3bf9d05af34abad34ca2cfa3ef4, type: 3}
+  m_PrefabInstance: {fileID: 443139042}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &474412417 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3882337560649312270, guid: 2d6b1a5c1f532d7438847aa74dab7461, type: 3}
@@ -3377,7 +3382,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 4.5
+  orthographic size: 4.43
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3402,7 +3407,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20.44553, y: 5.7023754, z: -10}
+  m_LocalPosition: {x: 43.83458, y: 12.92238, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8412,7 +8417,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6497835312553012984, guid: 7a74a3bf9d05af34abad34ca2cfa3ef4, type: 3}
   m_PrefabInstance: {fileID: 443139042}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 443139043}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 37c2eb7be406d2c499c709c03bbb0d06, type: 3}
@@ -9598,7 +9603,7 @@ MonoBehaviour:
   - {fileID: 922112991}
   - {fileID: 246518880}
   enemyBulletProfab: {fileID: 5569169980823808405, guid: af9db1b61804a074ebc0c816342d9f56, type: 3}
-  isFirstRoom: 1
+  isFirstRoom: 0
   isBossRoom: 0
   "\u6210\u529F\u9875\u9762": {fileID: 0}
 --- !u!1 &1519428232
@@ -13564,7 +13569,10 @@ MonoBehaviour:
   CloseDoors: {fileID: 1676303482}
   EnemiesInRoom:
   - {fileID: 1298304257}
-  enemyBulletProfab: {fileID: 0}
+  enemyBulletProfab: {fileID: 5569169980823808405, guid: af9db1b61804a074ebc0c816342d9f56, type: 3}
+  bossEnemy: {fileID: 1298304257}
+  bossRoot: {fileID: 443139043}
+  enableRewardSelectionOnBossDeath: 1
 --- !u!1 &2115288121
 GameObject:
   m_ObjectHideFlags: 0
