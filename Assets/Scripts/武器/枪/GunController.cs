@@ -40,6 +40,11 @@ public class GunController : WeaponControllerBase
             return; // 没有子弹，无法攻击
         }
 
+        if(!buffManager)
+        {
+            Debug.LogError("BuffManager is null!");
+            return;
+        }
         buffManager.BeforeAttackTriggered?.Invoke(M_gunData);
         if(M_gunData.IsConsumingBullet)
         {

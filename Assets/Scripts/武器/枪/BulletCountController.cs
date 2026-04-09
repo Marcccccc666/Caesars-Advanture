@@ -4,196 +4,176 @@ using UnityEngine;
 public class BulletCountController : MonoBehaviour
 {
     [SerializeField, ChineseLabel("子弹UI预制体")] private Transform bulletUIPrefab;
-
     [SerializeField, ChineseLabel("子弹UI父物体")] private Transform bulletUIParent;
+    [SerializeField, ChineseLabel("订阅的枪数据")] private GunData subscribedGunData;
 
-    private WeaponData currentWeaponData => WeaponManager.Instance?.GetCurrentWeapon;
-    
-    private Queue<Transform> bulletUIInstances = new();
+    private readonly Queue<Transform> bulletUIInstances = new();
 
     private WeaponManager weaponManager => WeaponManager.Instance;
     private PoolManager poolManager => PoolManager.Instance;
     private GameManager gameManager => GameManager.Instance;
 
-    /// <summary>
-    /// Awake is called when the script instance is being loaded.
-    /// </summary>
+    
+
     private void Awake()
     {
-        foreach (Transform child in bulletUIParent)
-        {
-            Destroy(child.gameObject);
-        }
-        bulletUIInstances?.Clear();
-
-        if(weaponManager.GetCurrentWeapon != null)
-        {
-            UpdateCurrentWeaponBulletUI();
-        }
+        ClearAllBulletUI();
     }
 
     private void OnEnable()
     {
-        weaponManager.OnWeaponSwitched += GetNewWeaponAndUpdateUI;
-        
-        gameManager.GameSceneChangedAction += ClearAllBulletUI;
-
-        if (currentWeaponData is GunData gunData)
+        if (weaponManager != null)
         {
-            gunData.OnBulletCountAdded += AddBulletUI;
-            gunData.OnBulletCountDecreased += RecycleBulletUIInstances;
+            weaponManager.OnWeaponSwitched += GetNewWeaponAndUpdateUI;
         }
+
+        if (gameManager != null)
+        {
+            gameManager.GameSceneChangedAction += ClearAllBulletUI;
+        }
+
+        BindCurrentWeapon();
     }
 
     private void OnDisable()
     {
-        if(weaponManager)
+        UnbindCurrentWeapon();
+
+        if (weaponManager != null)
         {
             weaponManager.OnWeaponSwitched -= GetNewWeaponAndUpdateUI;
         }
 
-        if (currentWeaponData is GunData gunData && currentWeaponData != null)
-        {
-            gunData.OnBulletCountAdded -= AddBulletUI;
-            gunData.OnBulletCountDecreased -= RecycleBulletUIInstances;
-        }
-
-        if(gameManager)
+        if (gameManager != null)
         {
             gameManager.GameSceneChangedAction -= ClearAllBulletUI;
         }
+
+        ClearAllBulletUI();
     }
 
     private void OnDestroy()
     {
-        if(weaponManager)
+        UnbindCurrentWeapon();
+
+        if (weaponManager != null)
         {
             weaponManager.OnWeaponSwitched -= GetNewWeaponAndUpdateUI;
         }
 
-        if (currentWeaponData is GunData gunData && currentWeaponData != null)
-        {
-            gunData.OnBulletCountAdded -= AddBulletUI;
-            gunData.OnBulletCountDecreased -= RecycleBulletUIInstances;
-        }
-
-        if(gameManager)
+        if (gameManager != null)
         {
             gameManager.GameSceneChangedAction -= ClearAllBulletUI;
         }
     }
 
-    /// <summary>
-    /// 获得新武器时更新子弹UI显示
-    /// </summary>
-    private void GetNewWeaponAndUpdateUI(WeaponData newWeaponData)
+    private void BindCurrentWeapon()
     {
-        if (currentWeaponData is GunData oldGunData)
+        if (weaponManager == null)
         {
-            oldGunData.OnBulletCountAdded -= AddBulletUI;
-            oldGunData.OnBulletCountDecreased -= RecycleBulletUIInstances;
-
-            ClearAllBulletUI();
+            return;
         }
 
-        if(newWeaponData is GunData gunData)
+        GetNewWeaponAndUpdateUI(weaponManager.GetCurrentWeapon);
+    }
+
+    private void UnbindCurrentWeapon()
+    {
+        if (subscribedGunData != null)
         {
-            gunData.OnBulletCountAdded += AddBulletUI;
-            gunData.OnBulletCountDecreased += RecycleBulletUIInstances;
-            if(gunData.WeaponBaseData is GunBaseData gunBaseData)
-            {
-                int bulletCount = weaponManager.GetFinalBulletCount(gunBaseData.MaxBulletCount);
-                for (int i = 0; i < bulletCount; i++)
-                {
-                    Transform bulletUI = poolManager.Spawn(
-                        prefab:bulletUIPrefab, 
-                        pos: bulletUIParent.position,
-                        rot: bulletUIParent.rotation,
-                        defaultCapacity: bulletCount,
-                        maxSize: 20,
-                        setActive: true,
-                        parent:bulletUIParent);
-                    bulletUIInstances.Enqueue(bulletUI);
-                }
-            }
+            subscribedGunData.OnBulletCountAdded -= AddBulletUI;
+            subscribedGunData.OnBulletCountDecreased -= RecycleBulletUIInstances;
+            subscribedGunData = null;
         }
     }
 
-    /// <summary>
-    /// 显示当前武器的子弹数量UI
-    /// </summary>
-    private void UpdateCurrentWeaponBulletUI()
+    private void GetNewWeaponAndUpdateUI(WeaponData newWeaponData)
     {
-        if (currentWeaponData is GunData gunData)
+        UnbindCurrentWeapon();
+        ClearAllBulletUI();
+
+        if (newWeaponData is not GunData gunData)
         {
-            int bulletCount = gunData.CurrentBulletCount;
-            ClearAllBulletUI();
-            for (int i = 0; i < bulletCount; i++)
+            return;
+        }
+
+        subscribedGunData = gunData;
+        subscribedGunData.OnBulletCountAdded += AddBulletUI;
+        subscribedGunData.OnBulletCountDecreased += RecycleBulletUIInstances;
+
+        if (!bulletUIParent || !bulletUIPrefab || poolManager == null || weaponManager == null)
+        {
+            return;
+        }
+
+        if (gunData.WeaponBaseData is GunBaseData gunBaseData)
+        {
+            int bulletCount = weaponManager.GetFinalBulletCount(gunBaseData.MaxBulletCount);
+            for (int i = 0; i < gunData.CurrentBulletCount; i++)
             {
                 Transform bulletUI = poolManager.Spawn(
-                    prefab:bulletUIPrefab, 
+                    prefab: bulletUIPrefab,
                     pos: bulletUIParent.position,
                     rot: bulletUIParent.rotation,
                     defaultCapacity: bulletCount,
                     maxSize: 20,
                     setActive: true,
-                    parent:bulletUIParent);
+                    parent: bulletUIParent
+                );
                 bulletUIInstances.Enqueue(bulletUI);
             }
         }
     }
 
-    /// <summary>
-    /// 回收子弹UI实例
-    /// </summary>
+    private void AddBulletUI(int count)
+    {
+        if (!bulletUIParent || !bulletUIPrefab || poolManager == null || weaponManager == null)
+        {
+            Debug.LogWarning("BulletCountController: UI 父物体或对象池已失效。");
+            return;
+        }
+
+        if (subscribedGunData == null || subscribedGunData.WeaponBaseData is not GunBaseData gunBaseData)
+        {
+            return;
+        }
+
+        int bulletCount = weaponManager.GetFinalBulletCount(gunBaseData.MaxBulletCount);
+        for (int i = 0; i < count; i++)
+        {
+            Transform bulletUI = poolManager.Spawn(
+                prefab: bulletUIPrefab,
+                pos: bulletUIParent.position,
+                rot: bulletUIParent.rotation,
+                defaultCapacity: bulletCount,
+                maxSize: 20,
+                setActive: true,
+                parent: bulletUIParent
+            );
+            bulletUIInstances.Enqueue(bulletUI);
+        }
+    }
+
     private void RecycleBulletUIInstances(int count)
     {
         for (int i = 0; i < count; i++)
         {
-            if(bulletUIInstances.TryDequeue(out Transform bulletUI))
-            {
-                poolManager.Release(bulletUIPrefab, bulletUI);
-            }
-        }
-    }
-
-    /// <summary>
-    /// 增加子弹UI显示
-    /// </summary>
-    public void AddBulletUI(int count)
-    {
-        if(currentWeaponData is GunData gunData)
-        {
-            if(gunData.WeaponBaseData is GunBaseData gunBaseData)
-            {
-                int bulletCount = weaponManager.GetFinalBulletCount(gunBaseData.MaxBulletCount);
-                for (int i = 0; i < count; i++)
-                {
-                    Transform bulletUI = poolManager.Spawn(
-                        prefab:bulletUIPrefab, 
-                        pos: bulletUIParent.position,
-                        rot: bulletUIParent.rotation,
-                        defaultCapacity: bulletCount,
-                        maxSize: 20,
-                        setActive: true,
-                        parent:bulletUIParent);
-                    bulletUIInstances.Enqueue(bulletUI);
-                }
-            }
-        }
-    }
-
-    private void ClearAllBulletUI()
-    {
-        while (bulletUIInstances!= null && bulletUIInstances.Count > 0)
-        {
-            var bulletUI = bulletUIInstances.Dequeue();
-            if(bulletUI != null)
+            if (bulletUIInstances.TryDequeue(out Transform bulletUI))
             {
                 poolManager?.Release(bulletUIPrefab, bulletUI);
             }
         }
     }
 
-    
+    private void ClearAllBulletUI()
+    {
+        while (bulletUIInstances.Count > 0)
+        {
+            var bulletUI = bulletUIInstances.Dequeue();
+            if (bulletUI != null && poolManager != null)
+            {
+                poolManager.Release(bulletUIPrefab, bulletUI);
+            }
+        }
+    }
 }

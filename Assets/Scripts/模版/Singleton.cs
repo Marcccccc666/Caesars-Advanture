@@ -2,29 +2,24 @@ using UnityEngine;
 
 public class Singleton<T> : MonoBehaviour where T : Singleton<T>
 {
-    private static T instance;
-    private static bool isQuitting = false;
+    protected static T instance;
+    protected static bool isQuitting = false;
 
-    /// <summary>
-    /// 是否在创建实例时调用DontDestroyOnLoad
-    /// </summary>
     protected virtual bool DontDestroyOnLoadCreated => true;
 
     public static T Instance
-    {   
+    {
         get
         {
-            if(isQuitting)
+            if (isQuitting)
             {
                 return null;
             }
-            
+
             if (instance == null)
             {
-                // 先尝试在场景中查找
                 instance = FindAnyObjectByType<T>();
 
-                // 如果场景中也没有，就自动创建一个
                 if (instance == null)
                 {
                     GameObject singletonObject = new(typeof(T).Name + " (Singleton)");
@@ -36,13 +31,15 @@ public class Singleton<T> : MonoBehaviour where T : Singleton<T>
                     }
                 }
             }
+
             return instance;
         }
     }
 
     protected virtual void Awake()
     {
-        // 如果还没有实例，就把自己注册为单例
+        isQuitting = false;
+
         if (instance == null)
         {
             instance = this as T;
@@ -52,28 +49,23 @@ public class Singleton<T> : MonoBehaviour where T : Singleton<T>
                 DontDestroyOnLoad(gameObject);
             }
         }
-        // 如果已经存在并且不是自己 → 删除自己
-        else if (Instance != this)
+        else if (instance != this)
         {
             Destroy(gameObject);
         }
-        
     }
 
-    
     protected virtual void OnEnable()
     {
-        GameManager.Instance.GameResetAction += OnRest;
+        if (GameManager.Instance != null && instance == this)
+        {
+            GameManager.Instance.GameResetAction += OnRest;
+        }
     }
 
     protected virtual void OnDisable()
     {
-        if (Instance == this)
-        {
-            isQuitting = true;
-        }
-
-        if(GameManager.Instance)
+        if (GameManager.Instance != null && instance == this)
         {
             GameManager.Instance.GameResetAction -= OnRest;
         }
@@ -81,28 +73,23 @@ public class Singleton<T> : MonoBehaviour where T : Singleton<T>
 
     protected virtual void OnDestroy()
     {
-        if (Instance == this)
+        if (instance == this)
         {
-            isQuitting = true;
-        }
+            instance = null;
 
-        if(GameManager.Instance)
-        {
-            GameManager.Instance.GameResetAction -= OnRest;
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.GameResetAction -= OnRest;
+            }
         }
     }
 
     protected virtual void OnApplicationQuit()
     {
-        if (Instance == this)
-        {
-            isQuitting = true;
-        }
+        isQuitting = true;
     }
 
     protected virtual void OnRest()
     {
-        
     }
-
 }
