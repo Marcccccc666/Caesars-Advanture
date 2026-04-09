@@ -87,10 +87,12 @@ public class ChooseWeaponBranch : MonoBehaviour
 
     public void ConfirmSelection()
     {
+
         // 切换到选中的武器分支
-        if (selectedBranchIndex >= 0 && weaponManager.GetCurrentWeapon.WeaponBaseData is InitialGunData initialGunData)
+        if (selectedBranchIndex >= 0 && weaponManager.GetCurrentWeapon.WeaponBaseData is IInitialWeapon initialData)
         {
-            WeaponBranch selectedBranch = initialGunData.WeaponBrachs[selectedBranchIndex];
+            Debug.Log($"Selected branch index: {selectedBranchIndex}");
+            WeaponBranch selectedBranch = initialData.WeaponBrachs[selectedBranchIndex];
             weaponManager.SwitchWeapon(selectedBranch.Data);
         }
         // 结束升级状态，关闭分支选择界面

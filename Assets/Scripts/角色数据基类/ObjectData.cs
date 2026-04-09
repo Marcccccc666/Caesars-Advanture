@@ -68,9 +68,10 @@ public class ObjectData : MonoBehaviour
             {
                 currentHealth = maxHealth;
             }
-            else if(value < 0)
+            else if(value <= 0)
             {
                 currentHealth = 0;
+                Debug.Log("角色死亡");
                 OnDie?.Invoke();
             }
             else
