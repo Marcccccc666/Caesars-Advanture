@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public abstract class WeaponControllerBase : MonoBehaviour
@@ -118,7 +117,7 @@ public abstract class WeaponControllerBase : MonoBehaviour
         inputManager.OnMouseLeftTap += HandleMouseClick;
     }
 
-#region UNITY_EDITOR
+#if UNITY_EDITOR
     /// <summary>
     /// Called when the script is loaded or a value is changed in the
     /// inspector (Called in the editor only).
@@ -134,5 +133,5 @@ public abstract class WeaponControllerBase : MonoBehaviour
             }
         }
     }
-#endregion
+#endif
 }
