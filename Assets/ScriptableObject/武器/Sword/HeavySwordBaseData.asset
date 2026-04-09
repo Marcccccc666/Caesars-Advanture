@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HeavySwordBaseData
   weaponName: Heavy Sword
   weaponDescription: 
-  weaponDamage: 0
+  weaponDamage: 6
   attackInterval: 3
   weaponRotationSpeed: 150
   initialBallisticsCount: 1

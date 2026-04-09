@@ -20,6 +20,9 @@ public class Enemy3HFSM : MonoBehaviour
     [SerializeField, ChineseLabel("死亡动画状态名")] private string dieAnimationState = "die";
     [SerializeField, ChineseLabel("死亡动画时长")] private float dieAnimationDuration = 0.5f;
 
+    [Header("音效")]
+    [SerializeField, ChineseLabel("死亡音效")] private AudioClip dieAudio;
+
     [Header("攻击配置")]
     [SerializeField, ChineseLabel("持续开火时长")] private float attackDuration = 1.5f;
     [SerializeField, ChineseLabel("攻击冷却时长")] private float attackCooldown = 1.5f;
@@ -492,6 +495,11 @@ public class Enemy3HFSM : MonoBehaviour
     public void EnterDie()
     {
         rb2D.linearVelocity = Vector2.zero;
+
+        if (dieAudio != null && Camera.main != null)
+        {
+            AudioSource.PlayClipAtPoint(dieAudio, Camera.main.transform.position);
+        }
     }
 
     private void UpdateAnimationByState(bool force = false)
