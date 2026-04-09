@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InitialGunData
   weaponName: Handgun
   weaponDescription: 
-  weaponDamage: 100
+  weaponDamage: 35
   attackInterval: 0.5
   weaponRotationSpeed: 1000
   initialBallisticsCount: 1

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuickSwordBaseData
   weaponName: Light Sword
   weaponDescription: 
-  weaponDamage: 0
+  weaponDamage: 2
   attackInterval: 0
   weaponRotationSpeed: 1000
   initialBallisticsCount: 1

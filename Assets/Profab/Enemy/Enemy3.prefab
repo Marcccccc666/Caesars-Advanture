@@ -406,6 +406,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37c2eb7be406d2c499c709c03bbb0d06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  maxHealth: 0
+  currentHealth: 0
   enemyBaseData: {fileID: 11400000, guid: e5b587a09bafdd545a06ed4af6b32350, type: 2}
 --- !u!114 &7073015299503198411
 MonoBehaviour:
@@ -426,6 +428,7 @@ MonoBehaviour:
   attackAnimationState: attack
   dieAnimationState: die
   dieAnimationDuration: 0.5
+  dieAudio: {fileID: 8300000, guid: 63dfefe9815619b46bf38167b3fde5d9, type: 3}
   attackDuration: 1.5
   attackCooldown: 1.5
   fireInterval: 0.3

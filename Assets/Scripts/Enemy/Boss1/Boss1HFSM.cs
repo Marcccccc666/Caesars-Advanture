@@ -91,7 +91,7 @@ public class Boss1HFSM : MonoBehaviour
 
     private Boss1StateID? lastAnimState;
     private readonly StateMachine<Boss1StateID, Boss1> stateMachine = new();
-
+    private GameManager gameManager => GameManager.Instance;
     public enum Boss1StateID
     {
         Idle, Attack1, Attack2, Attack3,
@@ -414,12 +414,14 @@ public class Boss1HFSM : MonoBehaviour
     #region Phase Transition
 
     private IEnumerator PhaseTransitionRoutine()
-    {
-        Time.timeScale = 0f;
+    {   
+        gameManager.SetGamePaused(true);
+        gameManager.SetPlayerControlLocked(true);
         CameraShake.Shake(7);
         yield return new WaitForSecondsRealtime(phaseTransitionPauseDuration);
 
-        Time.timeScale = 1f;
+        gameManager.SetPlayerControlLocked(false);
+        gameManager.SetGamePaused(false);
         currentPhase = 2;
         attackCycleIndex = 0;
 

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBaseData
   moveSpeed: 2
   baseAttack: 1
-  maxHealth: 70
+  maxHealth: 40
   attackInterval: 2
   rotationSpeed: 50
   fireResistance: 0

@@ -284,7 +284,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1657374595
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -4086219931996227907, guid: e4c505609ad2d5d4997f304bd39a3dba, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -309,6 +309,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37c2eb7be406d2c499c709c03bbb0d06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  maxHealth: 0
+  currentHealth: 0
   enemyBaseData: {fileID: 11400000, guid: f543f2342138d444e8553b5c1fe8cc0c, type: 2}
 --- !u!114 &2741666557413033440
 MonoBehaviour:
@@ -328,7 +330,10 @@ MonoBehaviour:
   chaseAnimationState: move
   attackAnimationState: attack
   dieAnimationState: die
+  dieAnimationDuration: 0.5
+  dieAudio: {fileID: 8300000, guid: 63dfefe9815619b46bf38167b3fde5d9, type: 3}
   aimDuration: 4
+  lockAimBeforeFire: 1.5
   attackCooldown: 1.5
   idleMoveSpeedMultiplier: 0.5
   idleMoveDurationRange: {x: 0.35, y: 0.8}
