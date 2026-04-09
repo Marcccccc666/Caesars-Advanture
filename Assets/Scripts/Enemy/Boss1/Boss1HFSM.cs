@@ -416,11 +416,9 @@ public class Boss1HFSM : MonoBehaviour
     private IEnumerator PhaseTransitionRoutine()
     {   
         gameManager.SetGamePaused(true);
-        gameManager.SetPlayerControlLocked(true);
         CameraShake.Shake(7);
         yield return new WaitForSecondsRealtime(phaseTransitionPauseDuration);
-
-        gameManager.SetPlayerControlLocked(false);
+        
         gameManager.SetGamePaused(false);
         currentPhase = 2;
         attackCycleIndex = 0;

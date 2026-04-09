@@ -155,6 +155,7 @@ public class AllBuffController : MonoBehaviour
                 selectedBuff.Apply();
             }
         }
+        GameManager.Instance.SetGamePaused(false);
     }
 
     public void CloseBuffPanel()

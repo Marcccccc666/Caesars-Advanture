@@ -32,7 +32,7 @@ public class InteractionObjectController : MonoBehaviour
 
     protected virtual void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && inputManager != null)
         {
             inputManager.OnInteractionPressed -= Interact;
             interactionHint.SetActive(false);

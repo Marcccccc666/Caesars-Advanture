@@ -36,11 +36,13 @@ public class GameManager : Singleton<GameManager>
     {
         isGamePaused = paused;
         if (isGamePaused)
-        {
+        {   
+            SetPlayerControlLocked(true);
             GamePausedAction?.Invoke();
         }
         else
-        {
+        {   
+            SetPlayerControlLocked(false);
             GameResumedAction?.Invoke();
         }
     }
@@ -63,6 +65,7 @@ public class GameManager : Singleton<GameManager>
     public void ResetGame()
     {
         GameResetAction?.Invoke();
+        SetGamePaused(false);
     }
 
     #endregion

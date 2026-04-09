@@ -107,7 +107,7 @@ public class BuffManager : Singleton<BuffManager>
     /// </summary>
     public void RequestBuffSelection()
     {
-        SetIsBuffSelectionOpen(true);
+        GameManager.Instance.SetGamePaused(true);
         OpenBuffSelectionUI?.Invoke();
     }
 

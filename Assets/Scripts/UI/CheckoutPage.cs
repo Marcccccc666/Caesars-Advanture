@@ -95,7 +95,8 @@ public class CheckoutPage : MonoBehaviour
     }
 
     public void ShowGameOverPage()
-    {
+    {   
+        gameManager.SetGamePaused(true);
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);

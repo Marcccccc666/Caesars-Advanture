@@ -12,6 +12,7 @@ public class RoomCleared : BaseState<RoomState>
     protected WeaponManager weaponManager => WeaponManager.Instance;
     private PoolManager poolManager => PoolManager.Instance;
     private CameraManager cameraManager => CameraManager.Instance;
+    private GameManager gameManager => GameManager.Instance;    
 
 
     public RoomCleared(BattleRoomController battleRoomController, EnemyBulletAttack enemyBullProfab, bool isBossRoom, GameObject 成功页面) : base()

@@ -15,7 +15,7 @@ MonoBehaviour:
   weaponName: Light Sword
   weaponDescription: 
   weaponDamage: 2
-  attackInterval: 0
+  attackInterval: 0.2
   weaponRotationSpeed: 1000
   initialBallisticsCount: 1
   ballisticsType: 0

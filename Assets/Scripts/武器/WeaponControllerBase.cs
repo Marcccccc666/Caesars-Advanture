@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public abstract class WeaponControllerBase : MonoBehaviour
@@ -45,6 +46,7 @@ public abstract class WeaponControllerBase : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (gameManager.IsGamePaused) return;
         if(inputManager.CurrentMouseState == MouseState.Hold)
         {
             HandleMouseHold();
@@ -57,7 +59,7 @@ public abstract class WeaponControllerBase : MonoBehaviour
 
     protected virtual void LateUpdate()
     {
-        if(!CanControl)
+        if(gameManager.IsGamePaused)
         {
             return;
         }

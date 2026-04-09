@@ -186,7 +186,6 @@ public class Level2BossRoomController : BossRoomController
 
         if (disablePlayerInputDuringReveal)
         {
-            gameManager.SetPlayerControlLocked(true);
             revealPlayerControlLockApplied = true;
         }
     }
@@ -198,7 +197,6 @@ public class Level2BossRoomController : BossRoomController
 
         if (revealPlayerControlLockApplied)
         {
-            gameManager.SetPlayerControlLocked(false);
             revealPlayerControlLockApplied = false;
         }
 
