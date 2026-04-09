@@ -2,11 +2,14 @@ using UnityEngine;
 
 public class Boss2_EmergeAttack : BaseState<Boss2HFSM.Boss2StateID>
 {
+    private const float EmergeDamageDelay = 0.3f;
+
     private readonly Boss2HFSM boss;
     private bool damageDealt = false;
-
-    private DownTimer attackTimer;
-    private MultiTimerManager timerManager => MultiTimerManager.Instance;
+    private bool pauseComplete = false;
+    private float pauseStartTime;
+    private float attackStartTime;
+    private float preEmergeDelay;
 
     public Boss2_EmergeAttack(Boss2HFSM boss) : base(needsExitTime: true)
     {
@@ -16,30 +19,37 @@ public class Boss2_EmergeAttack : BaseState<Boss2HFSM.Boss2StateID>
     public override void OnEnter()
     {
         base.OnEnter();
-        boss.EnterEmerge();
         damageDealt = false;
-
-        string key = "Boss2_EmergeAttack_" + boss.GetInstanceID();
-        attackTimer = timerManager.Create_DownTimer(key);
-        attackTimer.ResetTimer(boss.EmergeDuration);
-        attackTimer.StartTimer();
+        pauseComplete = false;
+        pauseStartTime = Time.time;
+        attackStartTime = 0f;
+        preEmergeDelay = Mathf.Max(0f, boss.PreEmergePause - EmergeDamageDelay);
     }
 
     public override void OnLogic()
     {
         base.OnLogic();
 
-        if (attackTimer == null) return;
+        if (!pauseComplete)
+        {
+            if (Time.time - pauseStartTime >= preEmergeDelay)
+            {
+                pauseComplete = true;
+                boss.EnterEmerge();
+                attackStartTime = Time.time;
+            }
+            return;
+        }
 
         // Timer fallback in case the animation event is missing or fails.
-        float elapsed = boss.EmergeDuration - attackTimer.GetRemainingTime();
-        if (!damageDealt && elapsed >= 0.3f)
+        float elapsed = Time.time - attackStartTime;
+        if (!damageDealt && elapsed >= EmergeDamageDelay)
         {
             boss.TriggerEmergeDamage();
             damageDealt = true;
         }
 
-        if (attackTimer.IsComplete())
+        if (elapsed >= boss.EmergeDuration)
         {
             fsm.StateCanExit();
         }
@@ -48,7 +58,7 @@ public class Boss2_EmergeAttack : BaseState<Boss2HFSM.Boss2StateID>
     public override void OnExitRequest()
     {
         // Only allow exit when our attack timer has completed
-        if (attackTimer != null && attackTimer.IsComplete())
+        if (pauseComplete && Time.time - attackStartTime >= boss.EmergeDuration)
         {
             fsm.StateCanExit();
         }
@@ -58,8 +68,5 @@ public class Boss2_EmergeAttack : BaseState<Boss2HFSM.Boss2StateID>
     {
         base.OnExit();
         boss.OnEmergeAttackExit();
-
-        if (attackTimer != null && attackTimer.IsRunning)
-            attackTimer.PauseTimer();
     }
 }

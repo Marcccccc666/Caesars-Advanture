@@ -210,15 +210,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Boss2HFSM
   p1MoveSpeed: 5
-  p1PreEmergePause: 2
+  p1PreEmergePause: 1.5
   p1EmergeDuration: 0.7
   p1SweepDuration: 1.2
-  p1PostAttackPause: 2
+  p1PostAttackPause: 1.5
   p2MoveSpeed: 8
-  p2PreEmergePause: 1
+  p2PreEmergePause: 0.7
   p2EmergeDuration: 0.6
   p2SweepDuration: 1
-  p2PostAttackPause: 1
+  p2PostAttackPause: 0.7
   p2ComboCount: 3
   emergeDamage: 1
   emergeRadius: 1.5

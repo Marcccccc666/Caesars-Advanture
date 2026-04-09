@@ -22,13 +22,13 @@ AnimationClip:
     curve:
     - time: 0
       value: {fileID: 6125926631589582331, guid: 1142d1af3874a1146ae9e41eb3d19bf9, type: 3}
-    - time: 0.16666667
+    - time: 0.15
       value: {fileID: -6507958432894171144, guid: 12cc65d221aa5da49b482b3e3242ea4e, type: 3}
-    - time: 0.33333334
+    - time: 0.3
       value: {fileID: 5287181378080388054, guid: cc4a090365d145948a8bff874f73782c, type: 3}
-    - time: 0.5
+    - time: 0.45
       value: {fileID: -3670004817364390138, guid: 5ffce0ed5e36cca4eaed7a87afbdd974, type: 3}
-    - time: 0.65
+    - time: 0.5833333
       value: {fileID: -3670004817364390138, guid: 5ffce0ed5e36cca4eaed7a87afbdd974, type: 3}
     attribute: m_Sprite
     path: 
@@ -62,7 +62,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.6666666
+    m_StopTime: 0.59999996
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -82,7 +82,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.33333334
+  - time: 0.45
     functionName: TriggerEmergeDamage
     data: 
     objectReferenceParameter: {fileID: 0}
