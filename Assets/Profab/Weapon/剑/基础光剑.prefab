@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 852226970918637911}
   - component: {fileID: 2520728945924605727}
-  - component: {fileID: 7105293238894227939}
+  - component: {fileID: 7839074487656627089}
   m_Layer: 6
   m_Name: "\u57FA\u7840\u5149\u5251"
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1314112383289854093}
+  - {fileID: 2295081010807816726}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2520728945924605727
@@ -46,14 +46,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92f40928310ad5e4ab0bfcfd1a8af9c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BaseSwordController
-  WeaponData: {fileID: 7105293238894227939}
+  WeaponData: {fileID: 7839074487656627089}
   M_attackAudioClip: {fileID: 0}
+  rotationPivot: {fileID: 2295081010807816726}
   animator: {fileID: 8574680026890903587}
   defaultAnimationName: Idle
   attackLeftAnimationName: "\u5251\u653B\u51FB\u5DE6"
   attackRightAnimationName: "\u5251\u653B\u51FB\u53F3"
   attackCollider: {fileID: 739038134235979233}
---- !u!114 &7105293238894227939
+--- !u!114 &7839074487656627089
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -62,12 +63,44 @@ MonoBehaviour:
   m_GameObject: {fileID: 2532581733146804988}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5eaf27bb2da2cd64ebcca7b840bcd72e, type: 3}
+  m_Script: {fileID: 11500000, guid: d7986af4ff9b0c34c8e4e9dd1c308068, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InitialSwordDate
   weaponBaseData: {fileID: 11400000, guid: f2cd5046331dedf4e96a3541cd6e8ff3, type: 2}
-  weaponController: {fileID: 2520728945924605727}
+  weaponController: {fileID: 0}
   currentSwordState: 0
+--- !u!1 &4843686797511487917
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2295081010807816726}
+  m_Layer: 0
+  m_Name: "\u5251\u56FE\u7247"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2295081010807816726
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4843686797511487917}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1314112383289854093}
+  m_Father: {fileID: 852226970918637911}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5776005920232948397
 GameObject:
   m_ObjectHideFlags: 0
@@ -96,12 +129,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5776005920232948397}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.3521626, y: 1.6731517, z: 1.5187}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 852226970918637911}
+  m_Father: {fileID: 2295081010807816726}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1991410613805927445
 SpriteRenderer:
@@ -241,4 +274,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d74d5a35e81f248bd785fba37d70fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SwordAttack
-  swordData: {fileID: 7105293238894227939}
+  swordData: {fileID: 7839074487656627089}

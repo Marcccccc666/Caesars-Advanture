@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c4c36bf78a7ca441b81e9908e516d85, type: 3}
   m_Name: "\u9730\u5F39\u57FA\u7840\u6570\u636E"
   m_EditorClassIdentifier: Assembly-CSharp::ShotGunBaseDate
-  weaponName: "\u9730\u5F39"
-  weaponDamage: 1
+  weaponName: Shot Gun
+  weaponDescription: 
+  weaponDamage: 2
   attackInterval: 1
   weaponRotationSpeed: 1000
   initialBallisticsCount: 3

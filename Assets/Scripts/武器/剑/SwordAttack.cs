@@ -17,10 +17,19 @@ public class SwordAttack : MonoBehaviour
             EnemyData enemyData = enemyManager.GetEnemyData(enemyId);
             if (enemyData != null)
             {
+                if(swordData is HeavySwordData heavySwordData)
+                {
+                    // 根据蓄力值增加伤害
+                    float chargeMultiplier = 1f + (heavySwordData.CurrentCharge / heavySwordData.M_WeaponBaseData.MaxCharge);
+                    finalDamage = Mathf.RoundToInt(finalDamage * chargeMultiplier);
+                }
+                
                 enemyData.Damage(finalDamage);
             }
         }
     }
+
+
 
 #if UNITY_EDITOR
     void OnValidate()

@@ -16,7 +16,17 @@ public class WeaponManager: Singleton<WeaponManager>
     /// <summary>
     /// 获取当前武器实例
     /// </summary>
-    public WeaponData GetCurrentWeapon => currentWeapon;
+    public WeaponData GetCurrentWeapon
+    {
+        get
+        {
+            return currentWeapon;
+        }
+        set
+        {
+            currentWeapon = value;
+        }
+    }
 
     [SerializeField, ChineseLabel("武器伤害倍率")] private float damageMultiplier = 1f;
     [SerializeField, ChineseLabel("武器伤害加成")] private int damageBonus = 0;

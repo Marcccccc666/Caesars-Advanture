@@ -75,7 +75,7 @@ public class Caesar_Controller : MonoBehaviour
     
     private void FixedUpdate()
     {
-        if(!gameManager.IsPlayerControllable)
+        if(gameManager.IsGamePaused)
         {
             return;
         }
@@ -90,7 +90,7 @@ public class Caesar_Controller : MonoBehaviour
 
     private void Update()
     {
-        if(!gameManager.IsPlayerControllable)
+        if(gameManager.IsGamePaused)
         {
             return;
         }

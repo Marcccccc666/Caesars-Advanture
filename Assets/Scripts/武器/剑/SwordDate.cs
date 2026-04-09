@@ -3,6 +3,8 @@ using UnityEngine;
 public enum SwordState
 {
     Idle,
+    Charging,
+    
     Attack,
 }
 

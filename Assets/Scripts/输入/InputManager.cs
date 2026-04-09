@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public enum MouseState
 {
     None,
-    Press,
+    Tap,
     Hold,
     Release
 }
@@ -38,6 +38,22 @@ public class InputManager : Singleton<InputManager>
     public void SetMouseState(MouseState newState)
     {
         currentMouseState = newState;
+
+        switch (currentMouseState)
+        {
+            case MouseState.Tap:
+                // 处理点击状态的逻辑
+                OnMouseLeftTap?.Invoke();
+                break;
+            case MouseState.Hold:
+                // 处理持续按住状态的逻辑
+                OnMouseLeftHold?.Invoke();
+                break;
+            case MouseState.Release:
+                // 处理释放状态的逻辑
+                OnMouseLeftRelease?.Invoke();
+                break;
+        }
     }
 
     /// <summary>
@@ -56,7 +72,17 @@ public class InputManager : Singleton<InputManager>
     /// <summary>
     /// 鼠标左键点击事件
     /// </summary>
-    public Action OnMouseLeftClick;
+    public Action OnMouseLeftTap;
+
+    /// <summary>
+    /// 鼠标左键长按事件
+    /// </summary>
+    public Action OnMouseLeftHold;
+
+    ///<summary>
+    /// 左键取消事件
+    /// </summary>
+    public Action OnMouseLeftRelease;
 #endregion
 
 #region Interaction

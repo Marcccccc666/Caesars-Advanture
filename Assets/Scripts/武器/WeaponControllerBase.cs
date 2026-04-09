@@ -32,7 +32,7 @@ public abstract class WeaponControllerBase : MonoBehaviour
     protected virtual void OnEnable()
     {
         CanControl = true;
-        inputManager.OnMouseLeftClick += HandleMouseClick;
+        inputManager.OnMouseLeftTap += HandleMouseClick;
     }
 
     protected virtual void Start()
@@ -45,6 +45,18 @@ public abstract class WeaponControllerBase : MonoBehaviour
 
     protected virtual void Update()
     {
+        if(inputManager.CurrentMouseState == MouseState.Hold)
+        {
+            HandleMouseHold();
+        }
+        else if(inputManager.CurrentMouseState == MouseState.Tap)
+        {
+            HandleMouseClick();
+        }
+    }
+
+    protected virtual void LateUpdate()
+    {
         if(!CanControl)
         {
             return;
@@ -52,18 +64,13 @@ public abstract class WeaponControllerBase : MonoBehaviour
         // 使武器始终朝向鼠标位置
         Vector2 mouseWorldPosition = inputManager.MouseWorldPosition;
         ObjectRotation.RotateTowardsTarget(this.transform, mouseWorldPosition, WeaponData.WeaponBaseData.WeaponRotationSpeed);
-        
-        if(inputManager.CurrentMouseState == MouseState.Hold)
-        {
-            HandleMouseHold();
-        }
     }
 
     protected virtual void OnDisable()
     {
         if (inputManager)
         {
-            inputManager.OnMouseLeftClick -= HandleMouseClick;
+            inputManager.OnMouseLeftTap -= HandleMouseClick;
         }
     }
 
@@ -97,7 +104,7 @@ public abstract class WeaponControllerBase : MonoBehaviour
     public virtual void OnGamePaused()
     {
         CanControl = false;
-        inputManager.OnMouseLeftClick -= HandleMouseClick;
+        inputManager.OnMouseLeftTap -= HandleMouseClick;
     }
 
     /// <summary>
@@ -106,7 +113,7 @@ public abstract class WeaponControllerBase : MonoBehaviour
     public virtual void OnGameResumed()
     {
         CanControl = true;
-        inputManager.OnMouseLeftClick += HandleMouseClick;
+        inputManager.OnMouseLeftTap += HandleMouseClick;
     }
 
 #region UNITY_EDITOR

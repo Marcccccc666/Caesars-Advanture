@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de5c27ad3abf99247985f9b871e5ccae, type: 3}
   m_Name: "\u72D9\u51FB\u67AA\u57FA\u7840\u6570\u636E"
   m_EditorClassIdentifier: Assembly-CSharp::SniperBaseDate
-  weaponName: "\u72D9"
+  weaponName: Sniper
+  weaponDescription: 
   weaponDamage: 2
   attackInterval: 0.45
   weaponRotationSpeed: 1000

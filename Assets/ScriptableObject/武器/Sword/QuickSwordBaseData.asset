@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9f282d1afd38664aa963f220c345347, type: 3}
   m_Name: QuickSwordBaseData
   m_EditorClassIdentifier: Assembly-CSharp::QuickSwordBaseData
-  weaponName: 
+  weaponName: Light Sword
   weaponDescription: 
   weaponDamage: 0
   attackInterval: 0
-  weaponRotationSpeed: 0
+  weaponRotationSpeed: 1000
   initialBallisticsCount: 1
   ballisticsType: 0
   bulletIntervalDistance: 0
@@ -24,4 +24,3 @@ MonoBehaviour:
   bulletPrefab: {fileID: 0}
   bulletSpeed: 0
   bulletPenetration: 0
-  weaponBranches: []

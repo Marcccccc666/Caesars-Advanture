@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class InitialSwordController : WeaponControllerBase
 {
+    [SerializeField, ChineseLabel("旋转轴")] protected Transform rotationPivot;
     [SerializeField, ChineseLabel("动画控制器")] protected Animator animator;
 
     [SerializeField, ChineseLabel("默认动画片段名称")] protected string defaultAnimationName;
@@ -14,7 +15,7 @@ public class InitialSwordController : WeaponControllerBase
     protected int attackRightAnimationHash;
 
     [SerializeField, ChineseLabel("攻击碰撞箱")] protected Collider2D attackCollider;
-    protected SwordDate M_swordData => WeaponData as SwordDate; 
+    private SwordDate M_swordData => WeaponData as SwordDate; 
 
     protected override void Awake()
     {
@@ -41,6 +42,14 @@ public class InitialSwordController : WeaponControllerBase
 
     protected override void Update()
     {
+        if(inputManager.CurrentMouseState == MouseState.Hold)
+        {
+            HandleMouseHold();
+        }
+    }
+
+    protected override void LateUpdate()
+    {
         if(!CanControl || M_swordData.CurrentSwordState == SwordState.Attack)
         {
             return;
@@ -48,13 +57,10 @@ public class InitialSwordController : WeaponControllerBase
 
         Vector2 mouseWorldPosition = inputManager.MouseWorldPosition;
 
-        ObjectRotation.RotateTowardsTarget(transform, mouseWorldPosition, M_swordData.WeaponBaseData.WeaponRotationSpeed, -90f);
-
-        if(inputManager.CurrentMouseState == MouseState.Hold)
-        {
-            HandleMouseHold();
-        }
+        ObjectRotation.RotateTowardsTarget(rotationPivot.transform, mouseWorldPosition, M_swordData.WeaponBaseData.WeaponRotationSpeed, -90f);
     }
+
+    
 
     protected override void HandleMouseClick()
     {
@@ -69,15 +75,13 @@ public class InitialSwordController : WeaponControllerBase
     public override void Attack()
     {
         if (!MultiTimerManager.IsDownTimerComplete("SwordAttackCooldown") || 
-            AnimatorTool.IsInAnimationState(animator, attackLeftAnimationHash) ||
-            AnimatorTool.IsInAnimationState(animator, attackRightAnimationHash))
+            M_swordData.CurrentSwordState == SwordState.Attack)
         {
             return;
         }
 
         M_swordData.CurrentSwordState = SwordState.Attack;
 
-        animator.Play(attackLeftAnimationHash);
         StartCoroutine(AttackAnimationFinishCheck());
     }
 
@@ -107,7 +111,7 @@ public class InitialSwordController : WeaponControllerBase
     /// </summary>
     protected virtual bool IsSwordFacingLeft()
     {
-        float zRotation = transform.eulerAngles.z;
+        float zRotation = rotationPivot.transform.eulerAngles.z;
         return zRotation >= 0f && zRotation < 180f;
     }
 }

@@ -104,7 +104,7 @@ public class GunData : WeaponData
         {
             yield return new WaitForSeconds(gunBaseData.BulletReplenishInterval);
 
-            if (!GameManager.Instance.IsPlayerControllable)
+            if (GameManager.Instance.IsGamePaused)
                 continue;
 
             int finalBulletCount = weaponManager.GetFinalBulletCount(gunBaseData.MaxBulletCount);

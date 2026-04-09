@@ -1,4 +1,6 @@
 #if UNITY_EDITOR
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEditor;
 #endif
 
@@ -8,19 +10,49 @@ public class TransferScenes : MonoBehaviour
 {
     [SerializeField, ChineseLabel("要传送到的场景名称"), Readonly] private string sceneName;
 
+    [SerializeField, ChineseLabel("提示拿武器")] private GameObject hintObject;
+    [SerializeField, ChineseLabel("是否需要重置游戏")] private bool needReset = false;
+
     private GameManager gameManager => GameManager.Instance;
+    private WeaponManager weaponManager => WeaponManager.Instance;
+
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    private void Awake()
+    {
+        if (hintObject != null)
+        {
+            hintObject?.SetActive(false);
+        }
+    }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            TransferScene(true);
+            if(weaponManager.GetCurrentWeapon == null)
+            {
+                StartCoroutine(ShowHintTemporarily());
+                return;
+            }
+            TransferScene(needReset);
         }
     }
 
     public void TransferScene(bool needReset)
     {
         gameManager.ChangeScene(sceneName, needReset);
+    }
+
+    private IEnumerator ShowHintTemporarily()
+    {
+        if (hintObject != null)
+        {
+            hintObject?.SetActive(true);
+            yield return new WaitForSeconds(2f); // 显示提示2秒
+            hintObject?.SetActive(false);
+        }
     }
 
 #if UNITY_EDITOR

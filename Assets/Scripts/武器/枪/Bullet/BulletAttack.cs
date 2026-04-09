@@ -48,7 +48,7 @@ public class BulletAttack : MonoBehaviour, IPoolable
 
     private void FixedUpdate()
     {
-        if(!GameManager.IsPlayerControllable)
+        if(GameManager.IsGamePaused)
         {
             return;
         }

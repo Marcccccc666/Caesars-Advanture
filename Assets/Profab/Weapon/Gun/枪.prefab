@@ -192,7 +192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunController
   WeaponData: {fileID: 5261869638763488654}
-  M_attackAudioClip: {fileID: 8300000, guid: 5708d77107cb74dd287928a1b3c2fd33, type: 3}
+  M_attackAudioClip: {fileID: 8300000, guid: 67035592ff07d174bae889b5c23136e1, type: 3}
   gunAnimator: {fileID: 6609465538024860973}
   shootAnimationName: Shoot
   bulletSpawnPoint: {fileID: 7524558461280973263}

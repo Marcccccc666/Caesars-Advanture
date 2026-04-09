@@ -31,7 +31,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8673776287607441944}
+  - {fileID: 2460615030617522543}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &987433501651063011
@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuickSwordController
   WeaponData: {fileID: 5625329499081057275}
   M_attackAudioClip: {fileID: 0}
+  rotationPivot: {fileID: 2460615030617522543}
   animator: {fileID: 6007420863171029387}
   defaultAnimationName: Idle
   attackLeftAnimationName: "\u5251\u653B\u51FB\u5DE6"
@@ -68,6 +69,38 @@ MonoBehaviour:
   weaponBaseData: {fileID: 11400000, guid: 22dbe0d56ddfdcc469d6c37d4b0f3563, type: 2}
   weaponController: {fileID: 987433501651063011}
   currentSwordState: 0
+--- !u!1 &1099093560671880612
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2460615030617522543}
+  m_Layer: 6
+  m_Name: "\u5251\u56FE\u7247"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2460615030617522543
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099093560671880612}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8673776287607441944}
+  m_Father: {fileID: 2067841513786495834}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2654241976269022002
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,7 +134,7 @@ Transform:
   m_LocalScale: {x: 2.3521626, y: 1.6731517, z: 1.5187}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2067841513786495834}
+  m_Father: {fileID: 2460615030617522543}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &9136469119490491673
 SpriteRenderer:

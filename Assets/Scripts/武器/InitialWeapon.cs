@@ -10,7 +10,17 @@ public enum WeaponType
     /// <summary>
     /// 狙击枪
     /// </summary>
-    Sniper
+    Sniper,
+
+    /// <summary>
+    /// 轻剑
+    /// </summary>
+    LightSword,
+
+    /// <summary>
+    /// 重剑
+    /// </summary>
+    HeavySword,
 }
 
 [System.Serializable]

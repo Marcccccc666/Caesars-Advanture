@@ -43,13 +43,13 @@ public class Singleton<T> : MonoBehaviour where T : Singleton<T>
     protected virtual void Awake()
     {
         // 如果还没有实例，就把自己注册为单例
-        if (Instance == null)
+        if (instance == null)
         {
             instance = this as T;
 
             if (DontDestroyOnLoadCreated)
             {
-                DontDestroyOnLoad(this);
+                DontDestroyOnLoad(gameObject);
             }
         }
         // 如果已经存在并且不是自己 → 删除自己

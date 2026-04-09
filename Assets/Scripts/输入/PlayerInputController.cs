@@ -4,35 +4,36 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputController : MonoBehaviour
 {
-    [SerializeField, ChineseLabel("攻击键按多久才算是Hold")] private float holdThreshold = 0.5f;
     private InputManager inputManager => InputManager.Instance;
     private GameManager gameManager => GameManager.Instance;
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (!gameManager.IsPlayerControllable)
-        {
-            return;
-        }
-
         Vector2 moveDirection = context.ReadValue<Vector2>();
         inputManager.MoveDirection = moveDirection;
     }
 
-    public void OnAttack(InputAction.CallbackContext context)
+    public void OnTapAttack(InputAction.CallbackContext context)
     {
-        if(context.started)
+        if(context.performed)
         {
-            inputManager.SetMouseState(MouseState.Press);
-            StartCoroutine(HoldAttackCoroutine());
-
-            // 触发鼠标点击事件
-            inputManager.OnMouseLeftClick?.Invoke();
+            inputManager.SetMouseState(MouseState.Tap);
         }
         else if(context.canceled)
         {
             inputManager.SetMouseState(MouseState.Release);
-            StopCoroutine(HoldAttackCoroutine());
+        }
+    }
+
+     public void OnHoldAttack(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            inputManager.SetMouseState(MouseState.Hold);
+        }
+        else if(context.canceled)
+        {
+            inputManager.SetMouseState(MouseState.Release);
         }
     }
 
@@ -41,15 +42,6 @@ public class PlayerInputController : MonoBehaviour
         if (context.performed)
         {
             inputManager.OnInteractionPressed?.Invoke();
-        }
-    }
-
-    IEnumerator HoldAttackCoroutine()
-    {
-        yield return new WaitForSeconds(holdThreshold);
-        if(inputManager.CurrentMouseState == MouseState.Press)
-        {
-            inputManager.SetMouseState(MouseState.Hold);
         }
     }
 }
