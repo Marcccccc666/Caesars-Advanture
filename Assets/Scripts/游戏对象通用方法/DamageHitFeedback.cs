@@ -63,7 +63,14 @@ public class DamageHitFeedback : MonoBehaviour
             return;
         }
 
-        objectData.OnDamage += HandleDamage;
+        if(objectData is CharacterDate characterDate)
+        {
+            characterDate.OnDamage += HandleDamage;
+        }
+        else
+        {
+            objectData.OnDamage += HandleDamage;
+        }
         isSubscribed = true;
     }
 
@@ -74,8 +81,27 @@ public class DamageHitFeedback : MonoBehaviour
             return;
         }
 
-        objectData.OnDamage -= HandleDamage;
+        if(objectData is CharacterDate characterDate)
+        {
+            characterDate.OnDamage -= HandleDamage;
+        }
+        else
+        {
+            objectData.OnDamage -= HandleDamage;
+        }
+        
         isSubscribed = false;
+    }
+
+    private void HandleDamage(int currentHealth, int maxHealth, int damage)
+    {
+        if (damage <= 0)
+        {
+            return;
+        }
+
+        PlayFlash();
+        SpawnDamageText(damage);
     }
 
     private void HandleDamage(int damage)

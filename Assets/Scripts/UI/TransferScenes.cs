@@ -1,36 +1,26 @@
-using System.ComponentModel;
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class TransferScenes : MonoBehaviour
 {
     [SerializeField, ChineseLabel("要传送到的场景名称"), Readonly] private string sceneName;
 
-    [SerializeField, ChineseLabel("玩家子弹")] private BulletAttack playerBulletPrefab;
-
-    private PoolManager poolManager => PoolManager.Instance;
     private GameManager gameManager => GameManager.Instance;
 
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            TransferScene();
+            TransferScene(true);
         }
     }
 
-    private void TransferScene()
+    public void TransferScene(bool needReset)
     {
-        if(playerBulletPrefab)
-        {
-            poolManager.ReleasePool(playerBulletPrefab);
-        }
-        gameManager.ChangeScene(sceneName);
+        gameManager.ChangeScene(sceneName, needReset);
     }
 
 #if UNITY_EDITOR

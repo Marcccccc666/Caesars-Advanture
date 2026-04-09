@@ -44,6 +44,11 @@ public class CharacterHPUI : MonoBehaviour
         if (character == null) return;
 
         subscribedCharacter = character;
+        if(subscribedCharacter is CaesarData caesarData)
+        {
+            caesarData.OnHeal += UpdateHPDisplay;
+            caesarData.OnDamage += UpdateHPDisplay;
+        }
         character.OnHeal += UpdateHPDisplay;
         character.OnDamage += UpdateHPDisplay;
 
@@ -64,6 +69,15 @@ public class CharacterHPUI : MonoBehaviour
     /// 更新HP显示
     /// </summary>
     private void UpdateHPDisplay(int currentHealth, int maxHealth)
+    {
+        if (HPSlider != null)
+        {
+            HPSlider.maxValue = maxHealth;
+            HPSlider.value = currentHealth;
+        }
+    }
+
+    private void UpdateHPDisplay(int currentHealth, int maxHealth, int damage)
     {
         if (HPSlider != null)
         {

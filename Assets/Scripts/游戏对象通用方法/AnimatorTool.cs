@@ -15,6 +15,14 @@ public static class AnimatorTool
     }
 
     /// <summary>
+    /// 检测动画是否正在特定的动画状态中
+    /// </summary>
+    public static bool IsInAnimationState(Animator animator, int animationHashName, int layerIndex = 0)
+    {
+        return animator.GetCurrentAnimatorStateInfo(layerIndex).shortNameHash == animationHashName;
+    }
+
+    /// <summary>
     /// 获取动画长度
     /// </summary>
     /// <param name="animator">动画组件</param>

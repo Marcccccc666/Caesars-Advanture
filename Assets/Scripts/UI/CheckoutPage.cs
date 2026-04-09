@@ -105,11 +105,7 @@ public class CheckoutPage : MonoBehaviour
 
     public void RestartGame()
     {
-        GameManager.Instance.GameResetAction?.Invoke();
-        if(characterManager.GetCurrentPlayerCharacterData != null)
-        {
-            poolManager.ReleasePool(playerCharacterData);
-        }
+        GameManager.Instance.ResetGame();
     }
 
     

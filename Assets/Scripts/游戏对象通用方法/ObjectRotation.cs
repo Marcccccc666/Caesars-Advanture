@@ -8,14 +8,16 @@ public static class ObjectRotation
     /// <param name="SelfTransform">自身变换组件</param>
     /// <param name="targetPosition">目标变换组件</param>
     /// <param name="rotationSpeed">旋转速度</param>
-    public static void RotateTowardsTarget(Transform SelfTransform, Vector2 targetPosition, float rotationSpeed)
+    /// <param name="angleOffset">角度偏移</param>
+
+    public static void RotateTowardsTarget(Transform SelfTransform, Vector2 targetPosition, float rotationSpeed, float angleOffset = 0f)
     {
          Vector2 direction = targetPosition - (Vector2)SelfTransform.position;
 
     if (direction.sqrMagnitude < 0.0001f)
         return;
 
-    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + angleOffset;
 
     Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
 

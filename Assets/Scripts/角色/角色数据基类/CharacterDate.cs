@@ -46,7 +46,7 @@ public class CharacterDate : ObjectData
     /// 受伤事件
     /// </summary>
     /// <param name="damage">受伤值</param>
-    public new Action<int, int> OnDamage;
+    public new Action<int, int, int> OnDamage;
 
 
     public override int CurrentHealth
@@ -89,8 +89,7 @@ public class CharacterDate : ObjectData
     public override void Damage(int damage)
     {
         CurrentHealth -= damage;
-        OnDamage?.Invoke(CurrentHealth, MaxHealth);
-        base.OnDamage?.Invoke(damage);
+        OnDamage?.Invoke(CurrentHealth, MaxHealth, damage);
     }
 #endregion
 }

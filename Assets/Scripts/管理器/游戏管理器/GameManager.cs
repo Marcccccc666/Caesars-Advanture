@@ -60,10 +60,17 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public Action GameResetAction;
 
+    public void ResetGame()
+    {
+        GameResetAction?.Invoke();
+    }
+
     #endregion
 
     #region 游戏切换场景
     public Action GameSceneChangedAction;
+
+    
 
     private GameObject BlackScreen;
 

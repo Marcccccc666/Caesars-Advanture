@@ -1,9 +1,14 @@
 using UnityEngine;
 
-public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
+public class Singleton<T> : MonoBehaviour where T : Singleton<T>
 {
     private static T instance;
     private static bool isQuitting = false;
+
+    /// <summary>
+    /// 是否在创建实例时调用DontDestroyOnLoad
+    /// </summary>
+    protected virtual bool DontDestroyOnLoadCreated => true;
 
     public static T Instance
     {   
@@ -13,6 +18,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
             {
                 return null;
             }
+            
             if (instance == null)
             {
                 // 先尝试在场景中查找
@@ -23,7 +29,11 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
                 {
                     GameObject singletonObject = new(typeof(T).Name + " (Singleton)");
                     instance = singletonObject.AddComponent<T>();
-                    DontDestroyOnLoad(singletonObject);
+
+                    if (instance.DontDestroyOnLoadCreated)
+                    {
+                        DontDestroyOnLoad(singletonObject);
+                    }
                 }
             }
             return instance;
@@ -37,13 +47,17 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
         {
             instance = this as T;
 
+            if (DontDestroyOnLoadCreated)
+            {
+                DontDestroyOnLoad(this);
+            }
         }
         // 如果已经存在并且不是自己 → 删除自己
         else if (Instance != this)
         {
             Destroy(gameObject);
         }
-        DontDestroyOnLoad(this.gameObject);
+        
     }
 
     
