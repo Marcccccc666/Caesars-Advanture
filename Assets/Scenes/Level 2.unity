@@ -7690,6 +7690,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: "\u901A\u5F80\u4E0B\u4E00\u5173"
       objectReference: {fileID: 0}
+    - target: {fileID: 4008608919082374417, guid: b1fbe95618fce8d4f8ec23ba58a03ca2, type: 3}
+      propertyPath: nextLevelSceneName
+      value: Level 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4008608919082374417, guid: b1fbe95618fce8d4f8ec23ba58a03ca2, type: 3}
+      propertyPath: nextLevelSceneAsset
+      value: 
+      objectReference: {fileID: 102900000, guid: 207402f55c31b1243a3e0df97e6b1e8b, type: 3}
     - target: {fileID: 6315638610696985221, guid: b1fbe95618fce8d4f8ec23ba58a03ca2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 31.509998
