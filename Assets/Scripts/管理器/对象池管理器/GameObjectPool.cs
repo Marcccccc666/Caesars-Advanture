@@ -19,7 +19,7 @@ public class GameObjectPool<T> : IGameObjectPool, IMyPool
     {
         this.prefab = prefab;
 
-        GameObject root = new GameObject($"{typeof(T).Name}_Pool");
+        GameObject root = new GameObject($"{typeof(T).Name}_Pool_{prefab.gameObject.GetInstanceID()}");
         root.transform.SetParent(PoolManager.Instance.transform);
         poolRoot = root.transform;
 

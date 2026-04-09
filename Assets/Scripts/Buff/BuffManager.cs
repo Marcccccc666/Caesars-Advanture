@@ -170,6 +170,11 @@ public class BuffManager : Singleton<BuffManager>
 
     protected override void OnRest()
     {
+        if(currentBuffs.Count == 0 || currentBuffs == null)
+        {
+            return;
+        }
+        
         for (int i = currentBuffs.Count - 1; i >= 0; i--)
         {
             currentBuffs[i].Remove();
