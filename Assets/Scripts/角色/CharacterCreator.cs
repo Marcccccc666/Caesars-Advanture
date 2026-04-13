@@ -13,7 +13,7 @@ public class CharacterCreator : MonoBehaviour
     #if UNITY_EDITOR
     [SerializeField, ChineseLabel("测试武器数据")] private WeaponData testWeaponData;
 
-    [SerializeField, ChineseLabel("测试Buff数据")] private List<BuffDefinition> testBuffData;
+    [SerializeField, ChineseLabel("测试Buff数据")] private BuffDefinition[] testBuffData;
     #endif
 
     private PoolManager poolManager => PoolManager.Instance;
@@ -45,11 +45,14 @@ public class CharacterCreator : MonoBehaviour
                 weaponManager.SwitchWeapon(testWeaponData);
             }
 
-            if(testBuffData != null && testBuffData.Count > 0)
+            if(testBuffData != null && testBuffData.Length > 0)
             {
                 foreach(var buff in testBuffData)
                 {
-                    buff.Apply();
+                    if(buff != null)
+                    {
+                        buff.Apply();
+                    }
                 }
             }
     }

@@ -51,7 +51,7 @@ public class GunController : WeaponControllerBase
             M_gunData.CurrentBulletCount = currentBulletCount - 1; // 消耗一发子弹
         }
         
-        buffManager.AttackTriggered?.Invoke(bulletSpawnPoint);
+        buffManager.AttackTriggered?.Invoke(transform);
         Attack();
         buffManager.AfterAttackTriggered?.Invoke(M_gunData);
 

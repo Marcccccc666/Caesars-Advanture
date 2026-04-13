@@ -60,4 +60,20 @@ public class PoolManager : Singleton<PoolManager>
             }
         }
     }
+
+    ///<summary>
+    /// 移除指定Profab的对象池
+    /// </summary>
+    public void RemovePool<T>(T prefab)
+        where T : Component
+    {
+        if (pools.TryGetValue(prefab, out var poolObj))
+        {
+            IGameObjectPool pool = poolObj;
+            pool.ReleaseAll();
+            pool.Clear();
+
+            pools.Remove(prefab);
+        }
+    }
 }

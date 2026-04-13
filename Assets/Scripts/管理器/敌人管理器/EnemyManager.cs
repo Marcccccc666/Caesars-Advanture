@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
 public class EnemyManager : Singleton<EnemyManager>
@@ -6,7 +7,8 @@ public class EnemyManager : Singleton<EnemyManager>
     /// <summary>
     /// 敌人角色数据字典
     /// </summary>
-    private Dictionary<int, EnemyData> EnemyDataDict = new Dictionary<int, EnemyData>();
+    [SerializeField,SerializedDictionary("敌人ID", "敌人角色数据")]
+    private SerializedDictionary<int, EnemyData> EnemyDataDict = new SerializedDictionary<int, EnemyData>();
 
     /// <summary>
     /// 敌人角色数据字典

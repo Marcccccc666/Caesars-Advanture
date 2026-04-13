@@ -42,9 +42,9 @@ public class TransferScenes : MonoBehaviour
 
     public void TransferScene(bool needReset)
     {
-        gameManager.ChangeScene(sceneName, needReset);
         Dictionary<int, EnemyData> dict = EnemyManager.Instance.GetEnemyDataDict;
         dict.Clear();
+        gameManager.ChangeScene(sceneName, needReset);
     }
 
     private IEnumerator ShowHintTemporarily()

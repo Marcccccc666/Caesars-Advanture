@@ -83,6 +83,8 @@ public class InitialSwordController : WeaponControllerBase
         M_swordData.CurrentSwordState = SwordState.Attack;
 
         StartCoroutine(AttackAnimationFinishCheck());
+
+        buffManager.AttackTriggered?.Invoke(transform);
     }
 
     protected virtual IEnumerator AttackAnimationFinishCheck()

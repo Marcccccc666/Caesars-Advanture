@@ -64,7 +64,6 @@ public class BossRoomController : BattleRoomController
         if (bossEnemy != null)
         {
             bossEnemy.OnDie += OnBossDie;
-            Debug.Log("Subscribed to boss death event");
         }
     }
 
