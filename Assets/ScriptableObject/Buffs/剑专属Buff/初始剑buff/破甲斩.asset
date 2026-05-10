@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2031111b2223333c444555566667777, type: 3}
+  m_Name: 破甲斩
+  m_EditorClassIdentifier: Assembly-CSharp::ArmorBreakBuff
+  buffId: 2003
+  displayName: Armor Break
+  description: Hit enemies take increased damage for a short time.
+  duration: 3
+  bonusDamageRatio: 0.25

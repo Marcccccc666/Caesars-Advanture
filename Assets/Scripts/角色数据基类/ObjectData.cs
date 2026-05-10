@@ -71,7 +71,6 @@ public class ObjectData : MonoBehaviour
             else if(value <= 0)
             {
                 currentHealth = 0;
-                Debug.Log("角色死亡");
                 OnDie?.Invoke();
             }
             else

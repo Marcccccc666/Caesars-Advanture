@@ -27,6 +27,8 @@ public abstract class BattleRoomController : RoomBase
 
     [SerializeField, ChineseLabel("房间清空后，要回收的子弹")] protected EnemyBulletAttack enemyBulletProfab;
 
+    [SerializeField, ChineseLabel("房间BGM")] protected AudioClip roomBGM;
+
     /// <summary>
     /// 是否锁门
     /// </summary>
@@ -86,6 +88,11 @@ public abstract class BattleRoomController : RoomBase
     {
         if (M_StateMachine.ActiveStateName != RoomState.Unvisited || LockRoom)
             return;
+
+        if (roomBGM != null)
+        {
+            AudioManager.Instance.SwitchBGM(roomBGM);
+        }
 
         base.PlayerEnterRoom();
 

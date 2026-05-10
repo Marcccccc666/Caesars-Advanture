@@ -11,5 +11,7 @@ public class Boss1_Die : BaseState<Boss1HFSM.Boss1StateID>
     {
         base.OnEnter();
         boss.EnterDie();
+
+        
     }
 }

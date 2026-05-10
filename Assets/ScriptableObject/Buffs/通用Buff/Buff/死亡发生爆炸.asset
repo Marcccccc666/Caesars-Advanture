@@ -17,3 +17,4 @@ MonoBehaviour:
   description: Enemies explode on death, dealing damage to nearby enemies.
   explosionDamage: 2
   explosionPrefab: {fileID: 7203149877748842602, guid: e77c2c6fe01dc804e8eeda4b13cc6bb3, type: 3}
+  explosionSFX: {fileID: 8300000, guid: 53f20c4c29006fc4fb32e4228a53c6d3, type: 3}

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityHFSM;
 
 public enum Boss2 { }
@@ -421,6 +422,9 @@ public class Boss2HFSM : MonoBehaviour
     {
         PlayAnimation(dieAnim);
         SetInvulnerable(true);
+
+        string SceneName = SceneManager.GetActiveScene().name;
+        AudioManager.Instance.ApplySceneBGM(SceneName);
     }
     #endregion
 

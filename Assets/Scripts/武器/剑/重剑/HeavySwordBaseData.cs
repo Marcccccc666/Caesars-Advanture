@@ -1,8 +1,12 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "HeavySwordBaseData", menuName = "Scriptable Objects/Sword/HeavySwordBaseData")]
-public class HeavySwordBaseData : SwordBaseData
+public class HeavySwordBaseData : SwordBaseData, IWeaponSpecificBuff
 {
+    [SerializeField] private BuffPool weaponSpecificBuffs;
+
+    public BuffPool GetWeaponSpecificBuffs => weaponSpecificBuffs;
+
     [Header("蓄力相关")]
     [SerializeField, ChineseLabel("蓄力最大量")]private float maxCharge = 100f;
 

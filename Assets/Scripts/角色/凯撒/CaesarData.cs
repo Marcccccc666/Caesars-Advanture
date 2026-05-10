@@ -20,6 +20,11 @@ public class CaesarData : CharacterDate
             return;
         }
 
+        if (BuffManager.Instance != null)
+        {
+            damage = BuffManager.Instance.GetModifiedPlayerDamage(damage);
+        }
+
         if (Time.time < invincibleUntilTime)
         {
             return;

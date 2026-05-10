@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuickSwordController
   WeaponData: {fileID: 5625329499081057275}
-  M_attackAudioClip: {fileID: 0}
+  M_attackAudioClip: {fileID: 8300000, guid: bef8598fd2cf4224797fd0d877d7a79b, type: 3}
   rotationPivot: {fileID: 2460615030617522543}
   animator: {fileID: 6007420863171029387}
   defaultAnimationName: Idle

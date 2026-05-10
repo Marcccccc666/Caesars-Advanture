@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityHFSM;
 
 public enum Boss1 { }
@@ -320,6 +321,9 @@ public class Boss1HFSM : MonoBehaviour
     public void EnterDie()
     {
         rb2D.linearVelocity = Vector2.zero;
+
+        string SceneName = SceneManager.GetActiveScene().name;
+        AudioManager.Instance.ApplySceneBGM(SceneName);
     }
 
     #endregion

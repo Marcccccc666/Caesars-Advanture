@@ -45,6 +45,8 @@ public class WeaponManager: Singleton<WeaponManager>
 
     [SerializeField, ChineseLabel("爆炸伤害")] private int explosionDamage = 0;
     
+    [SerializeField] private float swordAttackRangeMultiplier = 1f;
+
     private PoolManager poolManager => PoolManager.Instance;
 
     protected override void OnRest()
@@ -92,6 +94,18 @@ public class WeaponManager: Singleton<WeaponManager>
     }
 
     
+#endregion
+
+#region Sword Range
+    private void AddSwordAttackRangeMultiplierUnused(float delta)
+    {
+        swordAttackRangeMultiplier = Mathf.Max(0.1f, swordAttackRangeMultiplier + delta);
+    }
+
+    private float GetSwordAttackRangeMultiplierUnused()
+    {
+        return Mathf.Max(0.1f, swordAttackRangeMultiplier);
+    }
 #endregion
 
 #region 升级武器
@@ -146,6 +160,18 @@ public class WeaponManager: Singleton<WeaponManager>
         {
             return Mathf.Max(1, explosionDamage);
         }
+    }
+#endregion
+
+#region Sword Range
+    public void AddSwordAttackRangeMultiplier(float delta)
+    {
+        swordAttackRangeMultiplier = Mathf.Max(0.1f, swordAttackRangeMultiplier + delta);
+    }
+
+    public float GetSwordAttackRangeMultiplier()
+    {
+        return Mathf.Max(0.1f, swordAttackRangeMultiplier);
     }
 #endregion
 

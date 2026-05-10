@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: AddBallistics
   m_EditorClassIdentifier: Assembly-CSharp::AddBallistics
   buffId: 
-  displayName: Add Ballistics
-  description: Ballistics + 1
+  displayName: Extra Ballistics
+  description: Increase projectile count by 1.
   BallisticsCount: 1

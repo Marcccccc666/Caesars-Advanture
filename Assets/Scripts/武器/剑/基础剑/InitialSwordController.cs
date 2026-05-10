@@ -15,7 +15,8 @@ public class InitialSwordController : WeaponControllerBase
     protected int attackRightAnimationHash;
 
     [SerializeField, ChineseLabel("攻击碰撞箱")] protected Collider2D attackCollider;
-    private SwordDate M_swordData => WeaponData as SwordDate; 
+    private SwordDate M_swordData => WeaponData as SwordDate;
+    private Vector3 attackColliderBaseScale = Vector3.one;
 
     protected override void Awake()
     {
@@ -35,6 +36,8 @@ public class InitialSwordController : WeaponControllerBase
 
         animator.Play(defaultAnimationHash);
         attackCollider.enabled = false;
+        attackColliderBaseScale = attackCollider.transform.localScale;
+        ApplySwordAttackRange();
 
         M_swordData.CurrentSwordState = SwordState.Idle;
         
@@ -80,6 +83,11 @@ public class InitialSwordController : WeaponControllerBase
             return;
         }
 
+        if(M_attackAudioClip != null)
+        {
+            audioManager.PlaySFX(M_attackAudioClip);
+        }
+        
         M_swordData.CurrentSwordState = SwordState.Attack;
 
         StartCoroutine(AttackAnimationFinishCheck());
@@ -92,6 +100,7 @@ public class InitialSwordController : WeaponControllerBase
         int currentAttackAnimationHash = IsSwordFacingLeft() ? attackLeftAnimationHash : attackRightAnimationHash;
         
         animator.Play(currentAttackAnimationHash);
+        ApplySwordAttackRange();
         attackCollider.enabled = true;
         
         yield return null; // 等待一帧，确保动画状态机更新
@@ -105,7 +114,18 @@ public class InitialSwordController : WeaponControllerBase
         attackCollider.enabled = false;
 
         M_swordData.CurrentSwordState = SwordState.Idle;
+        buffManager.AfterAttackTriggered?.Invoke(M_swordData);
         MultiTimerManager.Start_DownTimer("SwordAttackCooldown", weaponManager.GetFinalAttackInterval(M_swordData.WeaponBaseData.AttackInterval));
+    }
+
+    private void ApplySwordAttackRange()
+    {
+        if (attackCollider == null)
+        {
+            return;
+        }
+
+        attackCollider.transform.localScale = attackColliderBaseScale * weaponManager.GetSwordAttackRangeMultiplier();
     }
 
     /// <summary>

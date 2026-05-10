@@ -372,7 +372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeavySwordController
   WeaponData: {fileID: 8548621360474863418}
-  M_attackAudioClip: {fileID: 0}
+  M_attackAudioClip: {fileID: 8300000, guid: bef8598fd2cf4224797fd0d877d7a79b, type: 3}
   rotationPivot: {fileID: 8193467128954050672}
   animator: {fileID: 5230068550002579781}
   defaultAnimationName: Idle

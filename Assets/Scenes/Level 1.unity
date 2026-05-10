@@ -3371,7 +3371,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 4.5
+  orthographic size: 4.43
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3396,7 +3396,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20.44553, y: 5.7023754, z: -10}
+  m_LocalPosition: {x: 43.83458, y: 12.92238, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6327,6 +6327,7 @@ MonoBehaviour:
   - {fileID: 1610726570}
   - {fileID: 720909374}
   enemyBulletProfab: {fileID: 5569169980823808405, guid: af9db1b61804a074ebc0c816342d9f56, type: 3}
+  roomBGM: {fileID: 0}
   isFirstRoom: 0
   isBossRoom: 0
   "\u6210\u529F\u9875\u9762": {fileID: 0}
@@ -8147,6 +8148,7 @@ MonoBehaviour:
   - {fileID: 1598088217}
   - {fileID: 1994394506}
   enemyBulletProfab: {fileID: 5569169980823808405, guid: af9db1b61804a074ebc0c816342d9f56, type: 3}
+  roomBGM: {fileID: 0}
   isFirstRoom: 0
   isBossRoom: 0
   "\u6210\u529F\u9875\u9762": {fileID: 0}
@@ -9593,6 +9595,7 @@ MonoBehaviour:
   - {fileID: 922112991}
   - {fileID: 246518880}
   enemyBulletProfab: {fileID: 5569169980823808405, guid: af9db1b61804a074ebc0c816342d9f56, type: 3}
+  roomBGM: {fileID: 0}
   isFirstRoom: 0
   isBossRoom: 0
   "\u6210\u529F\u9875\u9762": {fileID: 0}
@@ -10884,6 +10887,7 @@ MonoBehaviour:
   weaponSpecificBuffPool: []
   currentBuffs: []
   selectedBuffIndex: -1
+  heavyChargeDamageReduction: 0
 --- !u!4 &1686465502
 Transform:
   m_ObjectHideFlags: 0
@@ -13560,6 +13564,7 @@ MonoBehaviour:
   EnemiesInRoom:
   - {fileID: 1298304257}
   enemyBulletProfab: {fileID: 5569169980823808405, guid: af9db1b61804a074ebc0c816342d9f56, type: 3}
+  roomBGM: {fileID: 8300000, guid: e840cadd799c3544a85e7260414b1fbb, type: 3}
   bossEnemy: {fileID: 1298304257}
   bossRoot: {fileID: 443139043}
   enableRewardSelectionOnBossDeath: 1

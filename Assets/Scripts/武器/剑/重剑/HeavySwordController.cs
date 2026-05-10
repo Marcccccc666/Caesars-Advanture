@@ -64,8 +64,14 @@ public class HeavySwordController : InitialSwordController
             return;
         }
 
+        if(M_attackAudioClip != null)
+        {
+            audioManager.PlaySFX(M_attackAudioClip);
+        }
+
         M_swordData.CurrentSwordState = SwordState.Attack;
         StartCoroutine(AttackAnimationFinishCheck());
+        buffManager.AttackTriggered?.Invoke(transform);
     }
 
     protected override IEnumerator AttackAnimationFinishCheck()

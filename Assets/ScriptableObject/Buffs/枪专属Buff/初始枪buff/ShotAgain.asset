@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShotAgain
   buffId: 0
   displayName: Shot Again
-  description: There is a certain probability of triggering the design again.
+  description: Attacks have a chance to fire one additional time.
   probability: 0.5

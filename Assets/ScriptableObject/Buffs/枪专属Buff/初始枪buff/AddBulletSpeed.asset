@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: AddBulletSpeed
   m_EditorClassIdentifier: Assembly-CSharp::AddBulledSpeed
   buffId: 0
-  displayName: increase bullet speed
-  description: 
+  displayName: Bullet Speed Up
+  description: Increase bullet speed.
   bulletSpeedBonus: 2

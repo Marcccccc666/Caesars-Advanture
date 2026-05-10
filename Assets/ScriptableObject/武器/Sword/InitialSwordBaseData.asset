@@ -31,4 +31,4 @@ MonoBehaviour:
   - Type: 3
     Data: {fileID: 8548621360474863418, guid: 931ca01755f18fb4e88aeeb54d281792, type: 3}
     WeaponSprite: {fileID: -5154300969875271043, guid: fac4222d57ec0284cb55313e6149bdbe, type: 3}
-  WeaponSpecificBuffs: {fileID: 11400000, guid: 8f32fa55a693647478b20991418c4c9c, type: 2}
+  WeaponSpecificBuffs: {fileID: 11400000, guid: b1011111b2223333c444555566667777, type: 2}

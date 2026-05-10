@@ -10,6 +10,7 @@ public class AudioManager : Singleton<AudioManager>
     [SerializeField, ChineseLabel("BGM 混合器")] private AudioMixerGroup bgmMixerGroup;
     [SerializeField, ChineseLabel("Level 1 BGM")] private AudioClip level1BGM;
     [SerializeField, ChineseLabel("Level 2 BGM")] private AudioClip level2BGM;
+    [SerializeField, ChineseLabel("Level 3 BGM")] private AudioClip level3BGM;
 
     [Header("音效设置")]
     [SerializeField, ChineseLabel("同时播放的最大音效数量")] private int maxSimultaneousSFX = 15;
@@ -64,6 +65,11 @@ public class AudioManager : Singleton<AudioManager>
             level2BGM = Resources.Load<AudioClip>("music/BGM/mx_lvl2_maintheme_cueV1");
         }
 
+        if (level3BGM == null)
+        {
+            level3BGM = Resources.Load<AudioClip>("music/BGM/mx_lvl3_maintheme_cueV1");
+        }
+
         ApplySceneBGM(SceneManager.GetActiveScene().name);
 
         SFXaudioSourcePool = new Queue<AudioController>();
@@ -95,7 +101,7 @@ public class AudioManager : Singleton<AudioManager>
         ApplySceneBGM(scene.name);
     }
 
-    private void ApplySceneBGM(string sceneName)
+    public void ApplySceneBGM(string sceneName)
     {
         switch (sceneName)
         {
@@ -104,6 +110,9 @@ public class AudioManager : Singleton<AudioManager>
                 break;
             case "Level 2":
                 SwitchBGM(level2BGM);
+                break;
+            case "Level 3":
+                SwitchBGM(level3BGM);
                 break;
             default:
                 StopBGM();
@@ -146,6 +155,12 @@ public class AudioManager : Singleton<AudioManager>
         currentBGM.Stop();
     }
 
+    /// <summary>
+    /// 创建一个音效对象池，限制同一时间播放同一音效的最大数量和冷却时间
+    /// </summary>
+    /// <param name="clip">音效</param>
+    /// <param name="maxCount">最大播放次数</param>
+    /// <param name="cooldown">冷却时间</param>
     public void CreateSFXPool(AudioClip clip, int maxCount, float cooldown = 0.2f)
     {
         if (clip == null || maxCount <= 0) return;
@@ -153,6 +168,21 @@ public class AudioManager : Singleton<AudioManager>
         maxPlayCountPerSFX[clip] = maxCount;
         currentPlayCountPerSFX[clip] = 0;
         SetSFXCooldown(clip, cooldown);
+    }
+
+    /// <summary>
+    /// 删除一个音效对象池，移除对该音效的播放限制
+    /// </summary>
+    /// <param name="clip"></param>
+    /// <param name="cooldown"></param>
+    public void DeleteSFXPool(AudioClip clip)
+    {
+        if (clip == null) return;
+
+        maxPlayCountPerSFX.Remove(clip);
+        currentPlayCountPerSFX.Remove(clip);
+        cooldownPerSFX.Remove(clip);
+        lastPlayTimePerSFX.Remove(clip);
     }
 
     public void SetSFXCooldown(AudioClip clip, float cooldown)

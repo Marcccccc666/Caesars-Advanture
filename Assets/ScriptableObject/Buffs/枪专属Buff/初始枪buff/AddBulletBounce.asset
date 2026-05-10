@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: AddBulletBounce
   m_EditorClassIdentifier: Assembly-CSharp::AddBulletBounce
   buffId: 0
-  displayName: increase bullet bounce
-  description: bullet bounce+1
+  displayName: Bullet Bounce Up
+  description: Increase bullet bounce by 1.
   bounceBonus: 1

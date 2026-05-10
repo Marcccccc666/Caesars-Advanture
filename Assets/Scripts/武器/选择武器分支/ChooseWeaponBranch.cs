@@ -91,7 +91,6 @@ public class ChooseWeaponBranch : MonoBehaviour
         // 切换到选中的武器分支
         if (selectedBranchIndex >= 0 && weaponManager.GetCurrentWeapon.WeaponBaseData is IInitialWeapon initialData)
         {
-            Debug.Log($"Selected branch index: {selectedBranchIndex}");
             WeaponBranch selectedBranch = initialData.WeaponBrachs[selectedBranchIndex];
             weaponManager.SwitchWeapon(selectedBranch.Data);
         }

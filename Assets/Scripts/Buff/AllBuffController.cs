@@ -105,6 +105,7 @@ public class AllBuffController : MonoBehaviour
         bool IsInitialWeapon = weaponBaseData is IInitialWeapon;
         if(IsInitialWeapon)
         {
+            buffManager.ClearWeaponSpecificBuffPool();
             if(weaponBaseData  is IWeaponSpecificBuff weaponSpecificBuffData)
             {
                 buffManager.SetInitialWeaponBuffPool(new List<BuffDefinition>(weaponSpecificBuffData.GetWeaponSpecificBuffs.Buffs));

@@ -17,6 +17,11 @@ public class SwordAttack : MonoBehaviour
             EnemyData enemyData = enemyManager.GetEnemyData(enemyId);
             if (enemyData != null)
             {
+                if (collision.TryGetComponent(out SwordEnemyStatus swordEnemyStatus))
+                {
+                    finalDamage = Mathf.Max(1, Mathf.RoundToInt(finalDamage * swordEnemyStatus.GetDamageMultiplier()));
+                }
+
                 if(swordData is HeavySwordData heavySwordData)
                 {
                     // 根据蓄力值增加伤害
@@ -25,6 +30,7 @@ public class SwordAttack : MonoBehaviour
                 }
                 
                 enemyData.Damage(finalDamage);
+                BuffManager.Instance?.AttackHitTriggered?.Invoke(collision.transform);
             }
         }
     }

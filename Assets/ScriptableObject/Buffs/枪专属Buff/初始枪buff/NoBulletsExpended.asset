@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NoBulletsExpended
   buffId: 0
   displayName: No Bullets Expended
-  description: There is a certain probability that this attack will not consume bullets.
+  description: Attacks have a chance to consume no bullets.
   probability: 0.505

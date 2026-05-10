@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: "\u5251\u6CE2Buff"
   m_EditorClassIdentifier: Assembly-CSharp::SwordWave
   buffId: 0
-  displayName: 
-  description: 
+  displayName: Sword Wave
+  description: Releases a short-range sword wave whenever you attack.
   SwordWavePrefab: {fileID: 2009378464369353901, guid: 9cd9baf3db2677b4493f1e1cfb48cd52, type: 3}

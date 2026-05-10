@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2071111b2223333c444555566667777, type: 3}
+  m_Name: 残影斩
+  m_EditorClassIdentifier: Assembly-CSharp::AfterimageSlashBuff
+  buffId: 2102
+  displayName: Afterimage Slash
+  description: Every few attacks, unleash an additional afterimage slash.
+  slashProjectilePrefab: {fileID: 2009378464369353901, guid: 9cd9baf3db2677b4493f1e1cfb48cd52, type: 3}
+  attacksPerTrigger: 4
+  speed: 10
+  damageRatio: 0.8

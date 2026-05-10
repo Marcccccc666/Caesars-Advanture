@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: AddPenetration
   m_EditorClassIdentifier: Assembly-CSharp::AddPenetration
   buffId: 
-  displayName: Add Penetration
-  description: Penetration +1
+  displayName: Penetration Up
+  description: Increase bullet penetration by 1.
   penetrationBonus: 1

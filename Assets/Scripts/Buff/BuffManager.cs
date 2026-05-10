@@ -23,14 +23,7 @@ public class BuffManager : Singleton<BuffManager>
     /// <param name="buffPool"> 基础武器Buff池 </param>
     public void SetInitialWeaponBuffPool(List<BuffDefinition> buffPool)
     {
-        if(InitialWeaponBuffPool == null)
-        {
-            InitialWeaponBuffPool = buffPool;
-        }
-        else
-        {
-            InitialWeaponBuffPool?.AddRange(buffPool);
-        }
+        InitialWeaponBuffPool = buffPool ?? new List<BuffDefinition>();
     }
 
     [SerializeField] private List<BuffDefinition> weaponSpecificBuffPool;
@@ -45,14 +38,12 @@ public class BuffManager : Singleton<BuffManager>
     /// <param name="buffPool"> 武器特定Buff池 </param>
     public void SetWeaponSpecificBuffPool(List<BuffDefinition> buffPool)
     {
-        if(weaponSpecificBuffPool == null)
-        {
-            weaponSpecificBuffPool = buffPool;
-        }
-        else
-        {
-            weaponSpecificBuffPool?.AddRange(buffPool);
-        }
+        weaponSpecificBuffPool = buffPool ?? new List<BuffDefinition>();
+    }
+
+    public void ClearWeaponSpecificBuffPool()
+    {
+        weaponSpecificBuffPool = new List<BuffDefinition>();
     }
 
     [SerializeField, ChineseLabel("当前选择的Buff")] private List<BuffDefinition> currentBuffs = new List<BuffDefinition>();
@@ -116,20 +107,25 @@ public class BuffManager : Singleton<BuffManager>
     /// </summary>
     public void RequestCreateRandomBuff()
     {
-        int totalCount =
-                (normalBuffPool?.Buffs?.Count ?? 0) +
-                (InitialWeaponBuffPool?.Count ?? 0) +
-                (weaponSpecificBuffPool?.Count ?? 0);
-        List<BuffDefinition> combinedBuffs = new(totalCount);
-        combinedBuffs?.AddRange(normalBuffPool.Buffs);
-        combinedBuffs?.AddRange(InitialWeaponBuffPool);
-        combinedBuffs?.AddRange(weaponSpecificBuffPool);
+        List<BuffDefinition> combinedBuffs = new();
+        AddValidBuffs(combinedBuffs, normalBuffPool?.Buffs);
+        AddValidBuffs(combinedBuffs, InitialWeaponBuffPool);
+        AddValidBuffs(combinedBuffs, weaponSpecificBuffPool);
+
+        if (combinedBuffs.Count == 0)
+        {
+            for (int i = 0; i < currentSelection.Length; i++)
+            {
+                currentSelection[i] = null;
+            }
+            return;
+        }
 
         Shuffle(combinedBuffs);
 
         for (int i = 0; i < currentSelection.Length; i++)
         {
-            currentSelection[i] = combinedBuffs[i];
+            currentSelection[i] = combinedBuffs[i % combinedBuffs.Count];
         }
     }
     #endregion
@@ -166,6 +162,31 @@ public class BuffManager : Singleton<BuffManager>
     /// </summary>
     public Action<Transform> EnemyKilledTriggered;
 
+    [SerializeField, Range(0f, 0.95f)] private float heavyChargeDamageReduction;
+
+    public void AddHeavyChargeDamageReduction(float delta)
+    {
+        heavyChargeDamageReduction = Mathf.Clamp(heavyChargeDamageReduction + delta, 0f, 0.95f);
+    }
+
+    public int GetModifiedPlayerDamage(int damage)
+    {
+        if (damage <= 0)
+        {
+            return 0;
+        }
+
+        if (WeaponManager.Instance != null
+            && WeaponManager.Instance.GetCurrentWeapon is HeavySwordData heavySwordData
+            && heavySwordData.CurrentSwordState == SwordState.Charging
+            && heavyChargeDamageReduction > 0f)
+        {
+            damage = Mathf.Max(1, Mathf.RoundToInt(damage * (1f - heavyChargeDamageReduction)));
+        }
+
+        return damage;
+    }
+
     #endregion
 
     protected override void OnRest()
@@ -188,6 +209,22 @@ public class BuffManager : Singleton<BuffManager>
         {
             int j = UnityEngine.Random.Range(0, i + 1);
             (list[i], list[j]) = (list[j], list[i]);
+        }
+    }
+
+    private static void AddValidBuffs(List<BuffDefinition> target, IEnumerable<BuffDefinition> source)
+    {
+        if (source == null)
+        {
+            return;
+        }
+
+        foreach (BuffDefinition buff in source)
+        {
+            if (buff != null)
+            {
+                target.Add(buff);
+            }
         }
     }
 }
